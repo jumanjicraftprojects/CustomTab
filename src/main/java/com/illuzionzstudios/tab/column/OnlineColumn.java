@@ -54,10 +54,6 @@ public class OnlineColumn extends TabColumn {
         private int getWeight() {
             int weight = 0;
 
-            if (tabPlayer.equals(player)) {
-                weight -= 99999;
-            }
-
             weight += tabPlayer.getLocation().distance(player.getLocation());
 
             return weight;

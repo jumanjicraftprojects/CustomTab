@@ -35,7 +35,8 @@ public class Settings {
     public static final ConfigSetting PAGE_SCROLL_COOLDOWN = new ConfigSetting(config, "Page.Refresh", 100,
             "This is the interval (in ticks) between scrolling",
             "through tab pages. Recommended to set to a slower speed so",
-            "the pages don't fly through fast.");
+            "the pages don't fly through fast. This will be limited by",
+            "the update speed of the tab.");
 
     public static final ConfigSetting TAB_COLUMNS = new ConfigSetting(config, "Tab.Columns", 4,
             "Amount of columns to display. This be set here so we always",

@@ -1,0 +1,27 @@
+Refresh:
+  # This is the interval (in ticks) between updating
+  # the tab header and footer.
+  Header Footer: 20
+  # This is the interval (in ticks) between updating
+  # the tab elements and sections.
+  Tab: 100
+
+Page:
+  # This is the amount of elements to display per page.
+  # Total slots is this value + 1 because of the pagination text.
+  Elements: 19
+  # This is the interval (in ticks) between scrolling
+  # through tab pages. Recommended to set to a slower speed so
+  # the pages don't fly through fast. This will be limited by
+  # the update speed of the tab.
+  Refresh: 100
+
+Tab:
+  # Amount of columns to display. This be set here so we always
+  # display that many columns, but just change the content.
+  Columns: 4
+
+System:
+  # The language file to use for the plugin
+  # More language files (if available) can be found in the plugins locale folder.
+  Language: en_US
