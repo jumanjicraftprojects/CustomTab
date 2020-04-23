@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -49,6 +50,7 @@ public abstract class TabColumn implements Listener {
     /**
      * The number of the tab display column
      */
+    @Getter
     protected final int columnNumber;
 
     /**
@@ -124,6 +126,14 @@ public abstract class TabColumn implements Listener {
         headerFooterCooldown.go();
         elementCooldown.go();
         pageScrollCooldown.go();
+    }
+
+    /**
+     * Called when column is destroyed or no longer being displayed
+     */
+    public void disable() {
+        MinecraftScheduler.get().dismissSynchronizationService(this);
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler

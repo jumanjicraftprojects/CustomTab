@@ -13,6 +13,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.wrappers.*;
 import com.illuzionzstudios.core.bukkit.controller.BukkitController;
 import com.illuzionzstudios.core.util.Logger;
+import com.illuzionzstudios.tab.Tab;
 import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
 import com.illuzionzstudios.tab.listener.LegacyBlocker;
@@ -22,6 +23,7 @@ import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.struct.Latency;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
@@ -42,6 +44,27 @@ import java.util.*;
 public enum TabController implements Listener, BukkitController<Plugin> {
 
     INSTANCE;
+
+    /**
+     * The currently displayed tabs
+     */
+    @Getter
+    public HashMap<UUID, Tab> displayedTabs = new HashMap<>();
+
+    /**
+     * Display a tab to the player
+     *
+     * @param player Player to show tab
+     * @param tab Tab to display
+     */
+    public void displayTab(Player player, Tab tab) {
+        if (this.displayedTabs.containsKey(player.getUniqueId())) {
+            // Already displaying tab, dismiss other
+            this.displayedTabs.get(player.getUniqueId()).disable();
+        }
+
+        this.displayedTabs.put(player.getUniqueId(), tab);
+    }
 
     public static final char DISPLAY_SLOT;
     public static final char SKIN_SLOT;
