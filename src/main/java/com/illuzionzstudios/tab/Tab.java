@@ -141,16 +141,26 @@ public class Tab {
         StringBuilder footerText = new StringBuilder();
 
         // Update text
-        header.forEach(header -> {
-            header.changeText();
+        header.forEach(head -> {
+            head.changeText();
 
-            headerText.append(header.getVisibleText()).append("\n");
+            headerText.append(head.getVisibleText()).append("\n");
+
+            // Last element check
+            if (!header.get(header.size() - 1).equals(head)) {
+                footerText.append("\n");
+            }
         });
 
-        footer.forEach(footer -> {
-            footer.changeText();
+        footer.forEach(foot -> {
+            foot.changeText();
 
-            footerText.append(footer.getVisibleText()).append("\n");
+            footerText.append(foot.getVisibleText());
+
+            // Last element check
+            if (!footer.get(footer.size() - 1).equals(foot)) {
+                footerText.append("\n");
+            }
         });
 
         // Set the text in the tab
