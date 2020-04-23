@@ -22,13 +22,17 @@ public class Settings {
 
     public static final ConfigSetting HEADER_FOOTER_REFRESH = new ConfigSetting(config, "Refresh.Header Footer", 20,
             "This is the interval (in ticks) between updating",
-            "the tab header and footer. Recommended minimum is 15 without glitching");
+            "the tab header and footer.");
 
     public static final ConfigSetting TAB_REFRESH = new ConfigSetting(config, "Refresh.Tab", 100,
             "This is the interval (in ticks) between updating",
-            "the tab elements and sections. Recommended minimum is 15 without glitching");
+            "the tab elements and sections.");
 
-    public static final ConfigSetting PAGE_SCROLL_COOLDOWN = new ConfigSetting(config, "Refresh.Page", 100,
+    public static final ConfigSetting PAGE_ELEMENTS = new ConfigSetting(config, "Page.Elements", 19,
+            "This is the amount of elements to display per page.",
+            "Total slots is this value + 1 because of the pagination text.");
+
+    public static final ConfigSetting PAGE_SCROLL_COOLDOWN = new ConfigSetting(config, "Page.Refresh", 100,
             "This is the interval (in ticks) between scrolling",
             "through tab pages. Recommended to set to a slower speed so",
             "the pages don't fly through fast.");

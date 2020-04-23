@@ -10,6 +10,8 @@
 package com.illuzionzstudios.tab.text;
 
 import com.google.common.collect.Iterators;
+import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -36,22 +38,25 @@ public class FrameText implements DynamicText {
     private String visibleText;
 
     /**
+     * Interval in ticks between frame updates
+     */
+    @Getter
+    private PresetCooldown interval;
+
+    /**
      * @param frames Frames of text
      */
-    public FrameText(String... frames) {
-        // Store our frames
-        this.frames = Arrays.asList(frames);
-
-        // Create frame cycle
-        cycle = Iterators.cycle(this.frames);
+    public FrameText(int interval, String... frames) {
+        this(interval, Arrays.asList(frames));
     }
 
-    public FrameText(List<String> frames) {
+    public FrameText(int interval, List<String> frames) {
         // Store our frames
         this.frames = frames;
 
         // Create frame cycle
         cycle = Iterators.cycle(this.frames);
+        this.interval = new PresetCooldown(interval);
     }
 
     @Override
@@ -67,6 +72,11 @@ public class FrameText implements DynamicText {
 
     @Override
     public String changeText() {
+        // Check changing cooldown
+        if (!getInterval().isReady()) return "";
+        getInterval().reset();
+        getInterval().go();
+
         if (cycle.hasNext()) {
             visibleText = cycle.next();
         } else {

@@ -11,6 +11,8 @@ package com.illuzionzstudios.tab.text;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import lombok.Getter;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -28,7 +30,10 @@ public class AnimatedText implements DynamicText {
 
     private String visibleText;
 
-    public AnimatedText(String fullText, String... frames) {
+    @Getter
+    private PresetCooldown interval;
+
+    public AnimatedText(int interval, String fullText, String... frames) {
         this.fullText = ChatColor.translateAlternateColorCodes('&', fullText);
         if (frames != null) {
             this.frames = Lists.newArrayList(frames);
@@ -36,6 +41,7 @@ public class AnimatedText implements DynamicText {
             this.frames = new ArrayList<>();
         }
         cycle = Iterators.cycle(this.frames);
+        this.interval = new PresetCooldown(interval);
     }
 
     public void addColorFlashes(ChatColor color, boolean bold, int howMany) {

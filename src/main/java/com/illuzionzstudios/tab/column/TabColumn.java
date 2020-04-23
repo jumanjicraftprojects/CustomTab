@@ -100,25 +100,25 @@ public abstract class TabColumn implements Listener {
         MinecraftScheduler.get().registerSynchronizationService(this);
         Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
 
-        FrameText header = new FrameText(
+        FrameText header = new FrameText(20,
                 "&c&lTab Header",
                 "&4&lT&c&lab Header",
                 "&c&lT&4&la&c&lb Header",
                 "&c&lTa&4&lb &c&lHeader");
 
-        this.header.add(new FrameText(""));
+        this.header.add(new FrameText(-1, ""));
         this.header.add(header);
-        this.header.add(new FrameText(""));
+        this.header.add(new FrameText(-1, ""));
 
-        FrameText footer = new FrameText(
+        FrameText footer = new FrameText(20,
                 "&c&lTab Footer",
                 "&4&lT&c&lab Footer",
                 "&c&lT&4&la&c&lb Footer",
                 "&c&lTa&4&lb &c&lFooter");
 
-        this.footer.add(new FrameText(""));
+        this.footer.add(new FrameText(-1,""));
         this.footer.add(footer);
-        this.footer.add(new FrameText(""));
+        this.footer.add(new FrameText(-1,""));
 
         // Start timers
         headerFooterCooldown.go();
@@ -217,18 +217,18 @@ public abstract class TabColumn implements Listener {
 
         boolean pageInfo = false;
 
-        if (size >= 19) {
+        if (size >= Settings.PAGE_ELEMENTS.getInt()) {
             // Calculate page length //
-            double pageDelta = ((double) (cursor + 3) / 20) + 1;
+            double pageDelta = ((double) (cursor + 3) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
-            int max = (int) Math.ceil((size + (2 * elements.size() / 20)) / 20);
+            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
 
             sub.add("&7" + Math.max(1, page) + "&8/&7" + Math.max(1, max) + "");
             this.elements = elements;
             pageInfo = true;
         }
 
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= Settings.PAGE_ELEMENTS.getInt() + 1; i++) {
             boolean blank = (i - 1) >= sub.size();
 
             // Send update packet //
@@ -275,7 +275,7 @@ public abstract class TabColumn implements Listener {
 
             // Check if cursor is greater than applicable
             // number of pages
-            if (cursor >= (size - (3 * elements.size() / 20))) {
+            if (cursor >= (size - (3 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1))) {
                 // Reset to page 1
                 this.elements = null;
                 cursor = 0;

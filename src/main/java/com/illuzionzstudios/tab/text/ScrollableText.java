@@ -9,6 +9,8 @@
  */
 package com.illuzionzstudios.tab.text;
 
+import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -25,16 +27,20 @@ public class ScrollableText implements DynamicText {
     private Character format;
     private Character color;
 
-    public ScrollableText(String fullText) {
-        this(fullText, 16);
+    @Getter
+    private PresetCooldown interval;
+
+    public ScrollableText(int interval, String fullText) {
+        this(interval, fullText, 16);
     }
 
-    public ScrollableText(String fullText, int scrollSize) {
+    public ScrollableText(int interval, String fullText, int scrollSize) {
         // we must use the alternate codes
         this.fullText = ChatColor.translateAlternateColorCodes('&', fullText);
         this.scrollSize = scrollSize;
         scrollPos = 0;
         scrollPad = 0;
+        this.interval = new PresetCooldown(interval);
     }
 
     public int getScrollPos() {
