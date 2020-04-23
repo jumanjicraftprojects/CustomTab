@@ -31,15 +31,23 @@ Tab:
       Text:
         # Different text element names
         Line1:
-          # If this line should be repeated x amount of times
-          Loop:
-            Toggled: false
-            # Amount of times to loop
-            Amount: 0
           # Animations between frames if more than 1
           Animations:
             - "&ePlayer information displayed here"
             - "&6Player information displayed here"
+          # Interval (int ticks) between animation frames
+          Interval: 20
+    # Name of the column
+    Server Information:
+      # Column slot to display in
+      Slot: 3
+      # Text elements to display
+      Text:
+        # Different text element names
+        Line1:
+          # Animations between frames if more than 1
+          Animations:
+            - "&7RAM: 1.0/2.0 GB"
           # Interval (int ticks) between animation frames
           Interval: 20
 
