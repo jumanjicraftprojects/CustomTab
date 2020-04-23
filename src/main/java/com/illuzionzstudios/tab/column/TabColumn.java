@@ -1,0 +1,199 @@
+package com.illuzionzstudios.tab.column;
+
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+import com.illuzionzstudios.scheduler.MinecraftScheduler;
+import com.illuzionzstudios.scheduler.sync.Async;
+import com.illuzionzstudios.scheduler.sync.Rate;
+import com.illuzionzstudios.tab.CustomTab;
+import com.illuzionzstudios.tab.controller.TabController;
+import com.illuzionzstudios.tab.text.AnimatedText;
+import com.illuzionzstudios.tab.text.DynamicText;
+import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * Represents a column of the tab
+ */
+public abstract class TabColumn implements Listener {
+
+    /**
+     * The player the tab is shown to
+     */
+    protected Player player;
+
+    /**
+     * List of registered tabs
+     */
+    public static List<Class<? extends TabColumn>> registered = new ArrayList<>();
+
+    protected Table<Integer, Integer, UUID> avatarCache = HashBasedTable.create();
+
+    protected final int columnNumber;
+
+    private boolean start = false;
+
+    private int cursor = 0;
+
+    private List<String> elements;
+
+    private DynamicText headerLogo;
+
+    public TabColumn(Player player, int columnNumber) {
+        this.player = player;
+        this.columnNumber = columnNumber;
+
+        MinecraftScheduler.get().registerSynchronizationService(this);
+        Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
+
+        AnimatedText logo = new AnimatedText("Tab Test");
+        logo.addColorChange(ChatColor.LIGHT_PURPLE, true);
+
+        this.headerLogo = logo;
+    }
+
+    @EventHandler
+    public void onPlay(PlayerJoinEvent event) {
+        if (!event.getPlayer().equals(this.player)) {
+            return;
+        }
+
+        this.render();
+    }
+
+    /**
+     * @param column Register a tab column
+     */
+    public static void register(Class<? extends TabColumn> column) {
+        registered.add(column);
+    }
+
+    /**
+     * Refreshes the column of social
+     */
+    protected abstract void render(List<String> elements);
+
+    /**
+     * @return Returns the title of column
+     */
+    public abstract String getTitle();
+
+    @Async(rate = Rate.FAST)
+    public void renderHeaderFooter() {
+        if (player == null) {
+            return;
+        }
+
+        TabController API = TabController.INSTANCE;
+
+        headerLogo.changeText();
+
+        API.setHeaderFooter("Test Header", "Test Footer", player);
+    }
+
+    /*
+     * Refreshes social column very 4 seconds
+     */
+    @Async(rate = Rate.SEC_6)
+    public void render() {
+        if (player == null) {
+            return;
+        }
+
+        TabController API = TabController.INSTANCE;
+
+        List<String> elements = new ArrayList<>();
+
+        if (this.elements == null) {
+            render(elements);
+        } else {
+            elements = this.elements;
+        }
+
+        List<String> sub = new ArrayList<>
+                (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
+                        Math.min(elements.size(), cursor + 17)));
+
+        sub.add(0, ChatColor.translateAlternateColorCodes('&', getTitle()));
+        sub.add(1, " ");
+
+        double size = (elements.size() + 2 + Math.floor((elements.size() / 20)));
+
+        boolean pageInfo = false;
+
+        if (size >= 19) {
+            // Calculate page length //
+            double pageDelta = ((double) (cursor + 3) / 20) + 1;
+            int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
+            int max = (int) Math.ceil((size + (2 * elements.size() / 20)) / 20);
+
+            sub.add("&7" + Math.max(1, page) + "&8/&7" + Math.max(1, max) + "");
+            this.elements = elements;
+            pageInfo = true;
+        }
+
+        for (int i = 1; i <= 20; i++) {
+            boolean blank = (i - 1) >= sub.size();
+
+            // Send update packet //
+            String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1));
+            String[] textArray = text.split(" ");
+
+            // Get player to see if to display
+            String playerName = ChatColor.stripColor(textArray.length == 0 ? "" : textArray[textArray.length - 1]);
+            Player tabPlayer = Bukkit.getPlayer(playerName);
+
+            // Check all elements with text
+            if ((i - 1) < sub.size()) {
+                if (tabPlayer != null) {
+                    // Set the avatar for that slot
+                    if (!avatarCache.contains(columnNumber, i) || !avatarCache.get(columnNumber, i).equals(tabPlayer.getUniqueId())) {
+                        API.setAvatar(columnNumber, i, tabPlayer, this.player);
+                        avatarCache.put(columnNumber, i, tabPlayer.getUniqueId());
+                    }
+                }
+
+                // Set text in that slot as our final text
+                API.setText(columnNumber, i, text, this.player);
+            } else {
+                // Otherwise text not defined so set blank
+
+                // Set blank text
+                API.setText(columnNumber, i, "", this.player);
+
+                // Make sure avatar is blank
+                if (avatarCache.contains(columnNumber, i)) {
+                    avatarCache.remove(columnNumber, i);
+                    API.hideAvatar(columnNumber, i, this.player);
+                }
+            }
+
+            // Go to next page if applicable
+            cursor++;
+        }
+
+        // If page display at bottom
+        if (pageInfo) {
+            cursor -= 3;
+        }
+
+        // Check if cursor is greater than applicable
+        // number of pages
+        if (cursor >= (size - (3 * elements.size() / 20))) {
+            this.elements = null;
+            cursor = 0;
+        }
+    }
+
+
+}

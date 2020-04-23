@@ -1,0 +1,6 @@
+# General Messages
+
+general:
+  nametag:
+    prefix: '&c&lCustomTab &8»&7'
+  reload: '&7Reloaded all configuration files'
