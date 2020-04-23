@@ -8,7 +8,7 @@ Refresh:
 
 Page:
   # This is the amount of elements to display per page.
-  # Total slots is this value + 1 because of the pagination text.
+  # Total slots is this value + 1 because of the pagination text and title.
   Elements: 19
   # This is the interval (in ticks) between scrolling
   # through tab pages. Recommended to set to a slower speed so
@@ -27,10 +27,19 @@ Tab:
     Information:
       # Column slot to display in
       Slot: 1
+      # The title of this tab column
+      Title: "&e&lPlayer Information"
       # Text elements to display
       Text:
         # Different text element names
         Line1:
+          # If this text will scroll across
+          Scroll:
+            Enabled: false
+            # This is the amount of characters to display
+            # at a time. So if the text scrolls, only
+            # this many characters will be seen at a time
+            Amount: 30
           # Animations between frames if more than 1
           Animations:
             - "&ePlayer information displayed here"
@@ -41,10 +50,19 @@ Tab:
     Server Information:
       # Column slot to display in
       Slot: 3
+      # The title of this tab column
+      Title: "&e&lPlayer Information"
       # Text elements to display
       Text:
         # Different text element names
         Line1:
+          # If this text will scroll across
+          Scroll:
+            Enabled: false
+            # This is the amount of characters to display
+            # at a time. So if the text scrolls, only
+            # this many characters will be seen at a time
+            Amount: 30
           # Animations between frames if more than 1
           Animations:
             - "&7RAM: 1.0/2.0 GB"
@@ -60,9 +78,15 @@ Tab:
     Online:
       # Column slot
       Slot: 2
+      # The title of this tab column
+      Title: "&e&lPlayer Information"
       # What the list consists of. Here put
       # the element. Can put custom ones from addons
+      # Inbuilt: players
       List Of: players
+      # In what order to display elements
+      # Put a custom sorter
+      Sort By: distance
       # Text for each element
       Text:
         # Here formats display name per player

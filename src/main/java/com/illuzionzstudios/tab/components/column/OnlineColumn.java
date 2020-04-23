@@ -1,12 +1,9 @@
-package com.illuzionzstudios.tab.column;
+package com.illuzionzstudios.tab.components.column;
 
-import com.illuzionzstudios.tab.controller.TabController;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 public class OnlineColumn extends TabColumn {

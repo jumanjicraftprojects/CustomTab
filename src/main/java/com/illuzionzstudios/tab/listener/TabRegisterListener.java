@@ -9,8 +9,8 @@
  */
 package com.illuzionzstudios.tab.listener;
 
-import com.illuzionzstudios.tab.Tab;
-import com.illuzionzstudios.tab.column.*;
+import com.illuzionzstudios.tab.components.Tab;
+import com.illuzionzstudios.tab.components.column.*;
 import com.illuzionzstudios.tab.controller.TabController;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

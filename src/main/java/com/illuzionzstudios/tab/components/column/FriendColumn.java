@@ -1,4 +1,4 @@
-package com.illuzionzstudios.tab.column;
+package com.illuzionzstudios.tab.components.column;
 
 import org.bukkit.entity.Player;
 

@@ -13,7 +13,7 @@ import com.illuzionzstudios.config.Config;
 import com.illuzionzstudios.core.plugin.IlluzionzPlugin;
 import com.illuzionzstudios.scheduler.bukkit.BukkitScheduler;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
-import com.illuzionzstudios.tab.column.*;
+import com.illuzionzstudios.tab.components.column.*;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.listener.TabRegisterListener;
 import com.illuzionzstudios.tab.settings.Settings;

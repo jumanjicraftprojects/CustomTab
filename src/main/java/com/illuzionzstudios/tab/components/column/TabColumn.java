@@ -1,4 +1,4 @@
-package com.illuzionzstudios.tab.column;
+package com.illuzionzstudios.tab.components.column;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;

@@ -7,13 +7,13 @@
  * noncommercial uses permitted by copyright law. Any licensing of this software overrides
  * this statement.
  */
-package com.illuzionzstudios.tab;
+package com.illuzionzstudios.tab.components;
 
 import com.illuzionzstudios.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
-import com.illuzionzstudios.tab.column.TabColumn;
+import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.text.DynamicText;
