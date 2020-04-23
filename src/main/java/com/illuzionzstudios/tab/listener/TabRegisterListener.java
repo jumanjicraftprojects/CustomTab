@@ -35,7 +35,7 @@ public class TabRegisterListener implements Listener {
         Tab tabList = new Tab(event.getPlayer());
 
         // Register all tabs by creating instance
-        TabColumn.registered.forEach(tab -> {
+        TabColumn.registered.forEach((name, tab) -> {
             try {
                 Constructor<?> ctor = tab.getConstructor(Player.class);
                 TabColumn column = (TabColumn) ctor.newInstance(event.getPlayer());

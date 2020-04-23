@@ -15,9 +15,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents a column of the tab
@@ -30,9 +28,9 @@ public abstract class TabColumn implements Listener {
     protected Player player;
 
     /**
-     * List of registered tabs
+     * List of registered tabs. Sorted by tab column name
      */
-    public static List<Class<? extends TabColumn>> registered = new ArrayList<>();
+    public static Map<String, Class<? extends TabColumn>> registered = new HashMap<>();
 
     /**
      * Cached icon skins
@@ -99,8 +97,8 @@ public abstract class TabColumn implements Listener {
     /**
      * @param column Register a tab column
      */
-    public static void register(Class<? extends TabColumn> column) {
-        registered.add(column);
+    public static void register(String name, Class<? extends TabColumn> column) {
+        registered.put(name, column);
     }
 
     /**
