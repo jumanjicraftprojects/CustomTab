@@ -2,12 +2,14 @@ package com.illuzionzstudios.tab.column;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.controller.TabController;
+import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.text.AnimatedText;
 import com.illuzionzstudios.tab.text.DynamicText;
 import com.illuzionzstudios.tab.text.FrameText;
@@ -74,11 +76,26 @@ public abstract class TabColumn implements Listener {
     /**
      * Delay between updating header and footer
      */
-    private PresetCooldown headerFooterCooldown = new PresetCooldown(20);
+    private final PresetCooldown headerFooterCooldown;
+
+    /**
+     * Delay between updating tab elements
+     */
+    private final PresetCooldown elementCooldown;
+
+    /**
+     * Delay between scrolling sub pages
+     */
+    private final PresetCooldown pageScrollCooldown;
 
     public TabColumn(Player player, int columnNumber) {
         this.player = player;
         this.columnNumber = columnNumber;
+
+        // Set refresh cooldowns
+        headerFooterCooldown = new PresetCooldown(Settings.HEADER_FOOTER_REFRESH.getInt());
+        elementCooldown = new PresetCooldown(Settings.TAB_REFRESH.getInt());
+        pageScrollCooldown = new PresetCooldown(Settings.PAGE_SCROLL_COOLDOWN.getInt());
 
         MinecraftScheduler.get().registerSynchronizationService(this);
         Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
@@ -105,6 +122,8 @@ public abstract class TabColumn implements Listener {
 
         // Start timers
         headerFooterCooldown.go();
+        elementCooldown.go();
+        pageScrollCooldown.go();
     }
 
     @EventHandler
@@ -139,6 +158,8 @@ public abstract class TabColumn implements Listener {
         if (player == null || !headerFooterCooldown.isReady()) {
             return;
         }
+        headerFooterCooldown.reset();
+        headerFooterCooldown.go();
 
         TabController API = TabController.INSTANCE;
 
@@ -150,13 +171,13 @@ public abstract class TabColumn implements Listener {
         header.forEach(header -> {
             header.changeText();
 
-            headerText.append(header.getVisibleText() + "\n");
+            headerText.append(header.getVisibleText()).append("\n");
         });
 
         footer.forEach(footer -> {
             footer.changeText();
 
-            footerText.append(footer.getVisibleText() + "\n");
+            footerText.append(footer.getVisibleText()).append("\n");
         });
 
         // Set the text in the tab
@@ -164,13 +185,16 @@ public abstract class TabColumn implements Listener {
     }
 
     /*
-     * Refreshes social column very 4 seconds
+     * Render all text elements in tab
      */
-    @Async(rate = Rate.SEC_6)
+    @Async(rate = Rate.TICK)
     public void render() {
-        if (player == null) {
+        // Don't render if timer not ready
+        if (player == null || !elementCooldown.isReady()) {
             return;
         }
+        elementCooldown.reset();
+        elementCooldown.go();
 
         TabController API = TabController.INSTANCE;
 
@@ -240,20 +264,27 @@ public abstract class TabColumn implements Listener {
 
             // Go to next page if applicable
             cursor++;
+
         }
 
-        // If page display at bottom
-        if (pageInfo) {
-            cursor -= 3;
+        if (pageScrollCooldown.isReady()) {
+            // If page display at bottom
+            if (pageInfo) {
+                cursor -= 3;
+            }
+
+            // Check if cursor is greater than applicable
+            // number of pages
+            if (cursor >= (size - (3 * elements.size() / 20))) {
+                // Reset to page 1
+                this.elements = null;
+                cursor = 0;
+            }
+
+            pageScrollCooldown.reset();
+            pageScrollCooldown.go();
         }
 
-        // Check if cursor is greater than applicable
-        // number of pages
-        if (cursor >= (size - (3 * elements.size() / 20))) {
-            // Reset to page 1
-            this.elements = null;
-            cursor = 0;
-        }
     }
 
 

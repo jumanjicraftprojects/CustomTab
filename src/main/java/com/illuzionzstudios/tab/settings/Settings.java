@@ -20,6 +20,19 @@ public class Settings {
 
     static final Config config = CustomTab.getInstance().getCoreConfig();
 
+    public static final ConfigSetting HEADER_FOOTER_REFRESH = new ConfigSetting(config, "Refresh.Header Footer", 20,
+            "This is the interval (in ticks) between updating",
+            "the tab header and footer. Recommended minimum is 15 without glitching");
+
+    public static final ConfigSetting TAB_REFRESH = new ConfigSetting(config, "Refresh.Tab", 100,
+            "This is the interval (in ticks) between updating",
+            "the tab elements and sections. Recommended minimum is 15 without glitching");
+
+    public static final ConfigSetting PAGE_SCROLL_COOLDOWN = new ConfigSetting(config, "Refresh.Page", 100,
+            "This is the interval (in ticks) between scrolling",
+            "through tab pages. Recommended to set to a slower speed so",
+            "the pages don't fly through fast.");
+
     public static final ConfigSetting LANGUGE_MODE = new ConfigSetting(config, "System.Language Mode", "en_US",
             "The language file to use for the plugin",
             "More language files (if available) can be found in the plugins locale folder.");
