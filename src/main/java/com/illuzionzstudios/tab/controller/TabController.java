@@ -23,6 +23,7 @@ import com.illuzionzstudios.tab.struct.Latency;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -114,6 +115,9 @@ public enum TabController implements Listener, BukkitController<Plugin> {
      */
     public void setHeaderFooter(String header, String footer, Player... players) {
         WrapperPlayServerPlayerListHeaderFooter playerListHeaderFooter = new WrapperPlayServerPlayerListHeaderFooter();
+
+        header = ChatColor.translateAlternateColorCodes('&', header);
+        footer = ChatColor.translateAlternateColorCodes('&', footer);
 
         playerListHeaderFooter.setHeader(WrappedChatComponent.fromText(header));
         playerListHeaderFooter.setFooter(WrappedChatComponent.fromText(footer));

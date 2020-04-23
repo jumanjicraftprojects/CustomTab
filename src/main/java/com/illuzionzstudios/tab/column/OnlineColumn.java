@@ -2,9 +2,11 @@ package com.illuzionzstudios.tab.column;
 
 import com.illuzionzstudios.tab.controller.TabController;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 public class OnlineColumn extends TabColumn {
@@ -13,19 +15,22 @@ public class OnlineColumn extends TabColumn {
         super(player, 2);
     }
 
-    private List<TabPlayer> players = new ArrayList<>();
+    private final List<TabPlayer> players = new ArrayList<>();
 
     @Override
     public void render(List<String> elements) {
+        // Add players to cache to display
+        if (!((players.size() == Bukkit.getOnlinePlayers().size()) && (players.containsAll(Bukkit.getOnlinePlayers()) && Bukkit.getOnlinePlayers().containsAll(players)))) {
+            players.clear();
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                players.add(new TabPlayer(player));
+            });
+        }
+
         try {
             Collections.sort(players);
         } catch (Exception ignored) {
-
         }
-
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            players.add(new TabPlayer(player));
-        });
 
         players.forEach(p -> {
             if (p.tabPlayer == null) {
@@ -40,7 +45,7 @@ public class OnlineColumn extends TabColumn {
 
     public class TabPlayer implements Comparable<TabPlayer> {
 
-        private Player tabPlayer;
+        private final Player tabPlayer;
 
         public TabPlayer(Player player) {
             this.tabPlayer = player;

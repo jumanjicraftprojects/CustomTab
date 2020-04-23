@@ -56,7 +56,10 @@ public abstract class TabColumn implements Listener {
         MinecraftScheduler.get().registerSynchronizationService(this);
         Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
 
-        AnimatedText logo = new AnimatedText("Tab Test");
+        AnimatedText logo = new AnimatedText(
+                "&c&l&4&lT&c&lab Header",
+                "&c&lT&4&la&c&lb Header",
+                "&c&lTa&4&lb &c&lHeader");
         logo.addColorChange(ChatColor.LIGHT_PURPLE, true);
 
         this.headerLogo = logo;
@@ -95,10 +98,9 @@ public abstract class TabColumn implements Listener {
         }
 
         TabController API = TabController.INSTANCE;
-
         headerLogo.changeText();
 
-        API.setHeaderFooter("Test Header", "Test Footer", player);
+        API.setHeaderFooter("\n&r\n" + headerLogo.getVisibleText() + "\n&r\n", "\n&r\n" + "Test Footer" + "\n&r\n", player);
     }
 
     /*
@@ -149,13 +151,13 @@ public abstract class TabColumn implements Listener {
             String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1));
             String[] textArray = text.split(" ");
 
-            // Get player to see if to display
+            // Get player to see if to display player skin icon
             String playerName = ChatColor.stripColor(textArray.length == 0 ? "" : textArray[textArray.length - 1]);
             Player tabPlayer = Bukkit.getPlayer(playerName);
 
             // Check all elements with text
             if ((i - 1) < sub.size()) {
-                if (tabPlayer != null) {
+                if (tabPlayer != null && !playerName.trim().equalsIgnoreCase("")) {
                     // Set the avatar for that slot
                     if (!avatarCache.contains(columnNumber, i) || !avatarCache.get(columnNumber, i).equals(tabPlayer.getUniqueId())) {
                         API.setAvatar(columnNumber, i, tabPlayer, this.player);
@@ -167,8 +169,6 @@ public abstract class TabColumn implements Listener {
                 API.setText(columnNumber, i, text, this.player);
             } else {
                 // Otherwise text not defined so set blank
-
-                // Set blank text
                 API.setText(columnNumber, i, "", this.player);
 
                 // Make sure avatar is blank
@@ -190,6 +190,7 @@ public abstract class TabColumn implements Listener {
         // Check if cursor is greater than applicable
         // number of pages
         if (cursor >= (size - (3 * elements.size() / 20))) {
+            // Reset to page 1
             this.elements = null;
             cursor = 0;
         }
