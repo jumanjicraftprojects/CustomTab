@@ -57,7 +57,8 @@ public abstract class TabColumn implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
 
         AnimatedText logo = new AnimatedText(
-                "&c&l&4&lT&c&lab Header",
+                "&c&lTab Header",
+                "&4&lT&c&lab Header",
                 "&c&lT&4&la&c&lb Header",
                 "&c&lTa&4&lb &c&lHeader");
         logo.addColorChange(ChatColor.LIGHT_PURPLE, true);
