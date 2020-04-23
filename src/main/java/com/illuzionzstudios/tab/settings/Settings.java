@@ -37,6 +37,10 @@ public class Settings {
             "through tab pages. Recommended to set to a slower speed so",
             "the pages don't fly through fast.");
 
+    public static final ConfigSetting TAB_COLUMNS = new ConfigSetting(config, "Tab.Columns", 4,
+            "Amount of columns to display. This be set here so we always",
+            "display that many columns, but just change the content.");
+
     public static final ConfigSetting LANGUGE_MODE = new ConfigSetting(config, "System.Language Mode", "en_US",
             "The language file to use for the plugin",
             "More language files (if available) can be found in the plugins locale folder.");

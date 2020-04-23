@@ -9,17 +9,28 @@
  */
 package com.illuzionzstudios.tab;
 
+import com.illuzionzstudios.scheduler.MinecraftScheduler;
+import com.illuzionzstudios.scheduler.sync.Async;
+import com.illuzionzstudios.scheduler.sync.Rate;
+import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.column.TabColumn;
+import com.illuzionzstudios.tab.controller.TabController;
+import com.illuzionzstudios.tab.settings.Settings;
+import com.illuzionzstudios.tab.text.DynamicText;
+import com.illuzionzstudios.tab.text.FrameText;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Tab displayed to a player
+ *
+ * Header and Footer handled here as columns
+ * are independent of that
  */
-@RequiredArgsConstructor
 public class Tab {
 
     /**
@@ -29,20 +40,72 @@ public class Tab {
     private final Player player;
 
     /**
+     * Columns being displayed in the tab
+     */
+    private HashMap<Integer, TabColumn> columns = new HashMap<>();
+
+    /**
+     * List of header elements
+     */
+    private List<DynamicText> header = new ArrayList<>();
+
+    /**
+     * List of footer elements
+     */
+    private List<DynamicText> footer = new ArrayList<>();
+
+    // REFRESH COOLDOWNS
+
+    /**
+     * Delay between updating header and footer
+     */
+    private final PresetCooldown headerFooterCooldown;
+
+    public Tab(Player player) {
+        this.player = player;
+
+        // Cooldowns
+        headerFooterCooldown = new PresetCooldown(Settings.HEADER_FOOTER_REFRESH.getInt());
+
+        // Register scheduler for updating this tab
+        MinecraftScheduler.get().registerSynchronizationService(this);
+
+        FrameText header = new FrameText(20,
+                "&c&lTab Header",
+                "&4&lT&c&lab Header",
+                "&c&lT&4&la&c&lb Header",
+                "&c&lTa&4&lb &c&lHeader");
+
+        this.header.add(new FrameText(-1, ""));
+        this.header.add(header);
+        this.header.add(new FrameText(-1, ""));
+
+        FrameText footer = new FrameText(20,
+                "&c&lTab Footer",
+                "&4&lT&c&lab Footer",
+                "&c&lT&4&la&c&lb Footer",
+                "&c&lTa&4&lb &c&lFooter");
+
+        this.footer.add(new FrameText(-1,""));
+        this.footer.add(footer);
+        this.footer.add(new FrameText(-1,""));
+
+        // Start timers
+        headerFooterCooldown.go();
+    }
+
+    /**
      * Called when destroying or disabling this tab
      */
     public void disable() {
+        MinecraftScheduler.get().dismissSynchronizationService(this);
+
         columns.forEach((integer, column) -> {
             column.disable();
         });
 
         columns.clear();
     }
-
-    /**
-     * Columns being displayed in the tab
-     */
-    private HashMap<Integer, TabColumn> columns = new HashMap<>();
 
     /**
      * Start displaying a tab column
@@ -57,6 +120,51 @@ public class Tab {
         }
 
         this.columns.put(slot - 1, column);
+    }
+
+    /**
+     * Render the header and footer of the tab
+     */
+    @Async(rate = Rate.TICK)
+    public void renderHeaderFooter() {
+        // If not ready, don't render
+        if (player == null || !headerFooterCooldown.isReady()) {
+            return;
+        }
+        headerFooterCooldown.reset();
+        headerFooterCooldown.go();
+
+        TabController API = TabController.INSTANCE;
+
+        // Build the header/footer text
+        StringBuilder headerText = new StringBuilder();
+        StringBuilder footerText = new StringBuilder();
+
+        // Update text
+        header.forEach(header -> {
+            header.changeText();
+
+            headerText.append(header.getVisibleText()).append("\n");
+        });
+
+        footer.forEach(footer -> {
+            footer.changeText();
+
+            footerText.append(footer.getVisibleText()).append("\n");
+        });
+
+        // Set the text in the tab
+        API.setHeaderFooter(headerText.toString(), footerText.toString(), player);
+    }
+
+    /**
+     * Render all tab columns
+     */
+    @Async(rate = Rate.TICK)
+    public void render() {
+        this.columns.forEach((integer, column) -> {
+            column.render();
+        });
     }
 
 }

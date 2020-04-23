@@ -20,6 +20,7 @@ import com.illuzionzstudios.tab.listener.LegacyBlocker;
 import com.illuzionzstudios.tab.packet.AbstractPacket;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
+import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.struct.Latency;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -89,8 +90,8 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         ProtocolLibrary.getProtocolManager().addPacketListener(new LegacyBlocker(plugin));
 
         // Add default player slots
-        for (int x = 1; x <= 4; x++) {
-            for (int y = 1; y <= 20; y++) {
+        for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt() + 1; y++) {
                 this.initialList.add(
                         new PlayerInfoData(
                                 this.getDisplayProfile(x, y),
@@ -434,7 +435,6 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         this.removeSkin(player.getUniqueId(), players);
     }
 
-
     public void removeSkins(Collection<UUID> uuids, Player... players) {
         List<PlayerInfoData> data = new ArrayList<>();
 
@@ -509,7 +509,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         }
     }
 
-    // Set the gamemode when gamemode is changes
+    // Set the gamemode when gamemode is changed
     @EventHandler
     public void onGamemodeUpdate(PlayerGameModeChangeEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -528,10 +528,9 @@ public enum TabController implements Listener, BukkitController<Plugin> {
 
         // Load skins for player
         TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, event.getPlayer());
-        Logger.debug("Loaded %d skins for %s", Membrane.INSTANCE.displaySkins.size(), event.getPlayer().getName());
 
-        for (int x = 1; x <= 4; x++) {
-            for (int y = 1; y <= 20; y++) {
+        for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt() + 1; y++) {
                 this.hideAvatar(x, y, event.getPlayer());
             }
         }
@@ -545,6 +544,5 @@ public enum TabController implements Listener, BukkitController<Plugin> {
             }
         }
     }
-
 
 }
