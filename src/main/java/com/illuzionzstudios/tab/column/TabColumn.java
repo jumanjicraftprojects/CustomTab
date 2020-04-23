@@ -5,10 +5,12 @@ import com.google.common.collect.Table;
 import com.illuzionzstudios.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
+import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.text.AnimatedText;
 import com.illuzionzstudios.tab.text.DynamicText;
+import com.illuzionzstudios.tab.text.FrameText;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,17 +39,42 @@ public abstract class TabColumn implements Listener {
      */
     public static List<Class<? extends TabColumn>> registered = new ArrayList<>();
 
+    /**
+     * Cached icon skins
+     */
     protected Table<Integer, Integer, UUID> avatarCache = HashBasedTable.create();
 
+    /**
+     * The number of the tab display column
+     */
     protected final int columnNumber;
 
-    private boolean start = false;
-
+    /**
+     * Cursor between pages
+     */
     private int cursor = 0;
 
+    /**
+     * Text elements on the column
+     */
     private List<String> elements;
 
-    private DynamicText headerLogo;
+    /**
+     * List of header elements
+     */
+    private List<DynamicText> header = new ArrayList<>();
+
+    /**
+     * List of footer elements
+     */
+    private List<DynamicText> footer = new ArrayList<>();
+
+    // REFRESH COOLDOWNS
+
+    /**
+     * Delay between updating header and footer
+     */
+    private PresetCooldown headerFooterCooldown = new PresetCooldown(20);
 
     public TabColumn(Player player, int columnNumber) {
         this.player = player;
@@ -56,14 +83,28 @@ public abstract class TabColumn implements Listener {
         MinecraftScheduler.get().registerSynchronizationService(this);
         Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
 
-        AnimatedText logo = new AnimatedText(
+        FrameText header = new FrameText(
                 "&c&lTab Header",
                 "&4&lT&c&lab Header",
                 "&c&lT&4&la&c&lb Header",
                 "&c&lTa&4&lb &c&lHeader");
-        logo.addColorChange(ChatColor.LIGHT_PURPLE, true);
 
-        this.headerLogo = logo;
+        this.header.add(new FrameText(""));
+        this.header.add(header);
+        this.header.add(new FrameText(""));
+
+        FrameText footer = new FrameText(
+                "&c&lTab Footer",
+                "&4&lT&c&lab Footer",
+                "&c&lT&4&la&c&lb Footer",
+                "&c&lTa&4&lb &c&lFooter");
+
+        this.footer.add(new FrameText(""));
+        this.footer.add(footer);
+        this.footer.add(new FrameText(""));
+
+        // Start timers
+        headerFooterCooldown.go();
     }
 
     @EventHandler
@@ -92,16 +133,34 @@ public abstract class TabColumn implements Listener {
      */
     public abstract String getTitle();
 
-    @Async(rate = Rate.FAST)
+    @Async(rate = Rate.TICK)
     public void renderHeaderFooter() {
-        if (player == null) {
+        // If not ready, don't render
+        if (player == null || !headerFooterCooldown.isReady()) {
             return;
         }
 
         TabController API = TabController.INSTANCE;
-        headerLogo.changeText();
 
-        API.setHeaderFooter("\n&r\n" + headerLogo.getVisibleText() + "\n&r\n", "\n&r\n" + "Test Footer" + "\n&r\n", player);
+        // Build the header/footer text
+        StringBuilder headerText = new StringBuilder();
+        StringBuilder footerText = new StringBuilder();
+
+        // Update text
+        header.forEach(header -> {
+            header.changeText();
+
+            headerText.append(header.getVisibleText() + "\n");
+        });
+
+        footer.forEach(footer -> {
+            footer.changeText();
+
+            footerText.append(footer.getVisibleText() + "\n");
+        });
+
+        // Set the text in the tab
+        API.setHeaderFooter(headerText.toString(), footerText.toString(), player);
     }
 
     /*

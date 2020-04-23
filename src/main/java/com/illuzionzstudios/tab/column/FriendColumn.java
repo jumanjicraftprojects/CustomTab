@@ -11,16 +11,14 @@ public class FriendColumn extends TabColumn {
     }
 
     public void render(List<String> elements) {
-        elements.add("&fHey! You seem pretty");
-        elements.add("&flonely..");
-        elements.add("");
-        elements.add("Type &a/addfriend ");
-        elements.add("&fto add a friend!");
+        elements.add("&7Faction: None");
+        elements.add("&7Power: 0/0");
+        elements.add("&7Online Members: 2/7");
     }
 
     @Override
     public String getTitle() {
-        return "&2&lFriends";
+        return "&2&lFaction";
     }
 
 }
