@@ -1,5 +1,7 @@
 package com.illuzionzstudios.tab.components.column;
 
+import com.illuzionzstudios.tab.text.DynamicText;
+import com.illuzionzstudios.tab.text.FrameText;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -15,7 +17,7 @@ public class OnlineColumn extends TabColumn {
     private final List<TabPlayer> players = new ArrayList<>();
 
     @Override
-    public void render(List<String> elements) {
+    public void render(List<DynamicText> elements) {
         // Add players to cache to display
         if (!((players.size() == Bukkit.getOnlinePlayers().size()) && (players.containsAll(Bukkit.getOnlinePlayers()) && Bukkit.getOnlinePlayers().containsAll(players)))) {
             players.clear();
@@ -36,7 +38,7 @@ public class OnlineColumn extends TabColumn {
 
             String text = player.getDisplayName();
 
-            elements.add(text);
+            elements.add(new FrameText(-1, text));
         });
     }
 
@@ -63,7 +65,7 @@ public class OnlineColumn extends TabColumn {
     }
 
     @Override
-    public String getTitle() {
-        return "&a&lOnline&2 &2TEST";
+    public DynamicText getTitle() {
+        return new FrameText(-1, "&a&lOnline &2Test");
     }
 }

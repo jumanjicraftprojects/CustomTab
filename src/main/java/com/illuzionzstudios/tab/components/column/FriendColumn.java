@@ -1,5 +1,7 @@
 package com.illuzionzstudios.tab.components.column;
 
+import com.illuzionzstudios.tab.text.DynamicText;
+import com.illuzionzstudios.tab.text.FrameText;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -10,15 +12,13 @@ public class FriendColumn extends TabColumn {
         super(player, 3);
     }
 
-    public void render(List<String> elements) {
-        elements.add("&7Faction: None");
-        elements.add("&7Power: 0/0");
-        elements.add("&7Online Members: 2/7");
+    public void render(List<DynamicText> elements) {
+        elements.add(new FrameText(10, "&fFaction information", "&f&lFaction information"));
     }
 
     @Override
-    public String getTitle() {
-        return "&2&lFaction";
+    public DynamicText getTitle() {
+        return new FrameText(-1, "&2&lFaction");
     }
 
 }

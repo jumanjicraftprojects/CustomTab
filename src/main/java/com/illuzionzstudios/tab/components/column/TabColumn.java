@@ -7,6 +7,8 @@ import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
+import com.illuzionzstudios.tab.text.DynamicText;
+import com.illuzionzstudios.tab.text.FrameText;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -52,7 +54,7 @@ public abstract class TabColumn implements Listener {
     /**
      * Text elements on the column
      */
-    private List<String> elements;
+    private List<DynamicText> elements = new ArrayList<>();
 
     /**
      * Delay between updating tab elements
@@ -105,12 +107,12 @@ public abstract class TabColumn implements Listener {
     /**
      * Refreshes the column of social
      */
-    protected abstract void render(List<String> elements);
+    protected abstract void render(List<DynamicText> elements);
 
     /**
      * @return Returns the title of column
      */
-    public abstract String getTitle();
+    public abstract DynamicText getTitle();
 
     /*
      * Render all text elements in tab
@@ -125,26 +127,18 @@ public abstract class TabColumn implements Listener {
 
         TabController API = TabController.INSTANCE;
 
-        List<String> elements = new ArrayList<>();
+        // Render only if empty
+        if (elements.isEmpty())
+        render(elements);
 
-        if (this.elements == null) {
-            render(elements);
-        } else {
-            elements = this.elements;
-        }
-
-        Logger.debug("COLUMN " + columnNumber + " SIZE " + elements.size());
-
-        List<String> sub = new ArrayList<>
+        List<DynamicText> sub = new ArrayList<>
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
                         Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 2)));
 
-        Logger.debug("COLUMN " + columnNumber + " SUB SIZE " + sub.size());
+        sub.add(0, getTitle());
+        sub.add(1, new FrameText(-1, " "));
 
-        sub.add(0, ChatColor.translateAlternateColorCodes('&', getTitle()));
-        sub.add(1, " ");
-
-        double size = (elements.size() + 2 + Math.floor((elements.size() / (float) Settings.PAGE_ELEMENTS.getInt() + 1)));
+        double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)));
 
         boolean pageInfo = false;
 
@@ -152,9 +146,8 @@ public abstract class TabColumn implements Listener {
             // Calculate page length //
             double pageDelta = ((double) (cursor + 3) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
-            int max = (int) Math.ceil((size + (2 * elements.size() / (float) Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
-            sub.add("&7" + Math.max(1, page) + "&8/&7" + Math.max(1, max) + "");
-            this.elements = elements;
+            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
+            sub.add(new FrameText(-1, "&7" + Math.max(1, page) + "&8/&7" + Math.max(1, max) + ""));
             pageInfo = true;
         }
 
@@ -163,7 +156,7 @@ public abstract class TabColumn implements Listener {
             boolean blank = (i - 1) >= sub.size();
 
             // Send update packet //
-            String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1));
+            String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1).getVisibleText());
             String[] textArray = text.split(" ");
 
             // Get player to see if to display player skin icon
@@ -198,6 +191,9 @@ public abstract class TabColumn implements Listener {
             cursor++;
         }
 
+        // Update text
+        elements.forEach(DynamicText::changeText);
+
         if (pageScrollCooldown.isReady()) {
             // If page display at bottom
             if (pageInfo) {
@@ -208,14 +204,13 @@ public abstract class TabColumn implements Listener {
             // number of pages
             if (cursor >= (size - (3 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1))) {
                 // Reset to page 1
-                this.elements = null;
+                this.elements.clear();
                 cursor = 0;
             }
 
             pageScrollCooldown.reset();
             pageScrollCooldown.go();
         }
-
     }
 
 

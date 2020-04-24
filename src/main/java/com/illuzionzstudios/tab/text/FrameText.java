@@ -67,13 +67,18 @@ public class FrameText implements DynamicText {
 
     @Override
     public String getVisibleText() {
+        if (visibleText == null) {
+            visibleText = getOriginalText();
+            changeText();
+        }
+
         return visibleText;
     }
 
     @Override
     public String changeText() {
         // Check changing cooldown
-        if (!getInterval().isReady()) return "";
+        if (!getInterval().isReady()) return visibleText;
         getInterval().reset();
         getInterval().go();
 
