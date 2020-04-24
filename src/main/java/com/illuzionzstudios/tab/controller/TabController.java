@@ -66,6 +66,18 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         this.displayedTabs.put(player.getUniqueId(), tab);
     }
 
+    /**
+     * @param player Clear all displayed tabs for player
+     */
+    public void clearTabs(Player player) {
+        if (this.displayedTabs.containsKey(player.getUniqueId())) {
+            // Already displaying tab, dismiss other
+            this.displayedTabs.get(player.getUniqueId()).disable();
+        }
+
+        this.displayedTabs.remove(player.getUniqueId());
+    }
+
     public static final char DISPLAY_SLOT;
     public static final char SKIN_SLOT;
 

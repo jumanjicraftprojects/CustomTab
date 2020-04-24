@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
@@ -48,6 +49,12 @@ public class TabRegisterListener implements Listener {
         });
 
         TabController.INSTANCE.displayTab(event.getPlayer(), tabList);
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        // Handle unregistering tabs
+        TabController.INSTANCE.clearTabs(event.getPlayer());
     }
 
 }

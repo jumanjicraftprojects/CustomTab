@@ -143,6 +143,7 @@ public abstract class TabColumn implements Listener {
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
                         Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 2)));
 
+        // If titles enabled
         if (Settings.TAB_TITLES.getBoolean()) {
             sub.add(0, getTitle());
 
@@ -176,34 +177,34 @@ public abstract class TabColumn implements Listener {
             String[] textArray = text.split(" ");
 
             // Trim text
-            if (ChatColor.stripColor(text).length() > Settings.TAB_WIDTH.getInt()) {
+            if (text.length() > Settings.TAB_WIDTH.getInt()) {
                 // Check for colour code
                 boolean previousCode = false;
-                // How many bold characters
-                int textWidth = 0;
                 // If the text is currently bold
                 boolean isBold = false;
-                // Total number of iteratec characters
-                int characters = 0;
-                for (char c : text.toCharArray()) {
+                // Total number of bold characters
+                int boldChars = 0;
+
+                char[] chars = text.toCharArray();
+                for (int j = 0; j < Settings.TAB_WIDTH.getInt(); j++) {
+                    char c = chars[j];
+
                     if (c == '§') {
                         previousCode = true;
-                        characters--;
                     } else if (previousCode) {
                         previousCode = false;
                         isBold = c == 'l' || c == 'L';
-                        characters--;
                     } else {
-                        textWidth += isBold ? 2 : 1;
-                        // Add for each characters
-                        characters++;
-                    }
-
-                    // Check for over limit
-                    if (textWidth > Settings.TAB_WIDTH.getInt()) {
-//                        text = text.substring(0, characters - 1);
+                        boldChars += isBold ? 1 : 0;
                     }
                 }
+
+                if (columnNumber == 1) {
+                    Logger.debug("Width: " + (Settings.TAB_WIDTH.getInt() - (boldChars / 3)));
+                    Logger.debug("Bold Chars: " + boldChars);
+                }
+
+                text = text.substring(0, Settings.TAB_WIDTH.getInt() - (boldChars / 3));
             }
 
             // Get player to see if to display player skin icon

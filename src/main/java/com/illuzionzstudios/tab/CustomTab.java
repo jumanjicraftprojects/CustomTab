@@ -40,7 +40,7 @@ public class CustomTab extends IlluzionzPlugin {
     public void onPluginEnable() {
         // Load all settings and language
         Settings.loadSettings();
-        this.setLocale(Settings.LANGUGE_MODE.getString(), false);
+        this.setLocale(Settings.LANGUAGE_MODE.getString(), false);
 
         new BukkitScheduler(this).initialize();
 
@@ -71,7 +71,7 @@ public class CustomTab extends IlluzionzPlugin {
     public void onConfigReload() {
         // Load all settings and language
         Settings.loadSettings();
-        this.setLocale(Settings.LANGUGE_MODE.getString(), true);
+        this.setLocale(Settings.LANGUAGE_MODE.getString(), true);
     }
 
     @Override
