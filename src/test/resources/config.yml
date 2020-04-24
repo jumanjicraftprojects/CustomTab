@@ -21,6 +21,11 @@ Tab:
   # display that many columns, but just change the content.
   Columns: 4
 
+  # The amount of characters per column. This is the limit for
+  # text displayed per column before it cuts off. It's also the
+  # minimum width for each tab column, meaning it will always be that length
+  Width: 100
+
   # The different columns to be displayed
   Column:
     # Name of the column

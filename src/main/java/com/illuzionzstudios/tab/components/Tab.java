@@ -167,14 +167,4 @@ public class Tab {
         API.setHeaderFooter(headerText.toString(), footerText.toString(), player);
     }
 
-    /**
-     * Render all tab columns
-     */
-    @Async(rate = Rate.TICK)
-    public void render() {
-        this.columns.forEach((integer, column) -> {
-            column.render();
-        });
-    }
-
 }

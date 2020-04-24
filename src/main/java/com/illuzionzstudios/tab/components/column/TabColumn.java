@@ -2,7 +2,12 @@ package com.illuzionzstudios.tab.components.column;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.illuzionzstudios.core.util.DefaultFontInfo;
 import com.illuzionzstudios.core.util.Logger;
+import com.illuzionzstudios.core.util.StringUtil;
+import com.illuzionzstudios.scheduler.MinecraftScheduler;
+import com.illuzionzstudios.scheduler.sync.Async;
+import com.illuzionzstudios.scheduler.sync.Rate;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.controller.TabController;
@@ -75,6 +80,7 @@ public abstract class TabColumn implements Listener {
         pageScrollCooldown = new PresetCooldown(Settings.PAGE_SCROLL_COOLDOWN.getInt());
 
         Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
+        MinecraftScheduler.get().registerSynchronizationService(this);
 
         // Start timers
         elementCooldown.go();
@@ -86,6 +92,7 @@ public abstract class TabColumn implements Listener {
      */
     public void disable() {
         HandlerList.unregisterAll(this);
+        MinecraftScheduler.get().dismissSynchronizationService(this);
     }
 
     @EventHandler
@@ -117,6 +124,7 @@ public abstract class TabColumn implements Listener {
     /*
      * Render all text elements in tab
      */
+    @Async(rate = Rate.TICK)
     public void render() {
         // Don't render if timer not ready
         if (player == null || !elementCooldown.isReady()) {
@@ -136,7 +144,13 @@ public abstract class TabColumn implements Listener {
                         Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 2)));
 
         sub.add(0, getTitle());
-        sub.add(1, new FrameText(-1, " "));
+
+        // Set our minimum tab length
+        StringBuilder width = new StringBuilder();
+        for (int i = 0; i < Settings.TAB_WIDTH.getInt(); i++) {
+            width.append(" ");
+        }
+        sub.add(1, new FrameText(-1, width.toString()));
 
         double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)));
 
@@ -158,6 +172,37 @@ public abstract class TabColumn implements Listener {
             // Send update packet //
             String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1).getVisibleText());
             String[] textArray = text.split(" ");
+
+            // Trim text
+            if (ChatColor.stripColor(text).length() > Settings.TAB_WIDTH.getInt()) {
+                // Check for colour code
+                boolean previousCode = false;
+                // How many bold characters
+                int textWidth = 0;
+                // If the text is currently bold
+                boolean isBold = false;
+                // Total number of iteratec characters
+                int characters = 0;
+                for (char c : text.toCharArray()) {
+                    if (c == '§') {
+                        previousCode = true;
+                        characters--;
+                    } else if (previousCode) {
+                        previousCode = false;
+                        isBold = c == 'l' || c == 'L';
+                        characters--;
+                    } else {
+                        textWidth += isBold ? 2 : 1;
+                        // Add for each characters
+                        characters++;
+                    }
+
+                    // Check for over limit
+                    if (textWidth > Settings.TAB_WIDTH.getInt()) {
+//                        text = text.substring(0, characters - 1);
+                    }
+                }
+            }
 
             // Get player to see if to display player skin icon
             String playerName = ChatColor.stripColor(textArray.length == 0 ? "" : textArray[textArray.length - 1]);
