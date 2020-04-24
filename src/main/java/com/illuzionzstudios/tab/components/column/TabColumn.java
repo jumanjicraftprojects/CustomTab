@@ -199,12 +199,7 @@ public abstract class TabColumn implements Listener {
                     }
                 }
 
-                if (columnNumber == 1) {
-                    Logger.debug("Width: " + (Settings.TAB_WIDTH.getInt() - (boldChars / 3)));
-                    Logger.debug("Bold Chars: " + boldChars);
-                }
-
-                text = text.substring(0, Settings.TAB_WIDTH.getInt() - (boldChars / 3));
+                text = text.substring(0, (Settings.TAB_WIDTH.getInt() - (boldChars / 8)) - 4);
             }
 
             // Get player to see if to display player skin icon
