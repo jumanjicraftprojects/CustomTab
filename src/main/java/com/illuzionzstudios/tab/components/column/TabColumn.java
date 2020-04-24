@@ -2,6 +2,7 @@ package com.illuzionzstudios.tab.components.column;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.illuzionzstudios.core.locale.player.Message;
 import com.illuzionzstudios.core.util.DefaultFontInfo;
 import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.core.util.StringUtil;
@@ -164,7 +165,12 @@ public abstract class TabColumn implements Listener {
             double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
             int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
-            sub.add(new FrameText(-1, "&7" + Math.max(1, page) + "&8/&7" + Math.max(1, max) + ""));
+
+            // Pagination text
+            String pagesText = new Message(Settings.TAB_PAGE_TEXT.getString())
+                    .processPlaceholder("current_page", Math.max(1, page))
+                    .processPlaceholder("max", Math.max(1, max)).getMessage();
+            sub.add(new FrameText(-1, pagesText));
             pageInfo = true;
         }
 

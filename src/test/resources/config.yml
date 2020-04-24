@@ -31,6 +31,10 @@ Tab:
   # If set, minimum tab width won't work
   Display Titles: true
 
+  # This is the text displayed at the bottom of each tab column
+  # when there are multiple pages.
+  Page Text: "&7%current_page%&8/&7%max_page%"
+
   # The different columns to be displayed
   Column:
     # Name of the column

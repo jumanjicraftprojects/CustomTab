@@ -42,14 +42,18 @@ public class Settings {
             "Amount of columns to display. This be set here so we always",
             "display that many columns, but just change the content.");
 
-    public static final ConfigSetting TAB_TITLES = new ConfigSetting(config, "Tab.Display Titles", true,
-            "Whether each tab column will have a title, defined for each column.",
-            "If false, only text elements will be displayed");
-
     public static final ConfigSetting TAB_WIDTH = new ConfigSetting(config, "Tab.Width", 70,
             "The amount of characters per column. This is the limit for",
             "text displayed per column before it cuts off.",
             "minimum width for each tab column, meaning it will always be that length");
+
+    public static final ConfigSetting TAB_TITLES = new ConfigSetting(config, "Tab.Display Titles", true,
+            "Whether each tab column will have a title, defined for each column.",
+            "If false, only text elements will be displayed");
+
+    public static final ConfigSetting TAB_PAGE_TEXT = new ConfigSetting(config, "Tab.Page Text", "&7%current_page%&8/&7%max_page%",
+            "This is the text displayed at the bottom of each tab column",
+            "when there are multiple pages.");
 
     public static final ConfigSetting LANGUAGE_MODE = new ConfigSetting(config, "System.Language Mode", "en_US",
             "The language file to use for the plugin",
