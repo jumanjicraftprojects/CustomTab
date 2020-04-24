@@ -169,7 +169,7 @@ public abstract class TabColumn implements Listener {
             // Pagination text
             String pagesText = new Message(Settings.TAB_PAGE_TEXT.getString())
                     .processPlaceholder("current_page", Math.max(1, page))
-                    .processPlaceholder("max", Math.max(1, max)).getMessage();
+                    .processPlaceholder("max_page", Math.max(1, max)).getMessage();
             sub.add(new FrameText(-1, pagesText));
             pageInfo = true;
         }

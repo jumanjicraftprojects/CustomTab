@@ -38,7 +38,10 @@ public class OnlineColumn extends TabColumn {
 
             String text = player.getDisplayName();
 
-            elements.add(new FrameText(-1, text));
+            for (int i = 0; i < 30; i++) {
+                elements.add(new FrameText(-1, text));
+            }
+
         });
     }
 
