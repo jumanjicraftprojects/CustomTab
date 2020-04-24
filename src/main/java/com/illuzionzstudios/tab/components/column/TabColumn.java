@@ -2,6 +2,7 @@ package com.illuzionzstudios.tab.components.column;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.controller.TabController;
@@ -132,14 +133,18 @@ public abstract class TabColumn implements Listener {
             elements = this.elements;
         }
 
+        Logger.debug("COLUMN " + columnNumber + " SIZE " + elements.size());
+
         List<String> sub = new ArrayList<>
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
-                        Math.min(elements.size(), cursor + 17)));
+                        Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 2)));
+
+        Logger.debug("COLUMN " + columnNumber + " SUB SIZE " + sub.size());
 
         sub.add(0, ChatColor.translateAlternateColorCodes('&', getTitle()));
         sub.add(1, " ");
 
-        double size = (elements.size() + 2 + Math.floor((elements.size() / 20)));
+        double size = (elements.size() + 2 + Math.floor((elements.size() / (float) Settings.PAGE_ELEMENTS.getInt() + 1)));
 
         boolean pageInfo = false;
 
@@ -147,13 +152,13 @@ public abstract class TabColumn implements Listener {
             // Calculate page length //
             double pageDelta = ((double) (cursor + 3) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
-            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
-
+            int max = (int) Math.ceil((size + (2 * elements.size() / (float) Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
             sub.add("&7" + Math.max(1, page) + "&8/&7" + Math.max(1, max) + "");
             this.elements = elements;
             pageInfo = true;
         }
 
+        // For elements in the sub tab
         for (int i = 1; i <= Settings.PAGE_ELEMENTS.getInt() + 1; i++) {
             boolean blank = (i - 1) >= sub.size();
 
@@ -189,8 +194,8 @@ public abstract class TabColumn implements Listener {
             }
 
             // Go to next page if applicable
+            if (pageInfo)
             cursor++;
-
         }
 
         if (pageScrollCooldown.isReady()) {
