@@ -42,6 +42,10 @@ public class Settings {
             "Amount of columns to display. This be set here so we always",
             "display that many columns, but just change the content.");
 
+    public static final ConfigSetting TAB_TITLES = new ConfigSetting(config, "Tab.Display Titles", true,
+            "Whether each tab column will have a title, defined for each column.",
+            "If false, only text elements will be displayed");
+
     public static final ConfigSetting TAB_WIDTH = new ConfigSetting(config, "Tab.Width", 70,
             "The amount of characters per column. This is the limit for",
             "text displayed per column before it cuts off.",

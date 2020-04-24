@@ -143,14 +143,16 @@ public abstract class TabColumn implements Listener {
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
                         Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 2)));
 
-        sub.add(0, getTitle());
+        if (Settings.TAB_TITLES.getBoolean()) {
+            sub.add(0, getTitle());
 
-        // Set our minimum tab length
-        StringBuilder width = new StringBuilder();
-        for (int i = 0; i < Settings.TAB_WIDTH.getInt(); i++) {
-            width.append(" ");
+            // Set our minimum tab length
+            StringBuilder width = new StringBuilder();
+            for (int i = 0; i < Settings.TAB_WIDTH.getInt(); i++) {
+                width.append(" ");
+            }
+            sub.add(1, new FrameText(-1, width.toString()));
         }
-        sub.add(1, new FrameText(-1, width.toString()));
 
         double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)));
 
@@ -158,7 +160,7 @@ public abstract class TabColumn implements Listener {
 
         if (size >= Settings.PAGE_ELEMENTS.getInt()) {
             // Calculate page length //
-            double pageDelta = ((double) (cursor + 3) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
+            double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
             int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
             sub.add(new FrameText(-1, "&7" + Math.max(1, page) + "&8/&7" + Math.max(1, max) + ""));
@@ -242,12 +244,12 @@ public abstract class TabColumn implements Listener {
         if (pageScrollCooldown.isReady()) {
             // If page display at bottom
             if (pageInfo) {
-                cursor -= 3;
+                cursor -= (Settings.TAB_TITLES.getBoolean() ? 3 : 1);
             }
 
             // Check if cursor is greater than applicable
             // number of pages
-            if (cursor >= (size - (3 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1))) {
+            if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1))) {
                 // Reset to page 1
                 this.elements.clear();
                 cursor = 0;

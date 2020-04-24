@@ -26,6 +26,11 @@ Tab:
   # minimum width for each tab column, meaning it will always be that length
   Width: 100
 
+  # Whether each tab column will have a title, defined for each column.
+  # If false, only text elements will be displayed
+  # If set, minimum tab width won't work
+  Display Titles: true
+
   # The different columns to be displayed
   Column:
     # Name of the column
