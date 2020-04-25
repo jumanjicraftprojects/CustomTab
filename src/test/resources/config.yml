@@ -1,10 +1,10 @@
 Refresh:
   # This is the interval (in ticks) between updating
   # the tab header and footer.
-  Header Footer: 20
+  Header Footer: 5
   # This is the interval (in ticks) between updating
   # the tab elements and sections.
-  Tab: 100
+  Tab: 5
 
 Page:
   # This is the amount of elements per column.
@@ -24,7 +24,7 @@ Tab:
   # The amount of characters per column. This is the limit for
   # text displayed per column before it cuts off. It's also the
   # minimum width for each tab column, meaning it will always be that length
-  Width: 100
+  Width: 70
 
   # Whether each tab column will have a title, defined for each column.
   # If false, only text elements will be displayed
@@ -106,9 +106,12 @@ Tab:
     # Name of the column
     Server Information:
       # Column slot to display in
-      Slot: 3
+      Slot: 2
       # The title of this tab column
-      Title: "&e&lPlayer Information"
+      Title:
+        Animations:
+          - "&d&lServer Information"
+        Interval: -1
       # Text elements to display
       Text:
         # Different text element names

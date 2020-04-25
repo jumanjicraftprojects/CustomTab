@@ -20,11 +20,11 @@ public class Settings {
 
     static final Config config = CustomTab.getInstance().getCoreConfig();
 
-    public static final ConfigSetting HEADER_FOOTER_REFRESH = new ConfigSetting(config, "Refresh.Header Footer", 20,
+    public static final ConfigSetting HEADER_FOOTER_REFRESH = new ConfigSetting(config, "Refresh.Header Footer", 5,
             "This is the interval (in ticks) between updating",
             "the tab header and footer.");
 
-    public static final ConfigSetting TAB_REFRESH = new ConfigSetting(config, "Refresh.Tab", 100,
+    public static final ConfigSetting TAB_REFRESH = new ConfigSetting(config, "Refresh.Tab", 5,
             "This is the interval (in ticks) between updating",
             "the tab elements and sections.");
 
@@ -64,7 +64,7 @@ public class Settings {
      */
     public static void loadSettings() {
         config.load();
-        config.setAutoremove(true);
+        config.setAutoremove(false);
 
         config.saveChanges();
     }

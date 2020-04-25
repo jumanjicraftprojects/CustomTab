@@ -9,9 +9,11 @@
  */
 package com.illuzionzstudios.tab.listener;
 
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.components.column.*;
 import com.illuzionzstudios.tab.controller.TabController;
+import com.illuzionzstudios.tab.template.TabLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,11 +37,12 @@ public class TabRegisterListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Tab tabList = new Tab(event.getPlayer());
 
-        // Register all tabs by creating instance
-        TabColumn.registered.forEach((name, tab) -> {
+        TabController.INSTANCE.getLoaders().forEach((name, loader) -> {
             try {
-                Constructor<?> ctor = tab.getConstructor(Player.class);
-                TabColumn column = (TabColumn) ctor.newInstance(event.getPlayer());
+                Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, TabLoader.class);
+                CustomColumn column = (CustomColumn) ctor.newInstance(event.getPlayer(), loader);
+
+                Logger.debug("Registering tab column " + column.getTitle());
 
                 // Display to player
                 tabList.displayColumn(column.getColumnNumber(), column);

@@ -11,7 +11,11 @@ package com.illuzionzstudios.tab.controller;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.wrappers.*;
+import com.illuzionzstudios.config.Config;
+import com.illuzionzstudios.config.ConfigSection;
 import com.illuzionzstudios.core.bukkit.controller.BukkitController;
+import com.illuzionzstudios.core.util.Logger;
+import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
@@ -21,6 +25,7 @@ import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.struct.Latency;
+import com.illuzionzstudios.tab.template.TabLoader;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
@@ -50,6 +55,12 @@ public enum TabController implements Listener, BukkitController<Plugin> {
      */
     @Getter
     public HashMap<UUID, Tab> displayedTabs = new HashMap<>();
+
+    /**
+     * Loaded tab loaders to load tab columns
+     */
+    @Getter
+    public HashMap<String, TabLoader> loaders = new HashMap<>();
 
     /**
      * Display a tab to the player
@@ -107,6 +118,17 @@ public enum TabController implements Listener, BukkitController<Plugin> {
                         )
                 );
             }
+        }
+
+        // Load tab loaders
+        Config config = CustomTab.getInstance().getCoreConfig();
+
+        Logger.debug(config.getSections("Tab.Column"));
+
+        // Loop through and create a loader for each section
+        for (ConfigSection section : config.getSections("Tab.Column")) {
+            Logger.debug("Load tab loader " + section.getName());
+            this.loaders.put(section.getName().toLowerCase(), new TabLoader(section));
         }
     }
 

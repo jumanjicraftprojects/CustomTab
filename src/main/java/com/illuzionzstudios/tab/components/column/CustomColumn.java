@@ -30,11 +30,11 @@ public class CustomColumn extends TabColumn {
      * Create a new custom column. Loader
      * is parsed in when creating instance
      *
-     * @param player
-     * @param loader
+     * @param player Player showing tab
+     * @param loader Our loader to display data
      */
     public CustomColumn(Player player, TabLoader loader) {
-        super(player, 1);
+        super(player, loader.getSlot());
         this.loader = loader;
     }
 
