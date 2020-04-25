@@ -13,7 +13,7 @@ public class FriendColumn extends TabColumn {
     }
 
     public void render(List<DynamicText> elements) {
-        elements.add(new FrameText(10, "&fFaction information", "&f&lFaction information"));
+        elements.add(new FrameText(20, "&fFaction information", "&f&lFaction information"));
     }
 
     @Override

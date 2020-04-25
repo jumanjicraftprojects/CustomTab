@@ -13,7 +13,7 @@ public class TrainerColumn extends TabColumn {
     }
 
     public void render(List<DynamicText> elements) {
-        elements.add(new FrameText(10, "&fPlayer information displayed here", "&f&lPlayer information displayed here"));
+        elements.add(new FrameText(20, "&fPlayer information displayed here", "&f&lPlayer information displayed here"));
     }
 
     @Override

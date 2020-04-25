@@ -13,7 +13,7 @@ public class VersionColumn extends TabColumn {
     }
 
     public void render(List<DynamicText> elements) {
-        elements.add(new FrameText(10, "&fStill in development", "&f&lStill in development"));
+        elements.add(new FrameText(20, "&fStill in development", "&f&lStill in development"));
     }
 
     @Override

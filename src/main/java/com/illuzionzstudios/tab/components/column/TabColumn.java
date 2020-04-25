@@ -3,6 +3,7 @@ package com.illuzionzstudios.tab.components.column;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.illuzionzstudios.core.locale.player.Message;
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
@@ -168,20 +169,31 @@ public abstract class TabColumn implements Listener {
 
         if (size >= Settings.PAGE_ELEMENTS.getInt() - 1) {
             // Calculate page length //
-            double pageDelta = ((double) (cursor + 3) / 20) + 1;
+            double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt()) + 1;
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
-            int max = (int) Math.ceil((size + (2 * elements.size() / 20)) / 20);
-//            double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt()) + 1;
-//            int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta)) - 2;
-//            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt())) / Settings.PAGE_ELEMENTS.getInt());
+            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt())) / Settings.PAGE_ELEMENTS.getInt());
+
+            if (pageScrollCooldown.isReady()) {
+                // Don't update if on a null page
+                if (page > max) {
+                    // Reset to page 1
+                    this.elements = null;
+                    cursor = 0;
+                    return;
+                }
+
+                this.elements = check;
+                pageInfo = true;
+
+                pageScrollCooldown.reset();
+                pageScrollCooldown.go();
+            }
 
             // Pagination text
             String pagesText = new Message(Settings.TAB_PAGE_TEXT.getString())
                     .processPlaceholder("current_page", Math.max(1, page))
                     .processPlaceholder("max_page", Math.max(1, max)).getMessage();
             sub.add(new FrameText(-1, pagesText));
-            this.elements = check;
-            pageInfo = true;
         }
 
         // For elements in the sub tab
@@ -253,23 +265,19 @@ public abstract class TabColumn implements Listener {
         // Update text
         elements.forEach(DynamicText::changeText);
 
-        if (pageScrollCooldown.isReady()) {
-            // If page display at bottom
-            if (pageInfo) {
-                cursor -= (Settings.TAB_TITLES.getBoolean() ? 3 : 1);
-            }
-
-            // Check if cursor is greater than applicable
-            // number of pages
-            if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / (Settings.PAGE_ELEMENTS.getInt())))) {
-                // Reset to page 1
-                this.elements = null;
-                cursor = 0;
-            }
-
-            pageScrollCooldown.reset();
-            pageScrollCooldown.go();
+        // If page display at bottom
+        if (pageInfo) {
+            cursor -= (Settings.TAB_TITLES.getBoolean() ? 3 : 1);
         }
+
+        // Check if cursor is greater than applicable
+        // number of pages
+        if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / (Settings.PAGE_ELEMENTS.getInt())))) {
+            // Reset to page 1
+            this.elements = null;
+            cursor = 0;
+        }
+
     }
 
 
