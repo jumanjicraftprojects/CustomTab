@@ -3,9 +3,6 @@ package com.illuzionzstudios.tab.components.column;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.illuzionzstudios.core.locale.player.Message;
-import com.illuzionzstudios.core.util.DefaultFontInfo;
-import com.illuzionzstudios.core.util.Logger;
-import com.illuzionzstudios.core.util.StringUtil;
 import com.illuzionzstudios.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
@@ -32,45 +29,38 @@ import java.util.*;
 public abstract class TabColumn implements Listener {
 
     /**
-     * The player the tab is shown to
-     */
-    protected Player player;
-
-    /**
      * List of registered tabs. Sorted by tab column name
      */
     public static Map<String, Class<? extends TabColumn>> registered = new HashMap<>();
-
-    /**
-     * Cached icon skins
-     */
-    protected Table<Integer, Integer, UUID> avatarCache = HashBasedTable.create();
-
     /**
      * The number of the tab display column
      */
     @Getter
     protected final int columnNumber;
-
-    /**
-     * Cursor between pages
-     */
-    private int cursor = 0;
-
-    /**
-     * Text elements on the column
-     */
-    private List<DynamicText> elements = new ArrayList<>();
-
     /**
      * Delay between updating tab elements
      */
     private final PresetCooldown elementCooldown;
-
     /**
      * Delay between scrolling sub pages
      */
     private final PresetCooldown pageScrollCooldown;
+    /**
+     * The player the tab is shown to
+     */
+    protected Player player;
+    /**
+     * Cached icon skins
+     */
+    protected Table<Integer, Integer, UUID> avatarCache = HashBasedTable.create();
+    /**
+     * Cursor between pages
+     */
+    private int cursor = 0;
+    /**
+     * Text elements on the column
+     */
+    private List<DynamicText> elements = new ArrayList<>();
 
     public TabColumn(Player player, int columnNumber) {
         this.player = player;
@@ -89,6 +79,13 @@ public abstract class TabColumn implements Listener {
     }
 
     /**
+     * @param column Register a tab column
+     */
+    public static void register(String name, Class<? extends TabColumn> column) {
+        registered.put(name, column);
+    }
+
+    /**
      * Called when column is destroyed or no longer being displayed
      */
     public void disable() {
@@ -103,13 +100,6 @@ public abstract class TabColumn implements Listener {
         }
 
         this.render();
-    }
-
-    /**
-     * @param column Register a tab column
-     */
-    public static void register(String name, Class<? extends TabColumn> column) {
-        registered.put(name, column);
     }
 
     /**
@@ -136,9 +126,25 @@ public abstract class TabColumn implements Listener {
 
         TabController API = TabController.INSTANCE;
 
-        // Render only if empty
-        if (elements.isEmpty())
-        render(elements);
+        // Check if to refresh
+        List<DynamicText> check = new ArrayList<>();
+        render(check);
+
+        // If not the same, re render
+        if (elements.isEmpty()) {
+            elements = check;
+        } else {
+            // Check if elements updated
+            for (int i = 0; i < check.size(); i++) {
+                DynamicText text = check.get(i);
+
+                if (elements.get(i) == null || !text.getOriginalText().equals(elements.get(i).getOriginalText())) {
+                    // If element isn't the same re render
+                    elements = check;
+                    break;
+                }
+            }
+        }
 
         List<DynamicText> sub = new ArrayList<>
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
@@ -163,7 +169,7 @@ public abstract class TabColumn implements Listener {
         if (size >= Settings.PAGE_ELEMENTS.getInt()) {
             // Calculate page length //
             double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
-            int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
+            int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta)) - 2;
             int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
 
             // Pagination text
@@ -237,7 +243,7 @@ public abstract class TabColumn implements Listener {
 
             // Go to next page if applicable
             if (pageInfo)
-            cursor++;
+                cursor++;
         }
 
         // Update text
@@ -253,7 +259,7 @@ public abstract class TabColumn implements Listener {
             // number of pages
             if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1))) {
                 // Reset to page 1
-                this.elements.clear();
+                elements.clear();
                 cursor = 0;
             }
 
