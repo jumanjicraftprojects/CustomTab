@@ -1,7 +1,7 @@
 package com.illuzionzstudios.tab.components.column;
 
-import com.illuzionzstudios.tab.text.DynamicText;
-import com.illuzionzstudios.tab.text.FrameText;
+import com.illuzionzstudios.tab.components.text.DynamicText;
+import com.illuzionzstudios.tab.components.text.FrameText;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

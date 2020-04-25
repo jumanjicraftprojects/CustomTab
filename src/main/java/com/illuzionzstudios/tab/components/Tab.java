@@ -16,8 +16,8 @@ import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
-import com.illuzionzstudios.tab.text.DynamicText;
-import com.illuzionzstudios.tab.text.FrameText;
+import com.illuzionzstudios.tab.components.text.DynamicText;
+import com.illuzionzstudios.tab.components.text.FrameText;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 

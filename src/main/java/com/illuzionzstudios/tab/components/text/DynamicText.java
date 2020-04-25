@@ -7,7 +7,7 @@
  * noncommercial uses permitted by copyright law. Any licensing of this software overrides
  * this statement.
  */
-package com.illuzionzstudios.tab.text;
+package com.illuzionzstudios.tab.components.text;
 
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 
