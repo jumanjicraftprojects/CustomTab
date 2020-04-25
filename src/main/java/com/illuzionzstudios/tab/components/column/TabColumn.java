@@ -60,7 +60,7 @@ public abstract class TabColumn implements Listener {
     /**
      * Text elements on the column
      */
-    private List<DynamicText> elements = new ArrayList<>();
+    private List<DynamicText> elements;
 
     public TabColumn(Player player, int columnNumber) {
         this.player = player;
@@ -131,7 +131,7 @@ public abstract class TabColumn implements Listener {
         render(check);
 
         // If not the same, re render
-        if (elements.isEmpty()) {
+        if (elements == null || elements.isEmpty()) {
             elements = check;
         } else {
             // Check if elements updated
@@ -148,7 +148,7 @@ public abstract class TabColumn implements Listener {
 
         List<DynamicText> sub = new ArrayList<>
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
-                        Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 3)));
+                        Math.min(elements.size(), cursor + (Settings.PAGE_ELEMENTS.getInt() - 3))));
 
         // If titles enabled
         if (Settings.TAB_TITLES.getBoolean()) {
@@ -180,6 +180,7 @@ public abstract class TabColumn implements Listener {
                     .processPlaceholder("current_page", Math.max(1, page))
                     .processPlaceholder("max_page", Math.max(1, max)).getMessage();
             sub.add(new FrameText(-1, pagesText));
+            this.elements = check;
             pageInfo = true;
         }
 
@@ -262,7 +263,7 @@ public abstract class TabColumn implements Listener {
             // number of pages
             if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / (Settings.PAGE_ELEMENTS.getInt())))) {
                 // Reset to page 1
-                elements.clear();
+                this.elements = null;
                 cursor = 0;
             }
 

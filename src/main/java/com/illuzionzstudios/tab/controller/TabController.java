@@ -102,7 +102,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
 
         // Add default player slots
         for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
-            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt() + 1; y++) {
+            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
                 this.initialList.add(
                         new PlayerInfoData(
                                 this.getDisplayProfile(x, y),
@@ -541,7 +541,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, event.getPlayer());
 
         for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
-            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt() + 1; y++) {
+            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
                 this.hideAvatar(x, y, event.getPlayer());
             }
         }
