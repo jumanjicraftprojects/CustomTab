@@ -28,9 +28,9 @@ public class Settings {
             "This is the interval (in ticks) between updating",
             "the tab elements and sections.");
 
-    public static final ConfigSetting PAGE_ELEMENTS = new ConfigSetting(config, "Page.Elements", 19,
-            "This is the amount of elements to display per page.",
-            "Total slots is this value + 1 because of the pagination text.");
+    public static final ConfigSetting PAGE_ELEMENTS = new ConfigSetting(config, "Page.Elements", 20,
+            "This is the amount of elements per column.",
+            "This includes title and pagination text. Maximum value is 20");
 
     public static final ConfigSetting PAGE_SCROLL_COOLDOWN = new ConfigSetting(config, "Page.Refresh", 100,
             "This is the interval (in ticks) between scrolling",

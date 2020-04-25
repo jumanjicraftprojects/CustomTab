@@ -7,9 +7,9 @@ Refresh:
   Tab: 100
 
 Page:
-  # This is the amount of elements to display per page.
-  # Total slots is this value + 1 because of the pagination text and title.
-  Elements: 19
+  # This is the amount of elements per column.
+  # This includes title and pagination text. Maximum value is 20
+  Elements: 20
   # This is the interval (in ticks) between scrolling
   # through tab pages. Recommended to set to a slower speed so
   # the pages don't fly through fast. This will be limited by

@@ -148,7 +148,7 @@ public abstract class TabColumn implements Listener {
 
         List<DynamicText> sub = new ArrayList<>
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
-                        Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 2)));
+                        Math.min(elements.size(), cursor + Settings.PAGE_ELEMENTS.getInt() - 3)));
 
         // If titles enabled
         if (Settings.TAB_TITLES.getBoolean()) {
@@ -162,15 +162,18 @@ public abstract class TabColumn implements Listener {
             sub.add(1, new FrameText(-1, width.toString()));
         }
 
-        double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)));
+        double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.PAGE_ELEMENTS.getInt())));
 
         boolean pageInfo = false;
 
-        if (size >= Settings.PAGE_ELEMENTS.getInt()) {
+        if (size >= Settings.PAGE_ELEMENTS.getInt() - 1) {
             // Calculate page length //
-            double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt() + 1) + 1;
-            int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta)) - 2;
-            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1)) / Settings.PAGE_ELEMENTS.getInt() + 1);
+            double pageDelta = ((double) (cursor + 3) / 20) + 1;
+            int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
+            int max = (int) Math.ceil((size + (2 * elements.size() / 20)) / 20);
+//            double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt()) + 1;
+//            int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta)) - 2;
+//            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt())) / Settings.PAGE_ELEMENTS.getInt());
 
             // Pagination text
             String pagesText = new Message(Settings.TAB_PAGE_TEXT.getString())
@@ -181,7 +184,7 @@ public abstract class TabColumn implements Listener {
         }
 
         // For elements in the sub tab
-        for (int i = 1; i <= Settings.PAGE_ELEMENTS.getInt() + 1; i++) {
+        for (int i = 1; i <= Settings.PAGE_ELEMENTS.getInt(); i++) {
             boolean blank = (i - 1) >= sub.size();
 
             // Send update packet //
@@ -257,7 +260,7 @@ public abstract class TabColumn implements Listener {
 
             // Check if cursor is greater than applicable
             // number of pages
-            if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / Settings.PAGE_ELEMENTS.getInt() + 1))) {
+            if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / (Settings.PAGE_ELEMENTS.getInt())))) {
                 // Reset to page 1
                 elements.clear();
                 cursor = 0;
