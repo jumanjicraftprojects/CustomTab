@@ -35,6 +35,46 @@ Tab:
   # when there are multiple pages.
   Page Text: "&7%current_page%&8/&7%max_page%"
 
+  # The tab header
+  Header:
+    # Text elements
+    Text:
+      # Different text element names
+      Line1:
+        # If this text will scroll across
+        Scroll:
+          Enabled: false
+          # This is the amount of characters to display
+          # at a time. So if the text scrolls, only
+          # this many characters will be seen at a time
+          Amount: 30
+        # Animations between frames if more than 1
+        Animations:
+          - "&ePlayer information displayed here"
+          - "&6Player information displayed here"
+        # Interval (in ticks) between animation frames
+        Interval: 20
+
+  # The tab footer
+  Footer:
+    # Text elements
+    Text:
+      # Different text element names
+      Line1:
+        # If this text will scroll across
+        Scroll:
+          Enabled: false
+          # This is the amount of characters to display
+          # at a time. So if the text scrolls, only
+          # this many characters will be seen at a time
+          Amount: 30
+        # Animations between frames if more than 1
+        Animations:
+          - "&ePlayer information displayed here"
+          - "&6Player information displayed here"
+        # Interval (in ticks) between animation frames
+        Interval: 20
+
   # The different columns to be displayed
   Column:
     # Name of the column
@@ -42,7 +82,10 @@ Tab:
       # Column slot to display in
       Slot: 1
       # The title of this tab column
-      Title: "&e&lPlayer Information"
+      Title:
+        Animations:
+          - "&e&lPlayer Information"
+        Interval: -1
       # Text elements to display
       Text:
         # Different text element names
@@ -58,7 +101,7 @@ Tab:
           Animations:
             - "&ePlayer information displayed here"
             - "&6Player information displayed here"
-          # Interval (int ticks) between animation frames
+          # Interval (in ticks) between animation frames
           Interval: 20
     # Name of the column
     Server Information:
@@ -80,7 +123,7 @@ Tab:
           # Animations between frames if more than 1
           Animations:
             - "&7RAM: 1.0/2.0 GB"
-          # Interval (int ticks) between animation frames
+          # Interval (in ticks) between animation frames
           Interval: 20
 
   # These are custom lists to display things

@@ -32,31 +32,38 @@ public abstract class TabColumn implements Listener {
      * List of registered tabs. Sorted by tab column name
      */
     public static Map<String, Class<? extends TabColumn>> registered = new HashMap<>();
+
     /**
      * The number of the tab display column
      */
     @Getter
     protected final int columnNumber;
+
     /**
      * Delay between updating tab elements
      */
     private final PresetCooldown elementCooldown;
+
     /**
      * Delay between scrolling sub pages
      */
     private final PresetCooldown pageScrollCooldown;
+
     /**
      * The player the tab is shown to
      */
     protected Player player;
+
     /**
      * Cached icon skins
      */
     protected Table<Integer, Integer, UUID> avatarCache = HashBasedTable.create();
+
     /**
      * Cursor between pages
      */
     private int cursor = 0;
+
     /**
      * Text elements on the column
      */
@@ -91,15 +98,6 @@ public abstract class TabColumn implements Listener {
     public void disable() {
         HandlerList.unregisterAll(this);
         MinecraftScheduler.get().dismissSynchronizationService(this);
-    }
-
-    @EventHandler
-    public void onPlay(PlayerJoinEvent event) {
-        if (!event.getPlayer().equals(this.player)) {
-            return;
-        }
-
-        this.render();
     }
 
     /**
@@ -146,6 +144,7 @@ public abstract class TabColumn implements Listener {
             }
         }
 
+        // Our sub array, or our page
         List<DynamicText> sub = new ArrayList<>
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
                         Math.min(elements.size(), cursor + (Settings.PAGE_ELEMENTS.getInt() - 3))));
@@ -164,6 +163,7 @@ public abstract class TabColumn implements Listener {
 
         double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.PAGE_ELEMENTS.getInt())));
 
+        // If to show pagination info
         boolean pageInfo = false;
 
         if (size >= Settings.PAGE_ELEMENTS.getInt() - 1) {
@@ -172,6 +172,7 @@ public abstract class TabColumn implements Listener {
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
             int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt())) / Settings.PAGE_ELEMENTS.getInt());
 
+            // If we can go to next page
             if (pageScrollCooldown.isReady()) {
                 // Don't update if on a null page
                 if (page > max) {
@@ -181,6 +182,7 @@ public abstract class TabColumn implements Listener {
                     return;
                 }
 
+                // Go to next page
                 this.elements = check;
                 pageInfo = true;
 

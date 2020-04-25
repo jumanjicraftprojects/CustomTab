@@ -69,8 +69,7 @@ public class ScrollableText implements DynamicText {
         if (builder.length() > 0 && ChatColor.COLOR_CHAR == builder.charAt(builder.length() - 1)) {
             builder.replace(builder.length() - 1, builder.length(), " ");
         }
-        // Bukkit.getLogger().warning(String.format("Visible text: [%s]",
-        // builder.toString()));
+
         return builder.toString();
     }
 

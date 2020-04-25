@@ -91,11 +91,6 @@ public enum TabController implements Listener, BukkitController<Plugin> {
      */
     public final List<PlayerInfoData> initialList = new ArrayList<>();
 
-    /**
-     * Cached players in our tab
-     */
-    private HashSet<UUID> cachedPlayers = new HashSet<>();
-
     public void initialize(Plugin plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
         ProtocolLibrary.getProtocolManager().addPacketListener(new LegacyBlocker(plugin));
@@ -540,6 +535,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         // Load skins for player
         TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, event.getPlayer());
 
+        // Make sure no skins loaded
         for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
             for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
                 this.hideAvatar(x, y, event.getPlayer());

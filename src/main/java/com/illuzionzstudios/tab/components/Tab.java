@@ -123,6 +123,18 @@ public class Tab {
     }
 
     /**
+     * @param slot Hide a tab column in slot
+     */
+    public void hideColumn(int slot) {
+        if (this.columns.containsKey(slot - 1)) {
+            // Already displaying column, dismiss other
+            this.columns.get(slot - 1).disable();
+        }
+
+        this.columns.remove(slot);
+    }
+
+    /**
      * Render the header and footer of the tab
      */
     @Async(rate = Rate.TICK)
