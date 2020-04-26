@@ -150,28 +150,37 @@ Tab:
           Interval: 20
 
   # These are custom lists to display things
-  # link players, faction members etc. It's when
+  # like players, faction members etc. It's when
   # you need to repeat elements but have unique placeholders
   # and want to sort them
   Lists:
     # List name
     Online:
       # Column slot
-      Slot: 2
+      Slot: 3
       # The title of this tab column
-      Title: "&e&lPlayer Information"
+      Title:
+        Animations:
+          - "&a&lOnline Players &2%server_online%"
+        Interval: -1
       # What the list consists of. Here put
       # the element. Can put custom ones from addons
-      # Inbuilt: players
-      List Of: players
+      # Inbuilt: online_players
+      Type: online_players
       # In what order to display elements
       # Put a custom sorter
-      Sort By: distance
+      Sorter: distance
       # Text for each element
       Text:
+        # If this text will scroll across
+        Scroll:
+          Enabled: false
+          # This is the interval (in ticks)
+          # between scrolling the text
+          Interval: 5
         # Here formats display name per player
         Animations:
-          - "&7{display_name}"
+          - "&f%player_displayname%"
         Interval: 20
 
   # The different tabs composed of the different
@@ -191,6 +200,7 @@ Tab:
       Columns:
         - "Information"
         - "Server Information"
+        - "Online"
 
 System:
   # The language file to use for the plugin
