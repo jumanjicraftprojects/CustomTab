@@ -216,6 +216,8 @@ Tab:
       # priority this group has over others if the player
       # meets overlapping requirements.
       # Higher number means higher priority
+      # Also means how high the player with this
+      # group will be displayed in the tab
       Weight: 1
       # This is what is displayed on the tab
       # when the player has this group. Must be

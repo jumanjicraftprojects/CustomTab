@@ -16,6 +16,7 @@ import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.loader.GroupLoader;
 import com.illuzionzstudios.tab.components.loader.ListLoader;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
@@ -47,5 +48,26 @@ public enum GroupController implements BukkitController<Plugin> {
     @Override
     public void stop(Plugin plugin) {
 
+    }
+
+    /**
+     * Gets the highest group the player has
+     *
+     * @param player The player to check
+     */
+    public GroupLoader getGroup(Player player) {
+        GroupLoader highest = null;
+
+        for (GroupLoader group : groups.values()) {
+            // Has permission for group
+            if (player.hasPermission(group.getPermission()) || group.getPermission().trim().equalsIgnoreCase("")) {
+                int compare = Integer.compare(highest == null ? 0 : highest.getWeight(), group.getWeight());
+                if (compare < 0) {
+                    highest = group;
+                }
+            }
+        }
+
+        return highest;
     }
 }

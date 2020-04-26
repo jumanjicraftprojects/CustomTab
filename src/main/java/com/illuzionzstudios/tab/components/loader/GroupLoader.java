@@ -23,24 +23,22 @@ import java.util.List;
  * loads all information from a configuration section
  * then stores it.
  */
+@Getter
 public class GroupLoader implements Loader {
 
     /**
      * Permission required for group
      */
-    @Getter
     public String permission;
 
     /**
      * Weight of the group
      */
-    @Getter
     public int weight;
 
     /**
      * The formatting for each element
      */
-    @Getter
     private DynamicText elementText;
 
     public GroupLoader(ConfigSection section) {
