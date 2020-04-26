@@ -11,6 +11,7 @@ package com.illuzionzstudios.tab.template;
 
 import com.illuzionzstudios.config.ConfigSection;
 import com.illuzionzstudios.tab.components.column.list.ListType;
+import com.illuzionzstudios.tab.components.column.list.SortType;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.components.text.ScrollableText;
@@ -46,6 +47,12 @@ public class ListLoader {
     private ListType type;
 
     /**
+     * How to sort the list
+     */
+    @Getter
+    private SortType sorter;
+
+    /**
      * The formatting for each element
      */
     @Getter
@@ -70,6 +77,9 @@ public class ListLoader {
                     new ScrollableText(text.getInt("Scroll.Interval"), frames.get(0)) :
                     new FrameText(text.getInt("Interval"), frames);
         }
+
+        type = ListType.valueOf(section.getString("Type").toUpperCase());
+        sorter = SortType.valueOf(section.getString("Sorter").toUpperCase());
     }
 
 }
