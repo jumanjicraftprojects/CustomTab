@@ -60,12 +60,6 @@ public class CustomTab extends IlluzionzPlugin {
         // Listeners
         new TabRegisterListener(this);
 
-        // Register tabs
-        TabColumn.register("online", OnlineColumn.class);
-        TabColumn.register("friends", FriendColumn.class);
-        TabColumn.register("trainer", TrainerColumn.class);
-        TabColumn.register("version", VersionColumn.class);
-
         // Metrics
         int pluginId = 7282;
         Metrics metrics = new Metrics(this, pluginId);

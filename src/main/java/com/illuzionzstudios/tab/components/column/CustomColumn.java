@@ -10,7 +10,7 @@
 package com.illuzionzstudios.tab.components.column;
 
 import com.illuzionzstudios.tab.components.text.DynamicText;
-import com.illuzionzstudios.tab.template.TabLoader;
+import com.illuzionzstudios.tab.components.loader.TabLoader;
 import org.bukkit.entity.Player;
 
 import java.util.List;

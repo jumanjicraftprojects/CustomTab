@@ -19,13 +19,15 @@ import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
+import com.illuzionzstudios.tab.components.loader.ListLoader;
+import com.illuzionzstudios.tab.components.loader.Loader;
 import com.illuzionzstudios.tab.listener.LegacyBlocker;
 import com.illuzionzstudios.tab.packet.AbstractPacket;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.struct.Latency;
-import com.illuzionzstudios.tab.template.TabLoader;
+import com.illuzionzstudios.tab.components.loader.TabLoader;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
@@ -57,10 +59,10 @@ public enum TabController implements Listener, BukkitController<Plugin> {
     public HashMap<UUID, Tab> displayedTabs = new HashMap<>();
 
     /**
-     * Loaded tab loaders to load tab columns
+     * Loaded tab loaders to load tab components
      */
     @Getter
-    public HashMap<String, TabLoader> loaders = new HashMap<>();
+    public HashMap<String, Loader> loaders = new HashMap<>();
 
     /**
      * Display a tab to the player
@@ -128,6 +130,13 @@ public enum TabController implements Listener, BukkitController<Plugin> {
             // Notify the column has been loaded
             Logger.info("Loaded tab column '" + section.getName() + "'");
             this.loaders.put(section.getName().toLowerCase(), new TabLoader(section));
+        }
+
+        // Loop through and create a loader for each section
+        for (ConfigSection section : config.getSections("Tab.Lists")) {
+            // Notify the column has been loaded
+            Logger.info("Loaded tab list '" + section.getName() + "'");
+            this.loaders.put(section.getName().toLowerCase(), new ListLoader(section));
         }
     }
 

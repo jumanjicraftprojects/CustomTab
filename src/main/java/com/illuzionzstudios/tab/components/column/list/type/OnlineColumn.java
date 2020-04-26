@@ -1,5 +1,6 @@
-package com.illuzionzstudios.tab.components.column;
+package com.illuzionzstudios.tab.components.column.list.type;
 
+import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import org.bukkit.Bukkit;

@@ -7,48 +7,61 @@
  * noncommercial uses permitted by copyright law. Any licensing of this software overrides
  * this statement.
  */
-package com.illuzionzstudios.tab.template;
+package com.illuzionzstudios.tab.components.loader;
 
 import com.illuzionzstudios.config.ConfigSection;
+import com.illuzionzstudios.tab.components.column.list.ListType;
+import com.illuzionzstudios.tab.components.column.list.SortType;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.components.text.ScrollableText;
 import lombok.Getter;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created instance of a tab loader.
+ * Created instance of a list loader.
  * What this class does is when instantiated, it
  * loads all information from a configuration section
  * then stores it.
  */
-public class TabLoader {
+public class ListLoader implements Loader {
 
     /**
-     * Display slot of the column
+     * Display slot of the list
      */
     @Getter
     private int slot;
 
     /**
-     * The title of the column
+     * The title of the list
      */
     @Getter
     private DynamicText title;
 
     /**
-     * The tab's elements
+     * Type of list
      */
     @Getter
-    private List<DynamicText> elements = new ArrayList<>();
+    private ListType type;
+
+    /**
+     * How to sort the list
+     */
+    @Getter
+    private SortType sorter;
+
+    /**
+     * The formatting for each element
+     */
+    @Getter
+    private DynamicText elementText;
 
     /**
      * @param section Config section we're loading
      */
-    public TabLoader(ConfigSection section) {
+    public ListLoader(ConfigSection section) {
         // Load slot
         slot = section.getInt("Slot");
 
@@ -60,11 +73,13 @@ public class TabLoader {
         for (ConfigSection text : section.getSections("Text")) {
             // Add to elements
             List<String> frames = text.getStringList("Animations");
-            DynamicText element = text.getBoolean("Scroll.Enabled") ?
+            elementText = text.getBoolean("Scroll.Enabled") ?
                     new ScrollableText(text.getInt("Scroll.Interval"), frames.get(0)) :
                     new FrameText(text.getInt("Interval"), frames);
-            elements.add(element);
         }
+
+        type = ListType.valueOf(section.getString("Type").toUpperCase());
+        sorter = SortType.valueOf(section.getString("Sorter").toUpperCase());
     }
 
 }

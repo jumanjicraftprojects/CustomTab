@@ -9,11 +9,11 @@
  */
 package com.illuzionzstudios.tab.listener;
 
-import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.components.column.*;
+import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.controller.TabController;
-import com.illuzionzstudios.tab.template.TabLoader;
+import com.illuzionzstudios.tab.components.loader.TabLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,11 +39,27 @@ public class TabRegisterListener implements Listener {
 
         TabController.INSTANCE.getLoaders().forEach((name, loader) -> {
             try {
-                Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, TabLoader.class);
-                CustomColumn column = (CustomColumn) ctor.newInstance(event.getPlayer(), loader);
+                // Let's try load based on loader
+                if (loader instanceof TabLoader) {
+                    Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, TabLoader.class);
+                    CustomColumn column = (CustomColumn) ctor.newInstance(event.getPlayer(), loader);
 
-                // Display to player
-                tabList.displayColumn(column.getColumnNumber(), column);
+                    // Display to player
+                    tabList.displayColumn(column.getColumnNumber(), column);
+                } else if (loader instanceof ListLoader) {
+                    // Constructor for our column class
+                    Constructor<?> ctor;
+                    // Column to display
+                    TabColumn column;
+
+                    // We must do all checks here for type
+                    // of list, sorters etc
+                    switch (((ListLoader) loader).getType()) {
+                        case ONLINE_PLAYERS:
+                            break;
+                    }
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
