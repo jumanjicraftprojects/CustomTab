@@ -1,6 +1,8 @@
 package com.illuzionzstudios.tab.components.column.list.type;
 
 import com.illuzionzstudios.tab.components.column.TabColumn;
+import com.illuzionzstudios.tab.components.column.list.ListType;
+import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import org.bukkit.Bukkit;
@@ -9,13 +11,27 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-public class OnlineColumn extends TabColumn {
 
-    public OnlineColumn(Player player) {
-        super(player, 2);
-    }
+/**
+ * Tab list for {@link ListType.ONLINE_PLAYERS}
+ */
+public class OnlineList extends TabColumn {
 
+    /**
+     * Our loader for data
+     */
+    private final ListLoader loader;
+
+    /**
+     * Player's on the tab
+     */
     private final List<TabPlayer> players = new ArrayList<>();
+
+    public OnlineList(Player player, ListLoader loader) {
+        super(player, loader.getSlot());
+
+        this.loader = loader;
+    }
 
     @Override
     public void render(List<DynamicText> elements) {

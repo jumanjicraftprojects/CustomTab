@@ -69,14 +69,11 @@ public class ListLoader implements Loader {
         List<String> titleFrames = section.getStringList("Title.Animations");
         title = new FrameText(section.getInt("Title.Interval"), titleFrames);
 
-        // Load text elements
-        for (ConfigSection text : section.getSections("Text")) {
-            // Add to elements
-            List<String> frames = text.getStringList("Animations");
-            elementText = text.getBoolean("Scroll.Enabled") ?
-                    new ScrollableText(text.getInt("Scroll.Interval"), frames.get(0)) :
-                    new FrameText(text.getInt("Interval"), frames);
-        }
+        // Add to elements
+        List<String> frames = section.getStringList("Text.Animations");
+        elementText = section.getBoolean("Text.Scroll.Enabled") ?
+                new ScrollableText(section.getInt("Text.Scroll.Interval"), frames.get(0)) :
+                new FrameText(section.getInt("Text.Interval"), frames);
 
         type = ListType.valueOf(section.getString("Type").toUpperCase());
         sorter = SortType.valueOf(section.getString("Sorter").toUpperCase());
