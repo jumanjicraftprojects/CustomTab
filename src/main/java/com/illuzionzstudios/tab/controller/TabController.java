@@ -123,11 +123,10 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         // Load tab loaders
         Config config = CustomTab.getInstance().getCoreConfig();
 
-        Logger.debug(config.getSections("Tab.Column"));
-
         // Loop through and create a loader for each section
         for (ConfigSection section : config.getSections("Tab.Column")) {
-            Logger.debug("Load tab loader " + section.getName());
+            // Notify the column has been loaded
+            Logger.info("Loaded tab column '" + section.getName() + "'");
             this.loaders.put(section.getName().toLowerCase(), new TabLoader(section));
         }
     }

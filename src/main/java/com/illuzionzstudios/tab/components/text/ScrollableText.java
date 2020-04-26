@@ -10,6 +10,7 @@
 package com.illuzionzstudios.tab.components.text;
 
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.tab.settings.Settings;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +32,7 @@ public class ScrollableText implements DynamicText {
     private PresetCooldown interval;
 
     public ScrollableText(int interval, String fullText) {
-        this(interval, fullText, 16);
+        this(interval, fullText, Settings.TAB_WIDTH.getInt() / 3);
     }
 
     public ScrollableText(int interval, String fullText, int scrollSize) {

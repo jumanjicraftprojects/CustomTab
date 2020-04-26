@@ -17,6 +17,8 @@ import com.illuzionzstudios.tab.components.column.*;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.listener.TabRegisterListener;
 import com.illuzionzstudios.tab.settings.Settings;
+import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.util.List;
 
@@ -31,6 +33,10 @@ public class CustomTab extends IlluzionzPlugin {
         return INSTANCE;
     }
 
+    // Plugin hooks
+    @Getter
+    public static boolean papiEnabled;
+
     @Override
     public void onPluginLoad() {
         INSTANCE = this;
@@ -43,6 +49,9 @@ public class CustomTab extends IlluzionzPlugin {
         this.setLocale(Settings.LANGUAGE_MODE.getString(), false);
 
         new BukkitScheduler(this).initialize();
+
+        // Load plugin hooks
+        papiEnabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
 
         // Controllers
         TabController.INSTANCE.initialize(this);

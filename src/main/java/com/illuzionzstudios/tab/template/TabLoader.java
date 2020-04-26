@@ -12,6 +12,7 @@ package com.illuzionzstudios.tab.template;
 import com.illuzionzstudios.config.ConfigSection;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
+import com.illuzionzstudios.tab.components.text.ScrollableText;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -59,7 +60,10 @@ public class TabLoader {
         for (ConfigSection text : section.getSections("Text")) {
             // Add to elements
             List<String> frames = text.getStringList("Animations");
-            elements.add(new FrameText(text.getInt("Interval"), frames));
+            DynamicText element = text.getBoolean("Scroll.Enabled") ?
+                    new ScrollableText(text.getInt("Scroll.Interval"), frames.get(0)) :
+                    new FrameText(text.getInt("Interval"), frames);
+            elements.add(element);
         }
     }
 

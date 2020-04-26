@@ -42,8 +42,6 @@ public class TabRegisterListener implements Listener {
                 Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, TabLoader.class);
                 CustomColumn column = (CustomColumn) ctor.newInstance(event.getPlayer(), loader);
 
-                Logger.debug("Registering tab column " + column.getTitle());
-
                 // Display to player
                 tabList.displayColumn(column.getColumnNumber(), column);
             } catch (Exception e) {

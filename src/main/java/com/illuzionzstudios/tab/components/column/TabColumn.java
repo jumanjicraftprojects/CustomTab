@@ -13,6 +13,7 @@ import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -203,6 +204,10 @@ public abstract class TabColumn implements Listener {
 
             // Send update packet //
             String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1).getVisibleText());
+            // Set placeholders
+            if (CustomTab.isPapiEnabled()) {
+                text = PlaceholderAPI.setPlaceholders(player, text);
+            }
             String[] textArray = text.split(" ");
 
             // Trim text
@@ -263,7 +268,8 @@ public abstract class TabColumn implements Listener {
                 cursor++;
         }
 
-        // Update text
+        // Update text and title
+        getTitle().changeText();
         elements.forEach(DynamicText::changeText);
 
         // If page display at bottom
