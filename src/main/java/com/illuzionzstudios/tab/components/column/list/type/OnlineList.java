@@ -2,6 +2,7 @@ package com.illuzionzstudios.tab.components.column.list.type;
 
 import com.illuzionzstudios.core.locale.player.Message;
 import com.illuzionzstudios.core.util.Logger;
+import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.ListType;
 import com.illuzionzstudios.tab.components.loader.GroupLoader;
@@ -10,6 +11,7 @@ import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.controller.GroupController;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -70,7 +72,12 @@ public class OnlineList extends TabColumn {
                     toFormat = new Message(toFormat)
                             .processPlaceholder("group_format", p.getGroup().getElementText().getVisibleText())
                             .getMessage();
-                    System.out.println(toFormat);
+
+                    // Set placeholders per player
+                    if (CustomTab.isPapiEnabled()) {
+                        toFormat = PlaceholderAPI.setPlaceholders(p.tabPlayer, toFormat);
+                    }
+
                     frames.add(toFormat);
                 }
             }
