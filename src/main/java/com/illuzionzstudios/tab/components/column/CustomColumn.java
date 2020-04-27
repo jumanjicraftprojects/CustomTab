@@ -10,7 +10,7 @@
 package com.illuzionzstudios.tab.components.column;
 
 import com.illuzionzstudios.tab.components.text.DynamicText;
-import com.illuzionzstudios.tab.components.loader.TabLoader;
+import com.illuzionzstudios.tab.components.loader.ColumnLoader;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class CustomColumn extends TabColumn {
     /**
      * Our loader for options from config
      */
-    private TabLoader loader;
+    private ColumnLoader loader;
 
     /**
      * Create a new custom column. Loader
@@ -33,7 +33,7 @@ public class CustomColumn extends TabColumn {
      * @param player Player showing tab
      * @param loader Our loader to display data
      */
-    public CustomColumn(Player player, TabLoader loader) {
+    public CustomColumn(Player player, ColumnLoader loader) {
         super(player, loader.getSlot());
         this.loader = loader;
     }

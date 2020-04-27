@@ -10,11 +10,12 @@
 package com.illuzionzstudios.tab.components.loader;
 
 import com.illuzionzstudios.config.ConfigSection;
+import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.components.text.ScrollableText;
+import com.illuzionzstudios.tab.controller.TabController;
 import lombok.Getter;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,42 +29,64 @@ import java.util.List;
 public class TabLoader implements Loader {
 
     /**
-     * Display slot of the column
+     * Permission needed to view tab
      */
     @Getter
-    private int slot;
+    private String permission;
 
     /**
-     * The title of the column
+     * Weight of the tab
      */
     @Getter
-    private DynamicText title;
+    private int weight;
 
     /**
-     * The tab's elements
+     * The columns this tab displays.
+     * These are loaded last so we can store the objects
      */
     @Getter
-    private List<DynamicText> elements = new ArrayList<>();
+    private List<Loader> columns = new ArrayList<>();
 
     /**
-     * @param section Config section we're loading
+     * List of header elements
      */
+    private List<DynamicText> header = new ArrayList<>();
+
+    /**
+     * List of footer elements
+     */
+    private List<DynamicText> footer = new ArrayList<>();
+
     public TabLoader(ConfigSection section) {
-        // Load slot
-        slot = section.getInt("Slot");
+        permission = section.getString("Permission");
+        weight = section.getInt("Weight");
 
-        // Load title
-        List<String> titleFrames = section.getStringList("Title.Animations");
-        title = new FrameText(section.getInt("Title.Interval"), titleFrames);
+        // Loop through and search for loaded column loaders
+        for (String column : section.getStringList("Columns")) {
+            Loader loadedColumn = TabController.INSTANCE.getLoaders().get(column.toLowerCase());
+            if (loadedColumn != null) {
+                this.columns.add(loadedColumn);
+            }
+        }
 
-        // Load text elements
-        for (ConfigSection text : section.getSections("Text")) {
+        // Load header elements
+        for (ConfigSection text : section.getSections("Header.Text")) {
             // Add to elements
             List<String> frames = text.getStringList("Animations");
             DynamicText element = text.getBoolean("Scroll.Enabled") ?
                     new ScrollableText(text.getInt("Scroll.Interval"), frames.get(0)) :
                     new FrameText(text.getInt("Interval"), frames);
-            elements.add(element);
+            header.add(element);
+        }
+
+        // Load footer elements
+        for (ConfigSection text : section.getSections("Footer.Text")) {
+            // Add to elements
+            List<String> frames = text.getStringList("Animations");
+            DynamicText element = text.getBoolean("Scroll.Enabled") ?
+                    new ScrollableText(text.getInt("Scroll.Interval"), frames.get(0)) :
+                    new FrameText(text.getInt("Interval"), frames);
+            footer.add(element);
         }
     }
 

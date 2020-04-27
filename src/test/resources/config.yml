@@ -39,46 +39,6 @@ Tab:
   # they don't meet any conditions
   Default Tab: default
 
-  # The tab header
-  Header:
-    # Text elements
-    Text:
-      # Different text element names
-      Line1:
-        # If this text will scroll across
-        Scroll:
-          Enabled: false
-          # This is the amount of characters to display
-          # at a time. So if the text scrolls, only
-          # this many characters will be seen at a time
-          Amount: 30
-        # Animations between frames if more than 1
-        Animations:
-          - "&ePlayer information displayed here"
-          - "&6Player information displayed here"
-        # Interval (in ticks) between animation frames
-        Interval: 20
-
-  # The tab footer
-  Footer:
-    # Text elements
-    Text:
-      # Different text element names
-      Line1:
-        # If this text will scroll across
-        Scroll:
-          Enabled: false
-          # This is the amount of characters to display
-          # at a time. So if the text scrolls, only
-          # this many characters will be seen at a time
-          Amount: 30
-        # Animations between frames if more than 1
-        Animations:
-          - "&ePlayer information displayed here"
-          - "&6Player information displayed here"
-        # Interval (in ticks) between animation frames
-        Interval: 20
-
   # The different columns to be displayed
   Column:
     # Name of the column
@@ -205,6 +165,43 @@ Tab:
         - "Information"
         - "Server Information"
         - "Online"
+      # The tab header
+      Header:
+        # Text elements
+        Text:
+          # Different text element names
+          Line1:
+            # If this text will scroll across
+            Scroll:
+              Enabled: false
+              # This is the interval (in ticks)
+              # between scrolling the text
+              Interval: 5
+            # Animations between frames if more than 1
+            Animations:
+              - "&ePlayer information displayed here"
+              - "&6Player information displayed here"
+            # Interval (in ticks) between animation frames
+            Interval: 20
+
+      # The tab footer
+      Footer:
+        # Text elements
+        Text:
+          # Different text element names
+          Line1:
+            # If this text will scroll across
+            Scroll:
+              Enabled: false
+              # This is the interval (in ticks)
+              # between scrolling the text
+              Interval: 5
+            # Animations between frames if more than 1
+            Animations:
+              - "&ePlayer information displayed here"
+              - "&6Player information displayed here"
+            # Interval (in ticks) between animation frames
+            Interval: 20
 
   # These are the different groups for players
   # These are usually used for sorting and formatting

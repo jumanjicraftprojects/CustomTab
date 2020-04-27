@@ -21,13 +21,14 @@ import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
 import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.components.loader.Loader;
+import com.illuzionzstudios.tab.components.loader.TabLoader;
 import com.illuzionzstudios.tab.listener.LegacyBlocker;
 import com.illuzionzstudios.tab.packet.AbstractPacket;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.struct.Latency;
-import com.illuzionzstudios.tab.components.loader.TabLoader;
+import com.illuzionzstudios.tab.components.loader.ColumnLoader;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
@@ -63,6 +64,12 @@ public enum TabController implements Listener, BukkitController<Plugin> {
      */
     @Getter
     public HashMap<String, Loader> loaders = new HashMap<>();
+
+    /**
+     * Indepent store for tabs
+     */
+    @Getter
+    public HashMap<String, TabLoader> tabs = new HashMap<>();
 
     /**
      * Display a tab to the player
@@ -129,7 +136,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         for (ConfigSection section : config.getSections("Tab.Column")) {
             // Notify the column has been loaded
             Logger.info("Loaded tab column '" + section.getName() + "'");
-            this.loaders.put(section.getName().toLowerCase(), new TabLoader(section));
+            this.loaders.put(section.getName().toLowerCase(), new ColumnLoader(section));
         }
 
         // Loop through and create a loader for each section
@@ -137,6 +144,13 @@ public enum TabController implements Listener, BukkitController<Plugin> {
             // Notify the column has been loaded
             Logger.info("Loaded tab list '" + section.getName() + "'");
             this.loaders.put(section.getName().toLowerCase(), new ListLoader(section));
+        }
+
+        // Loop through and create a loader for each section
+        for (ConfigSection section : config.getSections("Tab.Tabs")) {
+            // Notify the column has been loaded
+            Logger.info("Loaded tab '" + section.getName() + "'");
+            this.tabs.put(section.getName().toLowerCase(), new TabLoader(section));
         }
     }
 

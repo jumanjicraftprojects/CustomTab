@@ -14,7 +14,7 @@ import com.illuzionzstudios.tab.components.column.*;
 import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
 import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.controller.TabController;
-import com.illuzionzstudios.tab.components.loader.TabLoader;
+import com.illuzionzstudios.tab.components.loader.ColumnLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,8 +41,8 @@ public class TabRegisterListener implements Listener {
         TabController.INSTANCE.getLoaders().forEach((name, loader) -> {
             try {
                 // Let's try load based on loader
-                if (loader instanceof TabLoader) {
-                    Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, TabLoader.class);
+                if (loader instanceof ColumnLoader) {
+                    Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, ColumnLoader.class);
                     CustomColumn column = (CustomColumn) ctor.newInstance(event.getPlayer(), loader);
 
                     // Display to player
