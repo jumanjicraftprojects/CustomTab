@@ -69,16 +69,16 @@ public class OnlineList extends TabColumn {
             // Format group formatting
             if (p.getGroup() != null) {
                 for (String toFormat : text.getFrames()) {
-                    toFormat = new Message(toFormat)
+                    String format = new Message(toFormat)
                             .processPlaceholder("group_format", p.getGroup().getElementText().getVisibleText())
                             .getMessage();
 
                     // Set placeholders per player
                     if (CustomTab.isPapiEnabled()) {
-                        toFormat = PlaceholderAPI.setPlaceholders(p.tabPlayer, toFormat);
+                        format = PlaceholderAPI.setPlaceholders(p.tabPlayer, format);
                     }
 
-                    frames.add(toFormat);
+                    frames.add(format);
                 }
             }
 

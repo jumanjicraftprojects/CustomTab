@@ -3,6 +3,7 @@ package com.illuzionzstudios.tab.components.column;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.illuzionzstudios.core.locale.player.Message;
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
@@ -133,16 +134,8 @@ public abstract class TabColumn implements Listener {
         if (elements == null || elements.isEmpty()) {
             elements = check;
         } else {
-            // Check if elements updated
-            for (int i = 0; i < check.size(); i++) {
-                DynamicText text = check.get(i);
-
-                if (elements.get(i) == null || !text.getOriginalText().equals(elements.get(i).getOriginalText())) {
-                    // If element isn't the same re render
-                    elements = check;
-                    break;
-                }
-            }
+            // Refresh
+            if (check.size() != elements.size()) elements = check;
         }
 
         // Our sub array, or our page
