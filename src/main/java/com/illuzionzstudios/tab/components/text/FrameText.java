@@ -11,12 +11,16 @@ package com.illuzionzstudios.tab.components.text;
 
 import com.google.common.collect.Iterators;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.tab.CustomTab;
 import lombok.Getter;
 import lombok.Setter;
+import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * Text that iterates through frames
@@ -98,6 +102,32 @@ public class FrameText implements DynamicText {
         this.frames = frames;
         // Create frame cycle again
         this.cycle = Iterators.cycle(this.frames);
+    }
+
+    @Override
+    public void placehold(String placeholder, Object replacement) {
+        // For each frame
+        for (int i = 0; i < frames.size(); i++) {
+            final String place = Matcher.quoteReplacement(placeholder);
+            String frame = frames.get(i);
+            // For each frame replace at i
+            frames.set(i, frame.replaceAll("%" + place + "%|\\{" + place + "\\}", replacement == null ? "" :
+                    Matcher.quoteReplacement(replacement.toString())));
+        }
+    }
+
+    @Override
+    public void papi(Player player) {
+        // Check for plugin here so we don't have to do
+        // multiple checks
+        if (CustomTab.isPapiEnabled()) {
+            // For each frame
+            for (int i = 0; i < frames.size(); i++) {
+                String frame = frames.get(i);
+                // For each frame replace at i
+                frames.set(i, PlaceholderAPI.setPlaceholders(player, frame));
+            }
+        }
     }
 
 }

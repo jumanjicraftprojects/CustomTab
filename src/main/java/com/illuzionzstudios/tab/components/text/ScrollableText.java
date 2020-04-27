@@ -10,13 +10,17 @@
 package com.illuzionzstudios.tab.components.text;
 
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.settings.Settings;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * Text that scrolls along
@@ -183,6 +187,22 @@ public class ScrollableText implements DynamicText {
     @Override
     public String getOriginalText() {
         return fullText;
+    }
+
+    @Override
+    public void placehold(String placeholder, Object replacement) {
+        final String place = Matcher.quoteReplacement(placeholder);// For each frame replace at i
+        fullText = fullText.replaceAll("%" + place + "%|\\{" + place + "\\}", replacement == null ? "" :
+                    Matcher.quoteReplacement(replacement.toString()));
+    }
+
+    @Override
+    public void papi(Player player) {
+        // Check for plugin here so we don't have to do
+        // multiple checks
+        if (CustomTab.isPapiEnabled()) {
+            fullText = PlaceholderAPI.setPlaceholders(player, fullText);
+        }
     }
 
 }

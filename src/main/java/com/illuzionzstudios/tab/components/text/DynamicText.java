@@ -10,6 +10,7 @@
 package com.illuzionzstudios.tab.components.text;
 
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -47,5 +48,18 @@ public interface DynamicText {
      * @return Get the frames of the text
      */
     List<String> getFrames();
+
+    /**
+     * Replace a placeholder in a text
+     *
+     * @param placeholder String to replace
+     * @param replacement What to replace with
+     */
+    void placehold(String placeholder, Object replacement);
+
+    /**
+     * @param player Format PAPI for a player
+     */
+    void papi(Player player);
 
 }
