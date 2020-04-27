@@ -15,6 +15,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,33 +57,23 @@ public class OnlineList extends TabColumn {
         }
 
         players.forEach(p -> {
-            if (p.tabPlayer == null) {
+            if (p.getTabPlayer() == null) {
                 return;
             }
 
             // Get animation display
+            // Clone so we don't update actual object
             DynamicText text = loader.getElementText();
-
-            // Frames for formatting
-            List<String> frames = new ArrayList<>();
+            // Reset from placeholders
+            text.clearPlaceholders();
 
             // Format group formatting
             if (p.getGroup() != null) {
-                for (String toFormat : text.getFrames()) {
-                    String format = new Message(toFormat)
-                            .processPlaceholder("group_format", p.getGroup().getElementText().getVisibleText())
-                            .getMessage();
-
-                    // Set placeholders per player
-                    if (CustomTab.isPapiEnabled()) {
-                        format = PlaceholderAPI.setPlaceholders(p.tabPlayer, format);
-                    }
-
-                    frames.add(format);
-                }
+                text.setFrames(text.placehold("group_format", p.getGroup().getElementText().getVisibleText()));
             }
 
-            text.setFrames(frames);
+            // Format PAPI
+            text.setFrames(text.papi(p.getTabPlayer()));
 
             elements.add(text);
         });
@@ -93,6 +84,7 @@ public class OnlineList extends TabColumn {
         /**
          * Player associated
          */
+        @Getter
         private final Player tabPlayer;
 
         /**
@@ -121,7 +113,7 @@ public class OnlineList extends TabColumn {
                 case NUMBER_VARIABLE:
                     break;
                 case DISTANCE:
-                    weight += tabPlayer.getLocation().distance(player.getLocation());
+                    weight -= tabPlayer.getLocation().distance(player.getLocation());
                     break;
             }
 

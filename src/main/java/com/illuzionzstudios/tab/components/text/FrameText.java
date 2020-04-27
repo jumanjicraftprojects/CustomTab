@@ -10,6 +10,7 @@
 package com.illuzionzstudios.tab.components.text;
 
 import com.google.common.collect.Iterators;
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -28,10 +30,15 @@ import java.util.regex.Matcher;
 public class FrameText implements DynamicText {
 
     /**
+     * List of original frames before placeholders
+     */
+    @Getter
+    private List<String> resetPlaceholders;
+
+    /**
      * Frames to go through
      */
     @Getter
-    @Setter
     private List<String> frames;
 
     /**
@@ -60,6 +67,7 @@ public class FrameText implements DynamicText {
     public FrameText(int interval, List<String> frames) {
         // Store our frames
         this.frames = frames;
+        this.resetPlaceholders = frames;
 
         // Create frame cycle
         cycle = Iterators.cycle(this.frames);
@@ -105,29 +113,46 @@ public class FrameText implements DynamicText {
     }
 
     @Override
-    public void placehold(String placeholder, Object replacement) {
+    public List<String> placehold(String placeholder, Object replacement) {
+        List<String> newFrames = new ArrayList<>();
+
         // For each frame
         for (int i = 0; i < frames.size(); i++) {
             final String place = Matcher.quoteReplacement(placeholder);
             String frame = frames.get(i);
             // For each frame replace at i
-            frames.set(i, frame.replaceAll("%" + place + "%|\\{" + place + "\\}", replacement == null ? "" :
+            newFrames.add(frame.replaceAll("%" + place + "%|\\{" + place + "\\}", replacement == null ? "" :
                     Matcher.quoteReplacement(replacement.toString())));
         }
+
+        return newFrames;
     }
 
     @Override
-    public void papi(Player player) {
+    public List<String> papi(Player player) {
+        List<String> newFrames = new ArrayList<>();
+
         // Check for plugin here so we don't have to do
         // multiple checks
         if (CustomTab.isPapiEnabled()) {
             // For each frame
             for (int i = 0; i < frames.size(); i++) {
                 String frame = frames.get(i);
+                System.out.println("Before Frame: \"" + frame + "\" for player " + player.getDisplayName());
+                String newText = PlaceholderAPI.setPlaceholders(player, frame);
+                Logger.debug("New Text: \"" + newText + "\" for player " + player.getDisplayName());
                 // For each frame replace at i
-                frames.set(i, PlaceholderAPI.setPlaceholders(player, frame));
+                newFrames.add(newText);
             }
         }
+
+        return newFrames;
+    }
+
+    @Override
+    public void clearPlaceholders() {
+        // Reset back to original frames
+        setFrames(resetPlaceholders);
     }
 
 }

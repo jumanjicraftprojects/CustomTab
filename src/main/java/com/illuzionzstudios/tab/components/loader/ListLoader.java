@@ -16,6 +16,7 @@ import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.components.text.ScrollableText;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ public class ListLoader implements Loader {
      * The formatting for each element
      */
     @Getter
+    @Setter
     private DynamicText elementText;
 
     /**

@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
  */
 public class ScrollableText implements DynamicText {
 
+    private String resetText;
     private String fullText;
     private int scrollPos;
     private int scrollSize;
@@ -45,6 +46,7 @@ public class ScrollableText implements DynamicText {
     public ScrollableText(int interval, String fullText, int scrollSize) {
         // we must use the alternate codes
         this.fullText = ChatColor.translateAlternateColorCodes('&', fullText);
+        this.resetText = fullText;
         this.scrollSize = scrollSize;
         scrollPos = 0;
         scrollPad = 0;
@@ -190,19 +192,26 @@ public class ScrollableText implements DynamicText {
     }
 
     @Override
-    public void placehold(String placeholder, Object replacement) {
+    public List<String> placehold(String placeholder, Object replacement) {
         final String place = Matcher.quoteReplacement(placeholder);// For each frame replace at i
-        fullText = fullText.replaceAll("%" + place + "%|\\{" + place + "\\}", replacement == null ? "" :
-                    Matcher.quoteReplacement(replacement.toString()));
+        return Collections.singletonList(fullText.replaceAll("%" + place + "%|\\{" + place + "\\}", replacement == null ? "" :
+                    Matcher.quoteReplacement(replacement.toString())));
     }
 
     @Override
-    public void papi(Player player) {
+    public List<String> papi(Player player) {
         // Check for plugin here so we don't have to do
         // multiple checks
         if (CustomTab.isPapiEnabled()) {
-            fullText = PlaceholderAPI.setPlaceholders(player, fullText);
+            return Collections.singletonList(PlaceholderAPI.setPlaceholders(player, fullText));
         }
+
+        return Collections.singletonList(fullText);
+    }
+
+    @Override
+    public void clearPlaceholders() {
+        this.fullText = resetText;
     }
 
 }

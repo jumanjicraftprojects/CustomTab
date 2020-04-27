@@ -55,11 +55,16 @@ public interface DynamicText {
      * @param placeholder String to replace
      * @param replacement What to replace with
      */
-    void placehold(String placeholder, Object replacement);
+    List<String> placehold(String placeholder, Object replacement);
 
     /**
      * @param player Format PAPI for a player
      */
-    void papi(Player player);
+    List<String> papi(Player player);
+
+    /**
+     * Clear all applied placeholders
+     */
+    void clearPlaceholders();
 
 }
