@@ -33,7 +33,7 @@ public class FrameText implements DynamicText {
     /**
      * Iterator for frames
      */
-    private final Iterator<String> cycle;
+    private Iterator<String> cycle;
 
     /**
      * Current displayed frame
@@ -92,4 +92,12 @@ public class FrameText implements DynamicText {
         }
         return visibleText;
     }
+
+    @Override
+    public void setFrames(List<String> frames) {
+        this.frames = frames;
+        // Create frame cycle again
+        this.cycle = Iterators.cycle(this.frames);
+    }
+
 }

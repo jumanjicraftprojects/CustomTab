@@ -1,6 +1,7 @@
 package com.illuzionzstudios.tab.components.column.list.type;
 
 import com.illuzionzstudios.core.locale.player.Message;
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.ListType;
 import com.illuzionzstudios.tab.components.loader.GroupLoader;
@@ -60,19 +61,21 @@ public class OnlineList extends TabColumn {
             // Get animation display
             DynamicText text = loader.getElementText();
 
-//            // Frames for formatting
-//            List<String> frames = text.getFrames();
-//
-//            // Format group formatting
-//            if (p.getGroup() != null) {
-//                for (String toFormat : text.getFrames()) {
-//                    frames.add(new Message(text.getVisibleText())
-//                            .processPlaceholder("group_format", p.getGroup().getElementText().getVisibleText())
-//                            .getMessage());
-//                }
-//            }
-//
-//            text.setFrames(frames);
+            // Frames for formatting
+            List<String> frames = new ArrayList<>();
+
+            // Format group formatting
+            if (p.getGroup() != null) {
+                for (String toFormat : text.getFrames()) {
+                    toFormat = new Message(toFormat)
+                            .processPlaceholder("group_format", p.getGroup().getElementText().getVisibleText())
+                            .getMessage();
+                    System.out.println(toFormat);
+                    frames.add(toFormat);
+                }
+            }
+
+            text.setFrames(frames);
 
             elements.add(text);
         });
