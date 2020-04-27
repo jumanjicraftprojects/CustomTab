@@ -56,6 +56,7 @@ public class OnlineList extends TabColumn {
         } catch (Exception ignored) {
         }
 
+        // For every player to display in the tab
         players.forEach(p -> {
             if (p.getTabPlayer() == null) {
                 return;
@@ -111,6 +112,8 @@ public class OnlineList extends TabColumn {
                 case STRING_VARIABLE:
                     break;
                 case NUMBER_VARIABLE:
+                    // The greater the number, the higher priority
+                    weight += Integer.parseInt(loader.getSortVariable());
                     break;
                 case DISTANCE:
                     weight -= tabPlayer.getLocation().distance(player.getLocation());
