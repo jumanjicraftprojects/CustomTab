@@ -15,6 +15,9 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Text that scrolls along
  */
@@ -165,6 +168,16 @@ public class ScrollableText implements DynamicText {
     public String changeText() {
         scrollText();
         return getVisibleText();
+    }
+
+    @Override
+    public void setFrames(List<String> frames) {
+        this.fullText = frames.get(0);
+    }
+
+    @Override
+    public List<String> getFrames() {
+        return Collections.singletonList(getOriginalText());
     }
 
     @Override

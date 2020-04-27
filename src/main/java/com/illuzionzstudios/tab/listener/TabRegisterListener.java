@@ -11,6 +11,7 @@ package com.illuzionzstudios.tab.listener;
 
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.components.column.*;
+import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
 import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.components.loader.TabLoader;
@@ -48,15 +49,22 @@ public class TabRegisterListener implements Listener {
                     tabList.displayColumn(column.getColumnNumber(), column);
                 } else if (loader instanceof ListLoader) {
                     // Constructor for our column class
-                    Constructor<?> ctor;
+                    Constructor<?> ctor = null;
                     // Column to display
-                    TabColumn column;
+                    TabColumn column = null;
 
                     // We must do all checks here for type
                     // of list, sorters etc
                     switch (((ListLoader) loader).getType()) {
                         case ONLINE_PLAYERS:
+                            ctor = OnlineList.class.getConstructor(Player.class, ListLoader.class);
+                            column = (OnlineList) ctor.newInstance(event.getPlayer(), loader);
                             break;
+                    }
+
+                    if (ctor != null && column != null) {
+                        // Display to player
+                        tabList.displayColumn(column.getColumnNumber(), column);
                     }
                 }
 

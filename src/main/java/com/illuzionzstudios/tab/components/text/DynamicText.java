@@ -11,6 +11,8 @@ package com.illuzionzstudios.tab.components.text;
 
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 
+import java.util.List;
+
 /**
  * Dynamic updating text
  */
@@ -35,5 +37,15 @@ public interface DynamicText {
      * @return Interval between updates
      */
     PresetCooldown getInterval();
+
+    /**
+     * @param frames Update the text's frames
+     */
+    void setFrames(List<String> frames);
+
+    /**
+     * @return Get the frames of the text
+     */
+    List<String> getFrames();
 
 }

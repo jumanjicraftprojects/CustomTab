@@ -38,9 +38,9 @@ public enum GroupController implements BukkitController<Plugin> {
         Config config = CustomTab.getInstance().getCoreConfig();
 
         // Loop through and create a loader for each section
-        for (ConfigSection section : config.getSections("Tab.Lists")) {
+        for (ConfigSection section : config.getSections("Tab.Groups")) {
             // Notify the column has been loaded
-            Logger.info("Loaded tab list '" + section.getName() + "'");
+            Logger.info("Loaded tab group '" + section.getName() + "'");
             this.groups.put(section.getName().toLowerCase(), new GroupLoader(section));
         }
     }

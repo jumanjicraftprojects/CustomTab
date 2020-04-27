@@ -12,6 +12,7 @@ package com.illuzionzstudios.tab.components.text;
 import com.google.common.collect.Iterators;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -25,7 +26,9 @@ public class FrameText implements DynamicText {
     /**
      * Frames to go through
      */
-    private final List<String> frames;
+    @Getter
+    @Setter
+    private List<String> frames;
 
     /**
      * Iterator for frames

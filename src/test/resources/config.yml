@@ -170,7 +170,7 @@ Tab:
       # In what order to display elements
       # Put a custom sorter
       # Sorters: distance, string_variable, number_variable, weight
-      Sorter: distance
+      Sorter: weight
       # This will be used for either string_variable or
       # number_variable.
       Sort Variable: ""
@@ -184,7 +184,7 @@ Tab:
           Interval: 5
         # Here formats display name per player
         Animations:
-          - "&f%player_displayname%"
+          - "%group_format%"
         Interval: 20
 
   # The different tabs composed of the different

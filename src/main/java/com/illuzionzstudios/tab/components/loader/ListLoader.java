@@ -53,6 +53,13 @@ public class ListLoader implements Loader {
     private SortType sorter;
 
     /**
+     * Variable (passed as string) to sort if
+     * a variable sorter is chosen.
+     */
+    @Getter
+    private String sortVariable;
+
+    /**
      * The formatting for each element
      */
     @Getter
