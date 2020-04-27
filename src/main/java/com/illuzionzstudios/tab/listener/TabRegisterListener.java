@@ -36,9 +36,9 @@ public class TabRegisterListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Tab tabList = new Tab(event.getPlayer());
+        Tab tabList = new Tab(event.getPlayer(), TabController.INSTANCE.getTab(event.getPlayer()));
 
-        TabController.INSTANCE.getLoaders().forEach((name, loader) -> {
+        tabList.getLoader().getColumns().forEach(loader -> {
             try {
                 // Let's try load based on loader
                 if (loader instanceof ColumnLoader) {

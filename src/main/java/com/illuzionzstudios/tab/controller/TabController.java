@@ -19,16 +19,13 @@ import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
-import com.illuzionzstudios.tab.components.loader.ListLoader;
-import com.illuzionzstudios.tab.components.loader.Loader;
-import com.illuzionzstudios.tab.components.loader.TabLoader;
+import com.illuzionzstudios.tab.components.loader.*;
 import com.illuzionzstudios.tab.listener.LegacyBlocker;
 import com.illuzionzstudios.tab.packet.AbstractPacket;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.struct.Latency;
-import com.illuzionzstudios.tab.components.loader.ColumnLoader;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
@@ -594,6 +591,27 @@ public enum TabController implements Listener, BukkitController<Plugin> {
                 this.addSkin(event.getPlayer(), player);
             }
         }
+    }
+
+    /**
+     * Gets the highest tab the player has
+     *
+     * @param player The player to check
+     */
+    public TabLoader getTab(Player player) {
+        TabLoader highest = null;
+
+        for (TabLoader group : tabs.values()) {
+            // Has permission for tab
+            if (player.hasPermission(group.getPermission()) || group.getPermission().trim().equalsIgnoreCase("")) {
+                int compare = Integer.compare(highest == null ? 0 : highest.getWeight(), group.getWeight());
+                if (compare < 0) {
+                    highest = group;
+                }
+            }
+        }
+
+        return highest == null ? tabs.get(Settings.TAB_DEFAULT.getString().toLowerCase()) : highest;
     }
 
 }

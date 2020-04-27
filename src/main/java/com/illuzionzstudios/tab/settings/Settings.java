@@ -55,6 +55,10 @@ public class Settings {
             "This is the text displayed at the bottom of each tab column",
             "when there are multiple pages.");
 
+    public static final ConfigSetting TAB_DEFAULT = new ConfigSetting(config, "Tab.Default Tab", "default",
+            "The default tab to show the player if",
+            "they don't meet any conditions");
+
     public static final ConfigSetting LANGUAGE_MODE = new ConfigSetting(config, "System.Language Mode", "en_US",
             "The language file to use for the plugin",
             "More language files (if available) can be found in the plugins locale folder.");

@@ -50,11 +50,13 @@ public class TabLoader implements Loader {
     /**
      * List of header elements
      */
+    @Getter
     private List<DynamicText> header = new ArrayList<>();
 
     /**
      * List of footer elements
      */
+    @Getter
     private List<DynamicText> footer = new ArrayList<>();
 
     public TabLoader(ConfigSection section) {

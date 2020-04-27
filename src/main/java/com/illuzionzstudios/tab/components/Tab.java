@@ -14,6 +14,7 @@ import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.components.column.TabColumn;
+import com.illuzionzstudios.tab.components.loader.TabLoader;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.components.text.DynamicText;
@@ -47,12 +48,12 @@ public class Tab {
     /**
      * List of header elements
      */
-    private List<DynamicText> header = new ArrayList<>();
+    private List<DynamicText> header;
 
     /**
      * List of footer elements
      */
-    private List<DynamicText> footer = new ArrayList<>();
+    private List<DynamicText> footer;
 
     // REFRESH COOLDOWNS
 
@@ -61,8 +62,15 @@ public class Tab {
      */
     private final PresetCooldown headerFooterCooldown;
 
-    public Tab(Player player) {
+    /**
+     * Loader for all data
+     */
+    @Getter
+    private TabLoader loader;
+
+    public Tab(Player player, TabLoader loader) {
         this.player = player;
+        this.loader = loader;
 
         // Cooldowns
         headerFooterCooldown = new PresetCooldown(Settings.HEADER_FOOTER_REFRESH.getInt());
@@ -70,25 +78,8 @@ public class Tab {
         // Register scheduler for updating this tab
         MinecraftScheduler.get().registerSynchronizationService(this);
 
-        FrameText header = new FrameText(20,
-                "&c&lTab Header",
-                "&4&lT&c&lab Header",
-                "&c&lT&4&la&c&lb Header",
-                "&c&lTa&4&lb &c&lHeader");
-
-        this.header.add(new FrameText(-1, ""));
-        this.header.add(header);
-        this.header.add(new FrameText(-1, ""));
-
-        FrameText footer = new FrameText(20,
-                "&c&lTab Footer",
-                "&4&lT&c&lab Footer",
-                "&c&lT&4&la&c&lb Footer",
-                "&c&lTa&4&lb &c&lFooter");
-
-        this.footer.add(new FrameText(-1,""));
-        this.footer.add(footer);
-        this.footer.add(new FrameText(-1,""));
+        this.header = loader.getHeader();
+        this.footer = loader.getFooter();
 
         // Start timers
         headerFooterCooldown.go();
