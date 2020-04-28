@@ -131,6 +131,6 @@ public class OnlineList extends TabColumn {
 
     @Override
     public DynamicText getTitle() {
-        return new FrameText(-1, "&a&lOnline &2Test");
+        return loader.getTitle();
     }
 }

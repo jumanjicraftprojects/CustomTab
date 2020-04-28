@@ -26,7 +26,7 @@ Tab:
   # The amount of characters per column. This is the limit for
   # text displayed per column before it cuts off. It's also the
   # minimum width for each tab column, meaning it will always be that length
-  Width: 70
+  Width: 50
 
   # Whether each tab column will have a title, defined for each column.
   # If false, only text elements will be displayed
