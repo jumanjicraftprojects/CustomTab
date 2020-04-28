@@ -1,13 +1,13 @@
 Refresh:
   # This is the interval (in ticks) between updating
-  # the tab header and footer.
+  # the tab header and footer. This limits the animation speed
   Header Footer: 5
   # This is the interval (in ticks) between updating
-  # the tab elements and sections.
+  # the tab elements and sections. This limits the animation speed
   Tab: 5
 
 Page:
-  # This is the amount of elements per column.
+  # This is the amount of elements or slots per column.
   # This includes title and pagination text. Maximum value is 20
   Elements: 20
   # This is the interval (in ticks) between scrolling
@@ -19,6 +19,8 @@ Page:
 Tab:
   # Amount of columns to display. This be set here so we always
   # display that many columns, but just change the content.
+  # Make sure to set to how many columns you want to display.
+  # If you don't set one of the columns, it will be blank
   Columns: 4
 
   # The amount of characters per column. This is the limit for
@@ -28,25 +30,31 @@ Tab:
 
   # Whether each tab column will have a title, defined for each column.
   # If false, only text elements will be displayed
-  # If set, minimum tab width won't work
+  # If true, minimum tab width won't work
   Display Titles: true
 
   # This is the text displayed at the bottom of each tab column
-  # when there are multiple pages.
+  # when there are multiple pages. Tells you what page
+  # you're on
   Page Text: "&7%current_page%&8/&7%max_page%"
 
   # The default tab to show the player if
-  # they don't meet any conditions
+  # they don't meet any conditions. Taken
+  # from the Tabs section
   Default Tab: default
 
-  # The different columns to be displayed
+  # The different tab columns able to be displayed
   Column:
-    # Name of the column
+    # Name of the column. Used to register columns
+    # and display them
     Information:
       # Column slot to display in
       Slot: 1
       # The title of this tab column
       Title:
+        # These are the different animation frames for
+        # this text. Each text element is iterated through
+        # to create a dynamic animation.
         Animations:
           - "&e&lPlayer Information"
           - "&6&lP&e&llayer Information"
@@ -66,10 +74,14 @@ Tab:
           - "&e&lPlayer Informat&6&li&e&lon"
           - "&e&lPlayer Informati&6&lo&e&ln"
           - "&e&lPlayer Informatio&6&ln"
+        # This is the interval (in ticks) between updating
+        # animation frames. This is limited by the tab update
+        # interval
         Interval: 5
-      # Text elements to display
+      # Text elements to display for this column
       Text:
-        # Different text element names
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
         Line1:
           # If this text will scroll across
           # Removes animating text
@@ -78,35 +90,53 @@ Tab:
             # This is the interval (in ticks)
             # between scrolling the text
             Interval: 5
-          # Animations between frames if more than 1
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
           Animations:
             - "&ePlayer information displayed here"
             - "&6Player information displayed here"
-          # Interval (in ticks) between animation frames
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
           Interval: 20
-    # Name of the column
+    # Name of the column. Used to register columns
+    # and display them
     Server Information:
       # Column slot to display in
       Slot: 2
       # The title of this tab column
       Title:
+        # These are the different animation frames for
+        # this text. Each text element is iterated through
+        # to create a dynamic animation.
         Animations:
           - "&d&lServer Information"
-        Interval: -1
-      # Text elements to display
+        # This is the interval (in ticks) between updating
+        # animation frames. This is limited by the tab update
+        # interval
+        Interval: 5
+      # Text elements to display for this column
       Text:
-        # Different text element names
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
         Line1:
           # If this text will scroll across
+          # Removes animating text
           Scroll:
             Enabled: false
             # This is the interval (in ticks)
             # between scrolling the text
             Interval: 5
-          # Animations between frames if more than 1
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
           Animations:
-            - "&7RAM: 1.0/2.0 GB"
-          # Interval (in ticks) between animation frames
+            - "&ePlayer information displayed here"
+            - "&6Player information displayed here"
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
           Interval: 20
 
   # These are custom lists to display things
@@ -114,14 +144,21 @@ Tab:
   # you need to repeat elements but have unique placeholders
   # and want to sort them
   Lists:
-    # List name
+    # Name of the list. Used to register columns
+    # and display them
     Online:
-      # Column slot
+      # Column slot to display in
       Slot: 3
       # The title of this tab column
       Title:
+        # These are the different animation frames for
+        # this text. Each text element is iterated through
+        # to create a dynamic animation.
         Animations:
           - "&a&lOnline Players &2%server_online%"
+        # This is the interval (in ticks) between updating
+        # animation frames. This is limited by the tab update
+        # interval
         Interval: -1
       # What the list consists of. Here put
       # the element. Can put custom ones from addons
@@ -129,10 +166,10 @@ Tab:
       Type: online_players
       # In what order to display elements
       # Put a custom sorter
-      # Sorters: distance, string_variable, number_variable, weight
+      # Sorters: distance, string_variable, weight
       Sorter: weight
-      # This will be used for either string_variable or
-      # number_variable.
+      # This will be used for number_variable
+      # to sort by number
       Sort Variable: ""
       # Text for each element
       Text:
@@ -142,9 +179,14 @@ Tab:
           # This is the interval (in ticks)
           # between scrolling the text
           Interval: 5
-        # Here formats display name per player
+        # These are the different animation frames for
+        # this text. Each text element is iterated through
+        # to create a dynamic animation.
         Animations:
           - "%group_format%"
+        # This is the interval (in ticks) between updating
+        # animation frames. This is limited by the tab update
+        # interval
         Interval: 20
 
   # The different tabs composed of the different
@@ -161,15 +203,18 @@ Tab:
       # Higher number means higher priority
       Weight: 1
       # The list of columns displayed in this tab
+      # The names are the name of each column.
       Columns:
         - "Information"
         - "Server Information"
         - "Online"
-      # The tab header
+      # The tab header. This is displayed at the top
+      # of the tab above all columns
       Header:
-        # Text elements
+        # Text to display in the header
         Text:
-          # Different text element names
+          # These are the different text elements in
+          # the column. Maximum of configured tab elements
           Line1:
             # If this text will scroll across
             Scroll:
@@ -177,18 +222,24 @@ Tab:
               # This is the interval (in ticks)
               # between scrolling the text
               Interval: 5
-            # Animations between frames if more than 1
+            # These are the different animation frames for
+            # this text. Each text element is iterated through
+            # to create a dynamic animation.
             Animations:
               - "&ePlayer information displayed here"
               - "&6Player information displayed here"
-            # Interval (in ticks) between animation frames
+            # This is the interval (in ticks) between updating
+            # animation frames. This is limited by the tab update
+            # interval
             Interval: 20
 
-      # The tab footer
+      # The tab footer. This is displayed at the bottom
+      # of the tab below all columns
       Footer:
-        # Text elements
+        # Text to display in the footer
         Text:
-          # Different text element names
+          # These are the different text elements in
+          # the column. Maximum of configured tab elements
           Line1:
             # If this text will scroll across
             Scroll:
@@ -196,16 +247,21 @@ Tab:
               # This is the interval (in ticks)
               # between scrolling the text
               Interval: 5
-            # Animations between frames if more than 1
+            # These are the different animation frames for
+            # this text. Each text element is iterated through
+            # to create a dynamic animation.
             Animations:
               - "&ePlayer information displayed here"
               - "&6Player information displayed here"
-            # Interval (in ticks) between animation frames
+            # This is the interval (in ticks) between updating
+            # animation frames. This is limited by the tab update
+            # interval
             Interval: 20
 
   # These are the different groups for players
   # These are usually used for sorting and formatting
   Groups:
+    # This is the name of the group
     default:
       # Permission needed to have this group
       Permission: ""
@@ -227,8 +283,14 @@ Tab:
           # This is the interval (in ticks)
           # between scrolling the text
           Interval: 5
+        # These are the different animation frames for
+        # this text. Each text element is iterated through
+        # to create a dynamic animation.
         Animations:
           - "&7Member &f%player_displayname%"
+        # This is the interval (in ticks) between updating
+        # animation frames. This is limited by the tab update
+        # interval
         Interval: -1
 
 System:

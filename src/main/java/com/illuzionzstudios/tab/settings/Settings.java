@@ -68,6 +68,18 @@ public class Settings {
      */
     public static void loadSettings() {
         config.load();
+
+        // Config information
+        config.setHeader("Controls information on tabs to display. Here you",
+                "can configure different tab columns to display and",
+                "all animations for them. You can also make lists that",
+                "loop over a group (eg players) and formats placeholders",
+                "for each player. You can also then construct tabs with the",
+                "different columns and display them separately to different",
+                "players. This way you could have a player tab and a staff tab.",
+                " ",
+                "Any queries join our discord at https://discord.gg/DbJXzWq");
+
         config.setAutoremove(false);
 
         config.saveChanges();
