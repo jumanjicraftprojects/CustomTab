@@ -15,10 +15,14 @@ import com.illuzionzstudios.config.Config;
 import com.illuzionzstudios.config.ConfigSection;
 import com.illuzionzstudios.core.bukkit.controller.BukkitController;
 import com.illuzionzstudios.core.util.Logger;
+import com.illuzionzstudios.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
+import com.illuzionzstudios.tab.components.column.CustomColumn;
+import com.illuzionzstudios.tab.components.column.TabColumn;
+import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
 import com.illuzionzstudios.tab.components.loader.*;
 import com.illuzionzstudios.tab.listener.LegacyBlocker;
 import com.illuzionzstudios.tab.packet.AbstractPacket;
@@ -39,6 +43,7 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -93,6 +98,52 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         }
 
         this.displayedTabs.remove(player.getUniqueId());
+    }
+
+    /**
+     * @param player Applicable tab to player
+     */
+    public void showTab(Player player) {
+        MinecraftScheduler.get().desynchronize(() -> {
+            Tab tabList = new Tab(player, getTab(player));
+
+            tabList.getLoader().getColumns().forEach(loader -> {
+                try {
+                    // Let's try load based on loader
+                    if (loader instanceof ColumnLoader) {
+                        Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, ColumnLoader.class);
+                        CustomColumn column = (CustomColumn) ctor.newInstance(player, loader);
+
+                        // Display to player
+                        tabList.displayColumn(column.getColumnNumber(), column);
+                    } else if (loader instanceof ListLoader) {
+                        // Constructor for our column class
+                        Constructor<?> ctor = null;
+                        // Column to display
+                        TabColumn column = null;
+
+                        // We must do all checks here for type
+                        // of list, sorters etc
+                        switch (((ListLoader) loader).getType()) {
+                            case ONLINE_PLAYERS:
+                                ctor = OnlineList.class.getConstructor(Player.class, ListLoader.class);
+                                column = (OnlineList) ctor.newInstance(player, loader);
+                                break;
+                        }
+
+                        if (ctor != null && column != null) {
+                            // Display to player
+                            tabList.displayColumn(column.getColumnNumber(), column);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            displayTab(player, tabList);
+        });
     }
 
     public static final char DISPLAY_SLOT;

@@ -36,44 +36,7 @@ public class TabRegisterListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Tab tabList = new Tab(event.getPlayer(), TabController.INSTANCE.getTab(event.getPlayer()));
-
-        tabList.getLoader().getColumns().forEach(loader -> {
-            try {
-                // Let's try load based on loader
-                if (loader instanceof ColumnLoader) {
-                    Constructor<?> ctor = CustomColumn.class.getConstructor(Player.class, ColumnLoader.class);
-                    CustomColumn column = (CustomColumn) ctor.newInstance(event.getPlayer(), loader);
-
-                    // Display to player
-                    tabList.displayColumn(column.getColumnNumber(), column);
-                } else if (loader instanceof ListLoader) {
-                    // Constructor for our column class
-                    Constructor<?> ctor = null;
-                    // Column to display
-                    TabColumn column = null;
-
-                    // We must do all checks here for type
-                    // of list, sorters etc
-                    switch (((ListLoader) loader).getType()) {
-                        case ONLINE_PLAYERS:
-                            ctor = OnlineList.class.getConstructor(Player.class, ListLoader.class);
-                            column = (OnlineList) ctor.newInstance(event.getPlayer(), loader);
-                            break;
-                    }
-
-                    if (ctor != null && column != null) {
-                        // Display to player
-                        tabList.displayColumn(column.getColumnNumber(), column);
-                    }
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        TabController.INSTANCE.displayTab(event.getPlayer(), tabList);
+        TabController.INSTANCE.showTab(event.getPlayer());
     }
 
     @EventHandler

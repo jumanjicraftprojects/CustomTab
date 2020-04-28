@@ -92,6 +92,9 @@ public class CustomTab extends IlluzionzPlugin {
         // Reload groups
         GroupController.INSTANCE.stop(this);
         GroupController.INSTANCE.initialize(this);
+
+        // Reshow all tabs
+        Bukkit.getOnlinePlayers().forEach(player -> TabController.INSTANCE.showTab(player));
     }
 
     /**

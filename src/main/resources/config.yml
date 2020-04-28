@@ -21,7 +21,7 @@ Tab:
   # display that many columns, but just change the content.
   # Make sure to set to how many columns you want to display.
   # If you don't set one of the columns, it will be blank
-  Columns: 4
+  Columns: 3
 
   # The amount of characters per column. This is the limit for
   # text displayed per column before it cuts off. It's also the

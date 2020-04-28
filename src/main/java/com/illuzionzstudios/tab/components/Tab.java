@@ -147,11 +147,11 @@ public class Tab {
         header.forEach(head -> {
             head.changeText();
 
-            headerText.append(head.getVisibleText()).append("\n");
+            headerText.append(head.getVisibleText());
 
             // Last element check
             if (!header.get(header.size() - 1).equals(head)) {
-                footerText.append("\n");
+                headerText.append("\n");
             }
         });
 
