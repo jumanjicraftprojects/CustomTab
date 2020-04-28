@@ -46,6 +46,7 @@ public class CustomTab extends IlluzionzPlugin {
     @Override
     public void onPluginEnable() {
         // Load all settings and language
+        saveResource("config.yml", false);
         Settings.loadSettings();
         this.setLocale(Settings.LANGUAGE_MODE.getString(), false);
 
@@ -74,6 +75,7 @@ public class CustomTab extends IlluzionzPlugin {
 
     @Override
     public void onConfigReload() {
+        saveResource("config.yml", false);
         // Load all settings and language
         Settings.loadSettings();
         this.setLocale(Settings.LANGUAGE_MODE.getString(), true);

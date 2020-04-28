@@ -166,10 +166,17 @@ Tab:
       Type: online_players
       # In what order to display elements
       # Put a custom sorter
-      # Sorters: distance, string_variable, weight
+      # Sorters: distance, number_variable, weight
+      #
+      # distance: The closest players to you are near the top
+      # number_variable: A higher number appears higher
+      #                  Taken from 'Sort Variable'
+      # weight: Uses weight taken from the player group
+      #         See 'Groups'. Higher weight appears at the top
       Sorter: weight
       # This will be used for number_variable
-      # to sort by number
+      # to sort by number. Can use placeholders
+      # so the value of the placeholder is used
       Sort Variable: ""
       # Text for each element
       Text:
@@ -296,4 +303,4 @@ Tab:
 System:
   # The language file to use for the plugin
   # More language files (if available) can be found in the plugins locale folder.
-  Language: en_US
+  Language Mode: en_US
