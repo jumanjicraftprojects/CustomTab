@@ -4,3 +4,12 @@ general:
   nametag:
     prefix: '&c&lCustomTab &8»&7'
   reload: '&7Reloaded all configuration files'
+  help: "&8&m                                        &r
+  \n &r
+  \n&b&lCustomTab &7v%version% by &bIlluzionz Studios
+  \n&r
+  \nb&lCommand Help
+  \n&8&l* &7/tab help - Display this page
+  \n&8&l* &7/tab reload - Reload all plugin configuration files
+  \n &r
+  \n&8&m                                        &r"

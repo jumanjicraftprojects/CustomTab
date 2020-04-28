@@ -9,10 +9,12 @@
  */
 package com.illuzionzstudios.tab;
 
+import com.illuzionzstudios.command.CommandManager;
 import com.illuzionzstudios.config.Config;
 import com.illuzionzstudios.core.plugin.IlluzionzPlugin;
 import com.illuzionzstudios.scheduler.bukkit.BukkitScheduler;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
+import com.illuzionzstudios.tab.command.CustomTabCommand;
 import com.illuzionzstudios.tab.components.column.*;
 import com.illuzionzstudios.tab.controller.GroupController;
 import com.illuzionzstudios.tab.controller.TabController;
@@ -50,6 +52,8 @@ public class CustomTab extends IlluzionzPlugin {
         Settings.loadSettings();
         this.setLocale(Settings.LANGUAGE_MODE.getString(), false);
 
+        loadCommands();
+
         new BukkitScheduler(this).initialize();
 
         // Load plugin hooks
@@ -70,7 +74,8 @@ public class CustomTab extends IlluzionzPlugin {
 
     @Override
     public void onPluginDisable() {
-
+        GroupController.INSTANCE.stop(this);
+        TabController.INSTANCE.stop(this);
     }
 
     @Override
@@ -79,6 +84,23 @@ public class CustomTab extends IlluzionzPlugin {
         // Load all settings and language
         Settings.loadSettings();
         this.setLocale(Settings.LANGUAGE_MODE.getString(), true);
+
+        // Reload tab
+        TabController.INSTANCE.stop(this);
+        TabController.INSTANCE.initialize(this);
+
+        // Reload groups
+        GroupController.INSTANCE.stop(this);
+        GroupController.INSTANCE.initialize(this);
+    }
+
+    /**
+     * Register all plugin commands
+     */
+    private void loadCommands() {
+        new CommandManager(this).initialize(this);
+
+        CommandManager.get().register(new CustomTabCommand(this));
     }
 
     @Override

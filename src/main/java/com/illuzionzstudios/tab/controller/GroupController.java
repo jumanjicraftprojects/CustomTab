@@ -47,7 +47,7 @@ public enum GroupController implements BukkitController<Plugin> {
 
     @Override
     public void stop(Plugin plugin) {
-
+        this.groups.clear();
     }
 
     /**

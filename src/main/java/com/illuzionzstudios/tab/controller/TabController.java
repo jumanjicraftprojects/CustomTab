@@ -153,6 +153,16 @@ public enum TabController implements Listener, BukkitController<Plugin> {
 
     @Override
     public void stop(Plugin plugin) {
+        this.loaders.clear();
+        this.tabs.clear();
+        this.displayedTabs.forEach((name, tab) -> {
+            tab.disable();
+        });
+
+        // Clear slots
+        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+        playerInfo.setData(this.initialList);
     }
 
     /**
