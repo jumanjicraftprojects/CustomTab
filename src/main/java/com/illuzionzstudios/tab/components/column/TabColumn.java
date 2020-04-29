@@ -206,6 +206,13 @@ public abstract class TabColumn implements Listener {
                     // If in range
                     if (i >= ((OnlineList) this).getPlayers().size() && !blank && i > (Settings.TAB_TITLES.getBoolean() ? 2 : 0)) {
                         OnlineList.TabPlayer tabPlayer = ((OnlineList) this).getPlayers().get(i - (Settings.TAB_TITLES.getBoolean() ? 3 : 1));
+
+                        if (tabPlayer.getGroup() != null) {
+                            // Group formatting
+                            text = new Message(text).processPlaceholder("group_format",
+                                    tabPlayer.getGroup().getElementText().getVisibleText()).getMessage();
+                        }
+
                         text = PlaceholderAPI.setPlaceholders(tabPlayer.getTabPlayer(), text);
                     }
                 }
@@ -214,7 +221,6 @@ public abstract class TabColumn implements Listener {
                 // By this point it will be formatted by player
                 text = PlaceholderAPI.setPlaceholders(player, text);
             }
-            String[] textArray = text.split(" ");
 
             // Trim text
             if (text.length() > Settings.TAB_WIDTH.getInt()) {
@@ -243,14 +249,17 @@ public abstract class TabColumn implements Listener {
             }
 
             // Get player to see if to display player skin icon
-            String playerName = ChatColor.stripColor(textArray.length == 0 ? "" : textArray[textArray.length - 1]);
-            Player tabPlayer = Bukkit.getPlayer(playerName);
+            Player tabPlayer = null;
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                // Simply check for name
+                if (text.contains(onlinePlayer.getName())) tabPlayer = onlinePlayer;
+            }
 
             // Check all elements with text
             if ((i - 1) < sub.size()) {
-                if (tabPlayer != null && !playerName.trim().equalsIgnoreCase("")) {
+                if (tabPlayer != null && !tabPlayer.getName().trim().equalsIgnoreCase("")) {
                     // Set the avatar for that slot
-                    if (!avatarCache.contains(columnNumber, i) || !avatarCache.get(columnNumber, i).equals(tabPlayer.getUniqueId())) {
+                    if ((!avatarCache.contains(columnNumber, i) || !avatarCache.get(columnNumber, i).equals(tabPlayer.getUniqueId())) && !blank) {
                         API.setAvatar(columnNumber, i, tabPlayer, this.player);
                         avatarCache.put(columnNumber, i, tabPlayer.getUniqueId());
                     }

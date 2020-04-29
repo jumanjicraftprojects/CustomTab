@@ -211,12 +211,26 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         });
 
         // Clear slots
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
-        playerInfo.setData(this.initialList);
+        WrapperPlayServerPlayerInfo removeInfo = new WrapperPlayServerPlayerInfo();
+        removeInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+        removeInfo.setData(this.initialList);
 
         Bukkit.getOnlinePlayers().forEach(player -> {
-            this.sendUnfilteredPacket(playerInfo, player);
+            this.sendUnfilteredPacket(removeInfo, player);
+        });
+    }
+
+    /**
+     * Re adds all slots
+     */
+    public void reloadSlots() {
+        WrapperPlayServerPlayerInfo addInfo = new WrapperPlayServerPlayerInfo();
+
+        addInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+        addInfo.setData(this.initialList);
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            this.sendUnfilteredPacket(addInfo, player);
         });
     }
 

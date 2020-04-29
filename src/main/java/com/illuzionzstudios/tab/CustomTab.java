@@ -88,6 +88,7 @@ public class CustomTab extends IlluzionzPlugin {
         // Reload tab
         TabController.INSTANCE.stop(this);
         TabController.INSTANCE.initialize(this);
+        TabController.INSTANCE.reloadSlots();
 
         // Reload groups
         GroupController.INSTANCE.stop(this);

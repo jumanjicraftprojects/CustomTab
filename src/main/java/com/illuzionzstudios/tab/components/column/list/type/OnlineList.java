@@ -42,6 +42,8 @@ public class OnlineList extends TabColumn {
         if (!((players.size() == Bukkit.getOnlinePlayers().size()) && (players.containsAll(Bukkit.getOnlinePlayers()) && Bukkit.getOnlinePlayers().containsAll(players)))) {
             players.clear();
             Bukkit.getOnlinePlayers().forEach(p -> {
+                // Detect vanished players
+                if (player.canSee(p))
                 players.add(new TabPlayer(p));
             });
         }
@@ -57,17 +59,7 @@ public class OnlineList extends TabColumn {
                 return;
             }
 
-            loader.getElementText().clearPlaceholders();
-            // Get animation display
-            // Clone so we don't update actual object
-            DynamicText text = loader.getElementText();
-
-            // Format group formatting
-            if (tabPlayer.getGroup() != null) {
-                text.placehold("group_format", tabPlayer.getGroup().getElementText().getVisibleText());
-            }
-
-            elements.add(text);
+            elements.add(loader.getElementText());
         });
     }
 
