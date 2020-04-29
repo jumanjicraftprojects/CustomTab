@@ -203,7 +203,7 @@ public abstract class TabColumn implements Listener {
                 // Check here for players because literally gay
                 if (this instanceof OnlineList) {
                     // If in range
-                    if (i >= ((OnlineList) this).getPlayers().size() + 2 && !blank) {
+                    if (i >= ((OnlineList) this).getPlayers().size() && !blank && i > 2) {
                         OnlineList.TabPlayer tabPlayer = ((OnlineList) this).getPlayers().get(i - 3);
                         text = PlaceholderAPI.setPlaceholders(tabPlayer.getTabPlayer(), text);
                     }

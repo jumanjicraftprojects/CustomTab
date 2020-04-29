@@ -109,10 +109,6 @@ public class FrameText implements DynamicText {
     public void setFrames(List<String> frames) {
         this.frames = frames;
 
-        getFrames().forEach(frame -> {
-            System.out.println("Element Frame Set: " + frame);
-        });
-
         // Create frame cycle again
         this.cycle = Iterators.cycle(getFrames());
         if (this.cycle.hasNext())
@@ -146,9 +142,7 @@ public class FrameText implements DynamicText {
             // For each frame
             for (int i = 0; i < frames.size(); i++) {
                 String frame = frames.get(i);
-                System.out.println("Before Frame: \"" + frame + "\" for player " + player.getDisplayName());
                 String newText = PlaceholderAPI.setPlaceholders(player, frame);
-                Logger.debug("New Text: \"" + newText + "\" for player " + player.getDisplayName());
                 // For each frame replace at i
                 newFrames.add(newText);
             }
