@@ -198,13 +198,14 @@ public abstract class TabColumn implements Listener {
 
             // Send update packet //
             String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1).getVisibleText());
+
             // Set placeholders
             if (CustomTab.isPapiEnabled()) {
                 // Check here for players because literally gay
                 if (this instanceof OnlineList) {
                     // If in range
-                    if (i >= ((OnlineList) this).getPlayers().size() && !blank && i > 2) {
-                        OnlineList.TabPlayer tabPlayer = ((OnlineList) this).getPlayers().get(i - 3);
+                    if (i >= ((OnlineList) this).getPlayers().size() && !blank && i > (Settings.TAB_TITLES.getBoolean() ? 2 : 0)) {
+                        OnlineList.TabPlayer tabPlayer = ((OnlineList) this).getPlayers().get(i - (Settings.TAB_TITLES.getBoolean() ? 3 : 1));
                         text = PlaceholderAPI.setPlaceholders(tabPlayer.getTabPlayer(), text);
                     }
                 }
