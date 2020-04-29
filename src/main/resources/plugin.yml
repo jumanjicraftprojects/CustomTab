@@ -4,3 +4,5 @@ author: Illuzionz Studios
 main: com.illuzionzstudios.tab.CustomTab
 api-version: "1.15"
 description: Custom tablist to display information
+softdepend:
+  - PlaceholderAPI
