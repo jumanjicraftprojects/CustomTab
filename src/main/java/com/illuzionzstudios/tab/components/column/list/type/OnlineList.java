@@ -1,14 +1,18 @@
 package com.illuzionzstudios.tab.components.column.list.type;
 
+import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.ListType;
 import com.illuzionzstudios.tab.components.loader.GroupLoader;
 import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.controller.GroupController;
+import com.illuzionzstudios.tab.settings.Settings;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +47,7 @@ public class OnlineList extends TabColumn {
             players.clear();
             Bukkit.getOnlinePlayers().forEach(p -> {
                 // Detect vanished players
-                if (player.canSee(p))
+                if (!isVanished(player, p))
                 players.add(new TabPlayer(p));
             });
         }
@@ -60,7 +64,30 @@ public class OnlineList extends TabColumn {
             }
 
             elements.add(loader.getElementText());
+            // Update text
+            loader.getElementText().changeText();
         });
+    }
+
+    /**
+     * See if player is vanished to another
+     *
+     * @param player Viewer
+     * @param other Checks on
+     */
+    private boolean isVanished(Player player, Player other) {
+        boolean vanished = false;
+
+        // Only if to hide from all
+        if (Settings.TAB_VANISH.getBoolean()) {
+            for (MetadataValue meta : other.getMetadata("vanished")) {
+                if (meta.asBoolean()) vanished = true;
+            }
+        } else {
+            vanished = !player.canSee(other);
+        }
+
+        return vanished;
     }
 
     public class TabPlayer implements Comparable<TabPlayer> {
@@ -96,7 +123,12 @@ public class OnlineList extends TabColumn {
                     break;
                 case NUMBER_VARIABLE:
                     // The greater the number, the higher priority
-                    weight += Integer.parseInt(loader.getSortVariable());
+                    // PAPI Here
+                    String toParse = loader.getSortVariable();
+                    if (CustomTab.isPapiEnabled()) {
+                        toParse = PlaceholderAPI.setPlaceholders(tabPlayer, toParse);
+                    }
+                    weight += Integer.parseInt(toParse);
                     break;
                 case DISTANCE:
                     weight -= tabPlayer.getLocation().distance(player.getLocation());
@@ -108,7 +140,7 @@ public class OnlineList extends TabColumn {
 
         @Override
         public int compareTo(TabPlayer o) {
-            return Integer.compare(getWeight(), o.getWeight());
+            return Integer.compare(o.getWeight(), getWeight());
         }
     }
 

@@ -18,6 +18,12 @@ Page:
   Refresh: 100
 
 Tab:
+  # If true, all vanished players will be hidden from everyone
+  # in the tab. If false, only players vanished to certain players are hidden.
+  # E.g, Normal player doesn't see vanished player on tab but admin sees
+  # that player in tab.
+  Hide Vanished From All: false
+
   # Amount of columns to display. This be set here so we always
   # display that many columns, but just change the content.
   # Make sure to set to how many columns you want to display.

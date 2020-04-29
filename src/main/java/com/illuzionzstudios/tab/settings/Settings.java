@@ -38,6 +38,12 @@ public class Settings {
             "the pages don't fly through fast. This will be limited by",
             "the update speed of the tab.");
 
+    public static final ConfigSetting TAB_VANISH = new ConfigSetting(config, "Tab.Hide Vanished From All", false,
+            "If true, all vanished players will be hidden from everyone",
+            "in the tab. If false, only players vanished to certain players are hidden.",
+            "E.g, Normal player doesn't see vanished player on tab but admin sees",
+            "that player in tab.");
+
     public static final ConfigSetting TAB_COLUMNS = new ConfigSetting(config, "Tab.Columns", 4,
             "Amount of columns to display. This be set here so we always",
             "display that many columns, but just change the content.");
