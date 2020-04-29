@@ -273,10 +273,23 @@ Tab:
         # to create a dynamic animation.
         Animations:
           - "&a&lOnline Players &2%server_online%"
+          - "&2&lO&a&lnline Players &2%server_online%"
+          - "&a&lO&2&ln&a&lline Players &2%server_online%"
+          - "&a&lOn&2&ll&a&line Players &2%server_online%"
+          - "&a&lOnl&2&li&a&lne Players &2%server_online%"
+          - "&a&lOnli&2&ln&a&le Players &2%server_online%"
+          - "&a&lOnlin&2&le &a&lPlayers &2%server_online%"
+          - "&a&lOnline &2&lP&a&llayers &2%server_online%"
+          - "&a&lOnline P&2&ll&a&layers &2%server_online%"
+          - "&a&lOnline Pl&2&la&a&lyers &2%server_online%"
+          - "&a&lOnline Pla&2&ly&a&lers &2%server_online%"
+          - "&a&lOnline Play&2&le&a&lrs &2%server_online%"
+          - "&a&lOnline Playe&2&lr&a&ls &2%server_online%"
+          - "&a&lOnline Player&2&ls &2%server_online%"
         # This is the interval (in ticks) between updating
         # animation frames. This is limited by the tab update
         # interval
-        Interval: -1
+        Interval: 5
       # What the list consists of. Here put
       # the element. Can put custom ones from addons
       # Types: online_players
@@ -484,7 +497,7 @@ Tab:
         # this text. Each text element is iterated through
         # to create a dynamic animation.
         Animations:
-          - "&7Member &r%player_displayname%"
+          - "&7Member &f%player_name%"
         # This is the interval (in ticks) between updating
         # animation frames. This is limited by the tab update
         # interval
@@ -515,7 +528,7 @@ Tab:
         # this text. Each text element is iterated through
         # to create a dynamic animation.
         Animations:
-          - "&4Owner &r%player_displayname%"
+          - "&4Owner &c%player_name%"
         # This is the interval (in ticks) between updating
         # animation frames. This is limited by the tab update
         # interval
