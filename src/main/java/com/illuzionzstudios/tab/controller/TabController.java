@@ -214,6 +214,10 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
         playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
         playerInfo.setData(this.initialList);
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            this.sendUnfilteredPacket(playerInfo, player);
+        });
     }
 
     /**

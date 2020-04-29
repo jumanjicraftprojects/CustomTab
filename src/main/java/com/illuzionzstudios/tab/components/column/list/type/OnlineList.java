@@ -1,21 +1,15 @@
 package com.illuzionzstudios.tab.components.column.list.type;
 
-import com.illuzionzstudios.core.locale.player.Message;
-import com.illuzionzstudios.core.util.Logger;
-import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.ListType;
 import com.illuzionzstudios.tab.components.loader.GroupLoader;
 import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.components.text.DynamicText;
-import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.controller.GroupController;
 import lombok.Getter;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
