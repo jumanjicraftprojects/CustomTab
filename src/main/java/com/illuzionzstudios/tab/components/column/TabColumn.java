@@ -9,6 +9,7 @@ import com.illuzionzstudios.scheduler.sync.Async;
 import com.illuzionzstudios.scheduler.sync.Rate;
 import com.illuzionzstudios.scheduler.util.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
+import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.components.text.DynamicText;
@@ -199,6 +200,17 @@ public abstract class TabColumn implements Listener {
             String text = ChatColor.translateAlternateColorCodes('&', blank ? "" : sub.get(i - 1).getVisibleText());
             // Set placeholders
             if (CustomTab.isPapiEnabled()) {
+                // Check here for players because literally gay
+                if (this instanceof OnlineList) {
+                    // If in range
+                    if (i >= ((OnlineList) this).getPlayers().size() + 2 && !blank) {
+                        OnlineList.TabPlayer tabPlayer = ((OnlineList) this).getPlayers().get(i - 3);
+                        text = PlaceholderAPI.setPlaceholders(tabPlayer.getTabPlayer(), text);
+                    }
+                }
+
+                // Try render anything else.
+                // By this point it will be formatted by player
                 text = PlaceholderAPI.setPlaceholders(player, text);
             }
             String[] textArray = text.split(" ");

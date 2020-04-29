@@ -108,8 +108,15 @@ public class FrameText implements DynamicText {
     @Override
     public void setFrames(List<String> frames) {
         this.frames = frames;
+
+        getFrames().forEach(frame -> {
+            System.out.println("Element Frame Set: " + frame);
+        });
+
         // Create frame cycle again
-        this.cycle = Iterators.cycle(this.frames);
+        this.cycle = Iterators.cycle(getFrames());
+        if (this.cycle.hasNext())
+        this.visibleText = cycle.next();
     }
 
     @Override
@@ -125,6 +132,7 @@ public class FrameText implements DynamicText {
                     Matcher.quoteReplacement(replacement.toString())));
         }
 
+        setFrames(newFrames);
         return newFrames;
     }
 
@@ -146,6 +154,7 @@ public class FrameText implements DynamicText {
             }
         }
 
+        setFrames(newFrames);
         return newFrames;
     }
 

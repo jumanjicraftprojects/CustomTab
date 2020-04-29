@@ -33,6 +33,7 @@ public class OnlineList extends TabColumn {
     /**
      * Player's on the tab
      */
+    @Getter
     private final List<TabPlayer> players = new ArrayList<>();
 
     public OnlineList(Player player, ListLoader loader) {
@@ -57,24 +58,20 @@ public class OnlineList extends TabColumn {
         }
 
         // For every player to display in the tab
-        players.forEach(p -> {
-            if (p.getTabPlayer() == null) {
+        this.players.forEach(tabPlayer -> {
+            if (tabPlayer.getTabPlayer() == null) {
                 return;
             }
 
+            loader.getElementText().clearPlaceholders();
             // Get animation display
             // Clone so we don't update actual object
             DynamicText text = loader.getElementText();
-            // Reset from placeholders
-            text.clearPlaceholders();
 
             // Format group formatting
-            if (p.getGroup() != null) {
-                text.setFrames(text.placehold("group_format", p.getGroup().getElementText().getVisibleText()));
+            if (tabPlayer.getGroup() != null) {
+                text.placehold("group_format", tabPlayer.getGroup().getElementText().getVisibleText());
             }
-
-            // Format PAPI
-            text.setFrames(text.papi(p.getTabPlayer()));
 
             elements.add(text);
         });
