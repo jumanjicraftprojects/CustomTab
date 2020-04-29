@@ -231,6 +231,13 @@ public enum TabController implements Listener, BukkitController<Plugin> {
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             this.sendUnfilteredPacket(addInfo, player);
+
+            // Make sure no skins loaded
+            for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+                for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
+                    this.hideAvatar(x, y, player);
+                }
+            }
         });
     }
 

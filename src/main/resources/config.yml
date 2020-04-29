@@ -101,8 +101,26 @@ Tab:
           # this text. Each text element is iterated through
           # to create a dynamic animation.
           Animations:
-            - "&ePlayer information displayed here"
-            - "&6Player information displayed here"
+            - "&7Money: $%vault_eco_balance_formatted%"
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
+          Interval: 20
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
+        Line2:
+          # If this text will scroll across
+          # Removes animating text
+          Scroll:
+            Enabled: false
+            # This is the interval (in ticks)
+            # between scrolling the text
+            Interval: 5
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
+          Animations:
+            - "&7Rank: %vault_rank%"
           # This is the interval (in ticks) between updating
           # animation frames. This is limited by the tab update
           # interval
@@ -119,6 +137,23 @@ Tab:
         # to create a dynamic animation.
         Animations:
           - "&d&lServer Information"
+          - "&5&lS&d&lerver Information"
+          - "&d&lS&5&le&d&lrver Information"
+          - "&d&lSe&5&lr&d&lver Information"
+          - "&d&lSer&5&lv&d&ler Information"
+          - "&d&lServ&5&le&d&lr Information"
+          - "&d&lServe&5&lr &d&lInformation"
+          - "&d&lServer &5&lI&d&lnformation"
+          - "&d&lServer I&5&ln&d&lformation"
+          - "&d&lServer In&5&lf&d&lormation"
+          - "&d&lServer Inf&5&lo&d&lrmation"
+          - "&d&lServer Info&5&lr&d&lmation"
+          - "&d&lServer Infor&5&lm&d&lation"
+          - "&d&lServer Inform&5&la&d&ltion"
+          - "&d&lServer Informa&5&lt&d&lion"
+          - "&d&lServer Informat&5&li&d&lon"
+          - "&d&lServer Informati&5&lo&d&ln"
+          - "&d&lServer Informatio&5&ln"
         # This is the interval (in ticks) between updating
         # animation frames. This is limited by the tab update
         # interval
@@ -139,8 +174,83 @@ Tab:
           # this text. Each text element is iterated through
           # to create a dynamic animation.
           Animations:
-            - "&ePlayer information displayed here"
-            - "&6Player information displayed here"
+            - "&7Online Players: %server_online%"
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
+          Interval: 20
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
+        Line2:
+          # If this text will scroll across
+          # Removes animating text
+          Scroll:
+            Enabled: false
+            # This is the interval (in ticks)
+            # between scrolling the text
+            Interval: 5
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
+          Animations:
+            - "&7Unique Joins: %server_unique_joins%"
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
+          Interval: 20
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
+        Line3:
+          # If this text will scroll across
+          # Removes animating text
+          Scroll:
+            Enabled: false
+            # This is the interval (in ticks)
+            # between scrolling the text
+            Interval: 5
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
+          Animations:
+            - "&7Server Version: %server_version%"
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
+          Interval: 20
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
+        Line4:
+          # If this text will scroll across
+          # Removes animating text
+          Scroll:
+            Enabled: false
+            # This is the interval (in ticks)
+            # between scrolling the text
+            Interval: 5
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
+          Animations:
+            - "&7TPS: %server_tps_1%"
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
+          Interval: 20
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
+        Line5:
+          # If this text will scroll across
+          # Removes animating text
+          Scroll:
+            Enabled: false
+            # This is the interval (in ticks)
+            # between scrolling the text
+            Interval: 5
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
+          Animations:
+            - "&7Ram Usage: %server_ram_used%MB/%server_ram_total%MB"
           # This is the interval (in ticks) between updating
           # animation frames. This is limited by the tab update
           # interval
@@ -374,7 +484,7 @@ Tab:
         # this text. Each text element is iterated through
         # to create a dynamic animation.
         Animations:
-          - "&7Member &f%player_displayname%"
+          - "&7Member &r%player_displayname%"
         # This is the interval (in ticks) between updating
         # animation frames. This is limited by the tab update
         # interval
@@ -405,7 +515,7 @@ Tab:
         # this text. Each text element is iterated through
         # to create a dynamic animation.
         Animations:
-          - "&4Owner &f%player_displayname%"
+          - "&4Owner &r%player_displayname%"
         # This is the interval (in ticks) between updating
         # animation frames. This is limited by the tab update
         # interval
