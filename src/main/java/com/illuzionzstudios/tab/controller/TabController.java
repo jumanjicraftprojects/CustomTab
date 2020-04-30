@@ -217,6 +217,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             this.sendUnfilteredPacket(removeInfo, player);
+            this.removeSkin(player, player);
         });
     }
 
@@ -238,6 +239,8 @@ public enum TabController implements Listener, BukkitController<Plugin> {
                     this.hideAvatar(x, y, player);
                 }
             }
+
+            this.addSkin(player, player);
         });
     }
 

@@ -9,7 +9,8 @@ Refresh:
 Page:
   # This is the amount of elements or slots per column.
   # This includes title and pagination text. Maximum is dependant
-  # on tab columns. For 4 = 20, 3 = 14, 2 = 12, 1 = 8
+  # on tab columns.
+  # AT THE MOMENT CHANGING BREAKS TAB (To Be Fixed)
   Elements: 20
   # This is the interval (in ticks) between scrolling
   # through tab pages. Recommended to set to a slower speed so
@@ -28,6 +29,7 @@ Tab:
   # display that many columns, but just change the content.
   # Make sure to set to how many columns you want to display.
   # If you don't set one of the columns, it will be blank
+  # AT THE MOMENT CHANGING BREAKS TAB (To Be Fixed)
   Columns: 4
 
   # The amount of characters per column. This is the limit for
@@ -255,6 +257,51 @@ Tab:
           # animation frames. This is limited by the tab update
           # interval
           Interval: 20
+    # Name of the column. Used to register columns
+    # and display them
+    Features:
+      # Column slot to display in
+      Slot: 4
+      # The title of this tab column
+      Title:
+        # These are the different animation frames for
+        # this text. Each text element is iterated through
+        # to create a dynamic animation.
+        Animations:
+          - "&c&lFeatures"
+          - "&4&lF&c&leatures"
+          - "&c&lF&4&le&c&latures"
+          - "&c&lFe&4&la&c&ltures"
+          - "&c&lFea&4&lt&c&lures"
+          - "&c&lFeat&4&lu&c&lres"
+          - "&c&lFeatu&4&lr&c&les"
+          - "&c&lFeatur&4&le&c&ls"
+          - "&c&lFeature&4&ls"
+        # This is the interval (in ticks) between updating
+        # animation frames. This is limited by the tab update
+        # interval
+        Interval: 5
+      # Text elements to display for this column
+      Text:
+        # These are the different text elements in
+        # the column. Maximum of configured tab elements
+        Line1:
+          # If this text will scroll across
+          # Removes animating text
+          Scroll:
+            Enabled: false
+            # This is the interval (in ticks)
+            # between scrolling the text
+            Interval: 5
+          # These are the different animation frames for
+          # this text. Each text element is iterated through
+          # to create a dynamic animation.
+          Animations:
+            - "&8&l* &7Animated Tablist"
+          # This is the interval (in ticks) between updating
+          # animation frames. This is limited by the tab update
+          # interval
+          Interval: 20
 
   # These are custom lists to display things
   # like players, faction members etc. It's when
@@ -345,6 +392,7 @@ Tab:
         - "Information"
         - "Server Information"
         - "Online"
+        - "Features"
       # The tab header. This is displayed at the top
       # of the tab above all columns
       Header:
