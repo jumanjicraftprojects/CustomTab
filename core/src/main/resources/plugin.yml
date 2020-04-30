@@ -1,0 +1,7 @@
+name: CustomTab
+version: ${project.version}
+author: Illuzionz Studios
+main: com.illuzionzstudios.tab.CustomTab
+description: Custom tablist to display information
+softdepend:
+  - PlaceholderAPI
