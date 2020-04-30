@@ -168,7 +168,9 @@ public enum TabController implements Listener, BukkitController<Plugin> {
 
     public void initialize(Plugin plugin) {
         // Setup handler
-        if (ServerVersion.isServerVersion(ServerVersion.V1_12)) {
+        if (ServerVersion.isServerVersion(ServerVersion.V1_8)) {
+            this.handler = new NMS_1_8_R3();
+        } else if (ServerVersion.isServerVersion(ServerVersion.V1_12)) {
             this.handler = new NMS_1_12_R1();
         } else if (ServerVersion.isServerVersion(ServerVersion.V1_13)) {
             this.handler = new NMS_1_13_R2();
