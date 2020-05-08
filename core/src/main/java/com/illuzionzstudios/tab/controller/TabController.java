@@ -26,17 +26,13 @@ import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
 import com.illuzionzstudios.tab.components.loader.*;
 import com.illuzionzstudios.tab.listener.LegacyBlocker;
-import com.illuzionzstudios.tab.packet.AbstractPacket;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.ping.Latency;
 import com.illuzionzstudios.tab.settings.Settings;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,8 +41,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
@@ -404,11 +398,11 @@ public enum TabController implements Listener, BukkitController<Plugin> {
     }
 
     public void setAvatar(int x, int y, Player player, Player... players) {
-        handler.setAvatar(x, y, ((CraftPlayer) player).getProfile(), players);
+        handler.setAvatar(x, y, player, players);
     }
 
     public void addSkin(Player player, Player... players) {
-        handler.addSkin(player.getUniqueId(), ((CraftPlayer) player).getProfile(), players);
+        handler.addSkin(player, players);
     }
 
     public void addSkins(Map<UUID, CachedSkin> skins, Player... players) {

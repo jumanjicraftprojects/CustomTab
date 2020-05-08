@@ -9,12 +9,13 @@
  */
 package com.illuzionzstudios.tab.command;
 
-import com.illuzionzstudios.command.type.GlobalCommand;
+import com.illuzionzstudios.command.ReturnType;
+import com.illuzionzstudios.command.type.AbstractCommand;
 import com.illuzionzstudios.core.locale.player.Message;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.command.sub.ReloadCommand;
 
-public class CustomTabCommand extends GlobalCommand {
+public class CustomTabCommand extends AbstractCommand {
 
     public CustomTabCommand(CustomTab plugin) {
         super("customtab", "tab", "tablist");
@@ -23,7 +24,7 @@ public class CustomTabCommand extends GlobalCommand {
     }
 
     @Override
-    public void onCommand(String s, String[] strings) {
+    public ReturnType onCommand(String s, String[] strings) {
         // By default execute help command
 
         // Help message
@@ -32,6 +33,13 @@ public class CustomTabCommand extends GlobalCommand {
 
         // Send to executor
         help.sendMessage(commandSender);
+
+        return ReturnType.SUCCESS;
+    }
+
+    @Override
+    public boolean isConsoleAllowed() {
+        return true;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.illuzionzstudios.tab.command.sub;
 
-import com.illuzionzstudios.command.type.SubCommand;
+import com.illuzionzstudios.command.ReturnType;
+import com.illuzionzstudios.command.type.AbstractCommand;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.struct.Permission;
 
@@ -14,7 +15,7 @@ import com.illuzionzstudios.tab.struct.Permission;
  * this statement.
  */
 
-public class ReloadCommand extends SubCommand {
+public class ReloadCommand extends AbstractCommand {
 
     private final CustomTab plugin;
 
@@ -27,9 +28,11 @@ public class ReloadCommand extends SubCommand {
     }
 
     @Override
-    public void onCommand(String s, String[] strings) {
+    public ReturnType onCommand(String s, String[] strings) {
         plugin.reloadConfig();
         plugin.getLocale().getMessage("general.reload").sendPrefixedMessage(commandSender);
+
+        return ReturnType.SUCCESS;
     }
 
     @Override

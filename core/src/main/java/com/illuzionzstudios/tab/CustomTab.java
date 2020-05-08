@@ -12,6 +12,7 @@ package com.illuzionzstudios.tab;
 import com.illuzionzstudios.command.CommandManager;
 import com.illuzionzstudios.config.Config;
 import com.illuzionzstudios.core.plugin.IlluzionzPlugin;
+import com.illuzionzstudios.core.util.Logger;
 import com.illuzionzstudios.scheduler.bukkit.BukkitScheduler;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
 import com.illuzionzstudios.tab.command.CustomTabCommand;
@@ -59,6 +60,10 @@ public class CustomTab extends IlluzionzPlugin {
         // Load plugin hooks
         papiEnabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
 
+        if (papiEnabled) {
+            Logger.info("Hooked into PlaceholderAPI");
+        }
+
         // Controllers
         TabController.INSTANCE.initialize(this);
         GroupController.INSTANCE.initialize(this);
@@ -102,7 +107,7 @@ public class CustomTab extends IlluzionzPlugin {
      * Register all plugin commands
      */
     private void loadCommands() {
-        new CommandManager(this).initialize(this);
+        new CommandManager().initialize(this);
 
         CommandManager.get().register(new CustomTabCommand(this));
     }
@@ -119,6 +124,6 @@ public class CustomTab extends IlluzionzPlugin {
 
     @Override
     public String getPluginVersion() {
-        return "1.0 BETA";
+        return "1.0.1";
     }
 }
