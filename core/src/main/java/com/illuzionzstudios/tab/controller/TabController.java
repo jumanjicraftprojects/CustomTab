@@ -9,7 +9,6 @@
  */
 package com.illuzionzstudios.tab.controller;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.wrappers.*;
 import com.illuzionzstudios.compatibility.ServerVersion;
 import com.illuzionzstudios.config.Config;
@@ -25,7 +24,6 @@ import com.illuzionzstudios.tab.components.column.CustomColumn;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
 import com.illuzionzstudios.tab.components.loader.*;
-import com.illuzionzstudios.tab.listener.LegacyBlocker;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.ping.Latency;
@@ -182,7 +180,6 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         }
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        ProtocolLibrary.getProtocolManager().addPacketListener(new LegacyBlocker(plugin));
 
         // Add default player slots
         for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {

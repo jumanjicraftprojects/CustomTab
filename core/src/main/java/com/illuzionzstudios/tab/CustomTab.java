@@ -124,6 +124,6 @@ public class CustomTab extends IlluzionzPlugin {
 
     @Override
     public String getPluginVersion() {
-        return "1.0.1";
+        return "1.0.3";
     }
 }
