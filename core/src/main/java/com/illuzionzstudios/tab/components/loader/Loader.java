@@ -9,8 +9,6 @@
  */
 package com.illuzionzstudios.tab.components.loader;
 
-import com.illuzionzstudios.config.ConfigSection;
-
 /**
  * Something that loads a tab component
  */

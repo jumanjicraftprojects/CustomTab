@@ -10,12 +10,14 @@
 package com.illuzionzstudios.tab.controller;
 
 import com.comphenix.protocol.wrappers.*;
-import com.illuzionzstudios.compatibility.ServerVersion;
-import com.illuzionzstudios.config.Config;
-import com.illuzionzstudios.config.ConfigSection;
-import com.illuzionzstudios.core.bukkit.controller.BukkitController;
-import com.illuzionzstudios.core.util.Logger;
-import com.illuzionzstudios.scheduler.MinecraftScheduler;
+import com.illuzionzstudios.mist.Logger;
+import com.illuzionzstudios.mist.compatibility.ServerVersion;
+import com.illuzionzstudios.mist.config.ConfigSection;
+import com.illuzionzstudios.mist.config.PluginSettings;
+import com.illuzionzstudios.mist.config.YamlConfig;
+import com.illuzionzstudios.mist.controller.PluginController;
+import com.illuzionzstudios.mist.plugin.SpigotPlugin;
+import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.tab.*;
 import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
@@ -44,7 +46,7 @@ import java.util.*;
 /**
  * Main controller for the player tab
  */
-public enum TabController implements Listener, BukkitController<Plugin> {
+public enum TabController implements Listener, PluginController<SpigotPlugin> {
 
     INSTANCE;
 
@@ -158,23 +160,23 @@ public enum TabController implements Listener, BukkitController<Plugin> {
      */
     public final List<PlayerInfoData> initialList = new ArrayList<>();
 
-    public void initialize(Plugin plugin) {
+    public void initialize(SpigotPlugin plugin) {
         // Setup handler
-        if (ServerVersion.isServerVersion(ServerVersion.V1_8)) {
+        if (ServerVersion.equals(ServerVersion.V.v1_8)) {
             this.handler = new NMS_1_8_R3();
-        } else if (ServerVersion.isServerVersion(ServerVersion.V1_12)) {
+        } else if (ServerVersion.equals(ServerVersion.V.v1_12)) {
             this.handler = new NMS_1_12_R1();
-        } else if (ServerVersion.isServerVersion(ServerVersion.V1_13)) {
+        } else if (ServerVersion.equals(ServerVersion.V.v1_13)) {
             this.handler = new NMS_1_13_R2();
-        } else if (ServerVersion.isServerVersion(ServerVersion.V1_14)) {
+        } else if (ServerVersion.equals(ServerVersion.V.v1_14)) {
             this.handler = new NMS_1_14_R1();
-        } else if (ServerVersion.isServerVersion(ServerVersion.V1_15)) {
+        } else if (ServerVersion.equals(ServerVersion.V.v1_15)) {
             this.handler = new NMS_1_15_R1();
         }
 
         // If NMS not handled, not available on server
         if (this.handler == null) {
-            Logger.severe("Not supported on your server version " + ServerVersion.getServerVersionString());
+            Logger.severe("Not supported on your server version " + ServerVersion.getServerVersion());
             Bukkit.getPluginManager().disablePlugin(plugin);
             return;
         }
@@ -196,7 +198,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
         }
 
         // Load tab loaders
-        Config config = CustomTab.getInstance().getCoreConfig();
+        YamlConfig config = PluginSettings.SETTINGS_FILE;
 
         // Loop through and create a loader for each section
         for (ConfigSection section : config.getSections("Tab.Column")) {
@@ -221,7 +223,7 @@ public enum TabController implements Listener, BukkitController<Plugin> {
     }
 
     @Override
-    public void stop(Plugin plugin) {
+    public void stop(SpigotPlugin plugin) {
         this.loaders.clear();
         this.tabs.clear();
         this.displayedTabs.forEach((name, tab) -> {

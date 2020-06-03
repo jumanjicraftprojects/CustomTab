@@ -1,6 +1,5 @@
 package com.illuzionzstudios.tab.struct;
 
-import com.illuzionzstudios.core.bukkit.permission.IPermission;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -17,14 +16,13 @@ import lombok.RequiredArgsConstructor;
  * A permission node
  */
 @RequiredArgsConstructor
-public enum Permission implements IPermission {
+public enum Permission {
 
     RELOAD("reload");
 
     private static final String PREFIX = "customtab.";
     private final String node;
 
-    @Override
     public String getPermissionNode() {
         return PREFIX + this.node;
     }

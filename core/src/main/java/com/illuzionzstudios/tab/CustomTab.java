@@ -9,53 +9,68 @@
  */
 package com.illuzionzstudios.tab;
 
-import com.illuzionzstudios.command.CommandManager;
-import com.illuzionzstudios.config.Config;
-import com.illuzionzstudios.core.plugin.IlluzionzPlugin;
-import com.illuzionzstudios.core.util.Logger;
-import com.illuzionzstudios.scheduler.bukkit.BukkitScheduler;
+import com.illuzionzstudios.mist.Logger;
+import com.illuzionzstudios.mist.config.PluginSettings;
+import com.illuzionzstudios.mist.config.locale.Locale;
+import com.illuzionzstudios.mist.plugin.SpigotPlugin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
-import com.illuzionzstudios.tab.command.CustomTabCommand;
-import com.illuzionzstudios.tab.components.column.*;
 import com.illuzionzstudios.tab.controller.GroupController;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.listener.TabRegisterListener;
-import com.illuzionzstudios.tab.settings.Settings;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
+import java.util.Objects;
 
 /**
  * Main class instance
  */
-public class CustomTab extends IlluzionzPlugin {
+public class CustomTab extends SpigotPlugin {
 
-    private static CustomTab INSTANCE;
+    /**
+     * Singleton instance of our {@link SpigotPlugin}
+     */
+    private static volatile CustomTab INSTANCE;
 
+    /**
+     * Return our instance of the {@link SpigotPlugin}
+     *
+     * Should be overridden in your own {@link SpigotPlugin} class
+     * as a way to implement your own methods per plugin
+     *
+     * @return This instance of the plugin
+     */
     public static CustomTab getInstance() {
+        // Assign if null
+        if (INSTANCE == null) {
+            INSTANCE = JavaPlugin.getPlugin(CustomTab.class);
+
+            Objects.requireNonNull(INSTANCE, "Cannot create instance of plugin. Did you reload?");
+        }
+
         return INSTANCE;
     }
 
-    // Plugin hooks
+    /**
+     * Check if PAPI is enabled
+     */
     @Getter
     public static boolean papiEnabled;
 
     @Override
     public void onPluginLoad() {
-        INSTANCE = this;
+    }
+
+    @Override
+    public void onPluginPreEnable() {
+
     }
 
     @Override
     public void onPluginEnable() {
         // Load all settings and language
         saveResource("config.yml", false);
-        Settings.loadSettings();
-        this.setLocale(Settings.LANGUAGE_MODE.getString(), false);
-
-        loadCommands();
-
-        new BukkitScheduler(this).initialize();
 
         // Load plugin hooks
         papiEnabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
@@ -84,12 +99,12 @@ public class CustomTab extends IlluzionzPlugin {
     }
 
     @Override
-    public void onConfigReload() {
+    public void onPluginPreReload() {
         saveResource("config.yml", false);
-        // Load all settings and language
-        Settings.loadSettings();
-        this.setLocale(Settings.LANGUAGE_MODE.getString(), true);
+    }
 
+    @Override
+    public void onPluginReload() {
         // Reload tab
         TabController.INSTANCE.stop(this);
         TabController.INSTANCE.initialize(this);
@@ -103,27 +118,18 @@ public class CustomTab extends IlluzionzPlugin {
         Bukkit.getOnlinePlayers().forEach(TabController.INSTANCE::showTab);
     }
 
-    /**
-     * Register all plugin commands
-     */
-    private void loadCommands() {
-        new CommandManager().initialize(this);
+    @Override
+    public void onReloadablesStart() {
 
-        CommandManager.get().register(new CustomTabCommand(this));
     }
 
     @Override
-    public List<Config> getExtraConfig() {
+    public PluginSettings getPluginSettings() {
         return null;
     }
 
     @Override
-    public String getPluginName() {
-        return "CustomTab";
-    }
-
-    @Override
-    public String getPluginVersion() {
-        return "1.0.3";
+    public Locale getPluginLocale() {
+        return null;
     }
 }

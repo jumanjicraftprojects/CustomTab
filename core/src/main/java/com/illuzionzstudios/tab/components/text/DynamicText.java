@@ -9,7 +9,7 @@
  */
 package com.illuzionzstudios.tab.components.text;
 
-import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown;
 import org.bukkit.entity.Player;
 
 import java.util.List;

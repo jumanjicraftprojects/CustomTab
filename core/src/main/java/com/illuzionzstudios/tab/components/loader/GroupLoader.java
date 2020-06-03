@@ -9,7 +9,7 @@
  */
 package com.illuzionzstudios.tab.components.loader;
 
-import com.illuzionzstudios.config.ConfigSection;
+import com.illuzionzstudios.mist.config.ConfigSection;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.components.text.ScrollableText;

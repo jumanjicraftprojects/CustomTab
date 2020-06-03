@@ -9,7 +9,7 @@
  */
 package com.illuzionzstudios.tab.components.loader;
 
-import com.illuzionzstudios.config.ConfigSection;
+import com.illuzionzstudios.mist.config.ConfigSection;
 import com.illuzionzstudios.tab.components.column.list.ListType;
 import com.illuzionzstudios.tab.components.column.list.SortType;
 import com.illuzionzstudios.tab.components.text.DynamicText;
@@ -18,7 +18,6 @@ import com.illuzionzstudios.tab.components.text.ScrollableText;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

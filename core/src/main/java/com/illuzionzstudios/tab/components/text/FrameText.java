@@ -10,11 +10,9 @@
 package com.illuzionzstudios.tab.components.text;
 
 import com.google.common.collect.Iterators;
-import com.illuzionzstudios.core.util.Logger;
-import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import lombok.Getter;
-import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 

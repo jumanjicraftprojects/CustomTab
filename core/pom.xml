@@ -37,6 +37,12 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.illuzionzstudios.mist</pattern>
+                            <shadedPattern>com.illuzionzstudios.tab.mist</shadedPattern>
+                        </relocation>
+                    </relocations>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <shadedArtifactAttached>false</shadedArtifactAttached>
                     <minimizeJar>true</minimizeJar>
@@ -54,11 +60,6 @@
 
 
     <repositories>
-        <repository>
-            <id>maven</id>
-            <url>http://192.168.20.16:8081/repository/maven-releases/</url>
-        </repository>
-
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
@@ -89,8 +90,8 @@
 
         <dependency>
             <groupId>com.illuzionzstudios</groupId>
-            <artifactId>core</artifactId>
-            <version>1.0</version>
+            <artifactId>Mist</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
@@ -98,20 +99,6 @@
             <groupId>com.illuzionzstudios</groupId>
             <artifactId>impl</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.illuzionzstudios</groupId>
-            <artifactId>command</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.illuzionzstudios</groupId>
-            <artifactId>scheduler</artifactId>
-            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
 

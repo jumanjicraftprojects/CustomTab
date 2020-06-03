@@ -2,12 +2,10 @@ package com.illuzionzstudios.tab.components.column;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import com.illuzionzstudios.core.locale.player.Message;
-import com.illuzionzstudios.core.util.Logger;
-import com.illuzionzstudios.scheduler.MinecraftScheduler;
-import com.illuzionzstudios.scheduler.sync.Async;
-import com.illuzionzstudios.scheduler.sync.Rate;
-import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
+import com.illuzionzstudios.mist.scheduler.rate.Async;
+import com.illuzionzstudios.mist.scheduler.rate.Rate;
+import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
 import com.illuzionzstudios.tab.controller.TabController;
@@ -19,10 +17,8 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.*;
 

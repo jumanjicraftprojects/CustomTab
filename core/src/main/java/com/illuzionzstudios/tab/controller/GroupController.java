@@ -9,13 +9,14 @@
  */
 package com.illuzionzstudios.tab.controller;
 
-import com.illuzionzstudios.config.Config;
-import com.illuzionzstudios.config.ConfigSection;
-import com.illuzionzstudios.core.bukkit.controller.BukkitController;
-import com.illuzionzstudios.core.util.Logger;
+import com.illuzionzstudios.mist.Logger;
+import com.illuzionzstudios.mist.config.ConfigSection;
+import com.illuzionzstudios.mist.config.PluginSettings;
+import com.illuzionzstudios.mist.config.YamlConfig;
+import com.illuzionzstudios.mist.controller.PluginController;
+import com.illuzionzstudios.mist.plugin.SpigotPlugin;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.loader.GroupLoader;
-import com.illuzionzstudios.tab.components.loader.ListLoader;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -24,7 +25,7 @@ import java.util.HashMap;
 /**
  * Control player tab groups
  */
-public enum GroupController implements BukkitController<Plugin> {
+public enum GroupController implements PluginController<SpigotPlugin> {
     INSTANCE;
 
     /**
@@ -33,9 +34,9 @@ public enum GroupController implements BukkitController<Plugin> {
     public HashMap<String, GroupLoader> groups = new HashMap<>();
 
     @Override
-    public void initialize(Plugin plugin) {
+    public void initialize(SpigotPlugin plugin) {
         // Load groups
-        Config config = CustomTab.getInstance().getCoreConfig();
+        YamlConfig config = PluginSettings.SETTINGS_FILE;
 
         // Loop through and create a loader for each section
         for (ConfigSection section : config.getSections("Tab.Groups")) {
@@ -46,7 +47,7 @@ public enum GroupController implements BukkitController<Plugin> {
     }
 
     @Override
-    public void stop(Plugin plugin) {
+    public void stop(SpigotPlugin plugin) {
         this.groups.clear();
     }
 

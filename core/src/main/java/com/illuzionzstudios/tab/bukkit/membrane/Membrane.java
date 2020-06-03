@@ -11,7 +11,8 @@ package com.illuzionzstudios.tab.bukkit.membrane;
 
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
-import com.illuzionzstudios.core.bukkit.controller.BukkitController;
+import com.illuzionzstudios.mist.controller.PluginController;
+import com.illuzionzstudios.mist.plugin.SpigotPlugin;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
@@ -24,7 +25,7 @@ import java.util.*;
 /*
  * Stores minecraft skins
  */
-public enum Membrane implements Listener, BukkitController<Plugin> {
+public enum Membrane implements Listener, PluginController<SpigotPlugin> {
     INSTANCE;
 
     /**
@@ -70,11 +71,12 @@ public enum Membrane implements Listener, BukkitController<Plugin> {
         }
     }
 
-    public void initialize(Plugin plugin) {
+    @Override
+    public void initialize(SpigotPlugin plugin) {
     }
 
     @Override
-    public void stop(Plugin plugin) {
+    public void stop(SpigotPlugin plugin) {
     }
 
     public void showEntry(UUID uuid, CachedSkin skin) {

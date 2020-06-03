@@ -9,7 +9,7 @@
  */
 package com.illuzionzstudios.tab.components.text;
 
-import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.settings.Settings;
 import lombok.Getter;
