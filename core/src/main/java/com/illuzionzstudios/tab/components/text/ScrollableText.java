@@ -40,7 +40,7 @@ public class ScrollableText implements DynamicText {
     private PresetCooldown interval;
 
     public ScrollableText(int interval, String fullText) {
-        this(interval, fullText, Settings.TAB_WIDTH.getInt() - 1);
+        this(interval, fullText, Settings.Tab.TAB_WIDTH.getInt() - 1);
     }
 
     public ScrollableText(int interval, String fullText, int scrollSize) {

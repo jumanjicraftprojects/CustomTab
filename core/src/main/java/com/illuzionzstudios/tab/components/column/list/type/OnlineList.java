@@ -79,7 +79,7 @@ public class OnlineList extends TabColumn {
         boolean vanished = false;
 
         // Only if to hide from all
-        if (Settings.TAB_VANISH.getBoolean()) {
+        if (Settings.Tab.TAB_VANISH.getBoolean()) {
             for (MetadataValue meta : other.getMetadata("vanished")) {
                 if (meta.asBoolean()) vanished = true;
             }

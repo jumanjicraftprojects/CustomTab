@@ -30,10 +30,6 @@ import java.lang.reflect.Constructor;
  */
 public class TabRegisterListener implements Listener {
 
-    public TabRegisterListener(Plugin plugin) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         TabController.INSTANCE.showTab(event.getPlayer());

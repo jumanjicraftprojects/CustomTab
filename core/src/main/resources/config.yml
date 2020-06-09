@@ -1,3 +1,9 @@
+Settings:
+
+  # The language file to use for the plugin
+  # More language files (if available) can be found in the plugins locale folder.
+  Locale: en_US
+
 Refresh:
   # This is the interval (in ticks) between updating
   # the tab header and footer. This limits the animation speed
@@ -582,7 +588,4 @@ Tab:
         # interval
         Interval: -1
 
-System:
-  # The language file to use for the plugin
-  # More language files (if available) can be found in the plugins locale folder.
-  Language Mode: en_US
+  Version: 1

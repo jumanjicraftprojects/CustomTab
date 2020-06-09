@@ -7,19 +7,24 @@
  * noncommercial uses permitted by copyright law. Any licensing of this software overrides
  * this statement.
  */
-package com.illuzionzstudios.tab.command;
+package com.illuzionzstudios.tab.settings;
 
-import com.illuzionzstudios.mist.command.SpigotCommandGroup;
-import com.illuzionzstudios.mist.command.type.ReloadCommand;
+import com.illuzionzstudios.mist.config.locale.Locale;
+import com.illuzionzstudios.mist.plugin.SpigotPlugin;
 
-/**
- * Main tab command. We mainly just have the reload command here
- */
-public class CustomTabCommand extends SpigotCommandGroup {
+public class TabLocale extends Locale {
 
-    @Override
-    public void registerSubcommands() {
-        registerSubCommand(new ReloadCommand());
+    public TabLocale(SpigotPlugin plugin) {
+        super(plugin);
     }
 
+    @Override
+    protected int getConfigVersion() {
+        return 1;
+    }
+
+    @Override
+    public void loadLocale() {
+
+    }
 }

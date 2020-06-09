@@ -184,8 +184,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
         // Add default player slots
-        for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
-            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
+        for (int x = 1; x <= Settings.Tab.TAB_COLUMNS.getInt(); x++) {
+            for (int y = 1; y <= Settings.Page.PAGE_ELEMENTS.getInt(); y++) {
                 this.initialList.add(
                         new PlayerInfoData(
                                 handler.getDisplayProfile(x, y),
@@ -254,8 +254,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             handler.sendUnfilteredPacket(addInfo, player);
 
             // Make sure no skins loaded
-            for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
-                for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
+            for (int x = 1; x <= Settings.Tab.TAB_COLUMNS.getInt(); x++) {
+                for (int y = 1; y <= Settings.Page.PAGE_ELEMENTS.getInt(); y++) {
                     this.hideAvatar(x, y, player);
                 }
             }
@@ -511,8 +511,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
         TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, event.getPlayer());
 
         // Make sure no skins loaded
-        for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
-            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
+        for (int x = 1; x <= Settings.Tab.TAB_COLUMNS.getInt(); x++) {
+            for (int y = 1; y <= Settings.Page.PAGE_ELEMENTS.getInt(); y++) {
                 this.hideAvatar(x, y, event.getPlayer());
             }
         }
@@ -545,7 +545,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             }
         }
 
-        return highest == null ? tabs.get(Settings.TAB_DEFAULT.getString().toLowerCase()) : highest;
+        return highest == null ? tabs.get(Settings.Tab.TAB_DEFAULT.getString().toLowerCase()) : highest;
     }
 
 }

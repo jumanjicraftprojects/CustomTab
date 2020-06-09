@@ -14,9 +14,12 @@ import com.illuzionzstudios.mist.config.PluginSettings;
 import com.illuzionzstudios.mist.config.locale.Locale;
 import com.illuzionzstudios.mist.plugin.SpigotPlugin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
+import com.illuzionzstudios.tab.command.CustomTabCommand;
 import com.illuzionzstudios.tab.controller.GroupController;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.listener.TabRegisterListener;
+import com.illuzionzstudios.tab.settings.Settings;
+import com.illuzionzstudios.tab.settings.TabLocale;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -69,9 +72,6 @@ public class CustomTab extends SpigotPlugin {
 
     @Override
     public void onPluginEnable() {
-        // Load all settings and language
-        saveResource("config.yml", false);
-
         // Load plugin hooks
         papiEnabled = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
 
@@ -85,7 +85,7 @@ public class CustomTab extends SpigotPlugin {
         Membrane.INSTANCE.initialize(this);
 
         // Listeners
-        new TabRegisterListener(this);
+        registerListener(new TabRegisterListener());
 
         // Metrics
         int pluginId = 7282;
@@ -100,7 +100,6 @@ public class CustomTab extends SpigotPlugin {
 
     @Override
     public void onPluginPreReload() {
-        saveResource("config.yml", false);
     }
 
     @Override
@@ -120,16 +119,16 @@ public class CustomTab extends SpigotPlugin {
 
     @Override
     public void onReloadablesStart() {
-
+        registerMainCommand(new CustomTabCommand(), "tab", "customtab");
     }
 
     @Override
     public PluginSettings getPluginSettings() {
-        return null;
+        return new Settings(this);
     }
 
     @Override
     public Locale getPluginLocale() {
-        return null;
+        return new TabLocale(this);
     }
 }

@@ -9,20 +9,18 @@
  */
 package com.illuzionzstudios.tab.components;
 
-import com.illuzionzstudios.scheduler.MinecraftScheduler;
-import com.illuzionzstudios.scheduler.sync.Async;
-import com.illuzionzstudios.scheduler.sync.Rate;
-import com.illuzionzstudios.scheduler.util.PresetCooldown;
+import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
+import com.illuzionzstudios.mist.scheduler.rate.Async;
+import com.illuzionzstudios.mist.scheduler.rate.Rate;
+import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.loader.TabLoader;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.components.text.DynamicText;
-import com.illuzionzstudios.tab.components.text.FrameText;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,7 +71,7 @@ public class Tab {
         this.loader = loader;
 
         // Cooldowns
-        headerFooterCooldown = new PresetCooldown(Settings.HEADER_FOOTER_REFRESH.getInt());
+        headerFooterCooldown = new PresetCooldown(Settings.Refresh.HEADER_FOOTER_REFRESH.getInt());
 
         // Register scheduler for updating this tab
         MinecraftScheduler.get().registerSynchronizationService(this);
