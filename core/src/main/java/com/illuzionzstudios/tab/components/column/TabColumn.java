@@ -2,6 +2,7 @@ package com.illuzionzstudios.tab.components.column;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.illuzionzstudios.mist.Logger;
 import com.illuzionzstudios.mist.config.locale.Message;
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.mist.scheduler.rate.Async;

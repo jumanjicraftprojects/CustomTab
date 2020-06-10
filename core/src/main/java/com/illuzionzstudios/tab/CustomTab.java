@@ -85,6 +85,7 @@ public class CustomTab extends SpigotPlugin {
         Membrane.INSTANCE.initialize(this);
 
         // Listeners
+        registerListener(TabController.INSTANCE);
         registerListener(new TabRegisterListener());
 
         // Metrics

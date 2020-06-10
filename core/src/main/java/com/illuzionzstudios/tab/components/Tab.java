@@ -9,6 +9,7 @@
  */
 package com.illuzionzstudios.tab.components;
 
+import com.illuzionzstudios.mist.Logger;
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.mist.scheduler.rate.Async;
 import com.illuzionzstudios.mist.scheduler.rate.Rate;

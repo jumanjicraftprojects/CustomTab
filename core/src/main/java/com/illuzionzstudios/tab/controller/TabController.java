@@ -181,8 +181,6 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             return;
         }
 
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-
         // Add default player slots
         for (int x = 1; x <= Settings.Tab.TAB_COLUMNS.getInt(); x++) {
             for (int y = 1; y <= Settings.Page.PAGE_ELEMENTS.getInt(); y++) {
