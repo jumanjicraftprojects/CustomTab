@@ -249,6 +249,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
         addInfo.setData(this.initialList);
 
         Bukkit.getOnlinePlayers().forEach(player -> {
+            // Load skins for player
+            TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, player);
             handler.sendUnfilteredPacket(addInfo, player);
 
             // Make sure no skins loaded

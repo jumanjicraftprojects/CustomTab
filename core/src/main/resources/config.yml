@@ -587,5 +587,3 @@ Tab:
         # animation frames. This is limited by the tab update
         # interval
         Interval: -1
-
-  Version: 1
