@@ -13,6 +13,7 @@ import com.illuzionzstudios.mist.Logger;
 import com.illuzionzstudios.mist.config.PluginSettings;
 import com.illuzionzstudios.mist.config.locale.Locale;
 import com.illuzionzstudios.mist.plugin.SpigotPlugin;
+import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
 import com.illuzionzstudios.tab.command.CustomTabCommand;
 import com.illuzionzstudios.tab.controller.GroupController;
@@ -84,10 +85,6 @@ public class CustomTab extends SpigotPlugin {
         GroupController.INSTANCE.initialize(this);
         Membrane.INSTANCE.initialize(this);
 
-        // Listeners
-        registerListener(TabController.INSTANCE);
-        registerListener(new TabRegisterListener());
-
         // Metrics
         int pluginId = 7282;
         Metrics metrics = new Metrics(this, pluginId);
@@ -121,6 +118,10 @@ public class CustomTab extends SpigotPlugin {
     @Override
     public void onReloadablesStart() {
         registerMainCommand(new CustomTabCommand(), "tab", "customtab");
+
+        // Listeners
+        registerListener(TabController.INSTANCE);
+        registerListener(new TabRegisterListener());
     }
 
     @Override

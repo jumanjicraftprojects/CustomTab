@@ -244,7 +244,6 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
      */
     public void reloadSlots() {
         WrapperPlayServerPlayerInfo addInfo = new WrapperPlayServerPlayerInfo();
-
         addInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
         addInfo.setData(this.initialList);
 
