@@ -1,12 +1,15 @@
 package com.illuzionzstudios.tab.components.column.list.type;
 
+import com.illuzionzstudios.mist.config.locale.Message;
 import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.ListType;
 import com.illuzionzstudios.tab.components.loader.GroupLoader;
 import com.illuzionzstudios.tab.components.loader.ListLoader;
 import com.illuzionzstudios.tab.components.text.DynamicText;
+import com.illuzionzstudios.tab.components.text.FrameText;
 import com.illuzionzstudios.tab.controller.GroupController;
+import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -57,16 +60,45 @@ public class OnlineList extends TabColumn {
         } catch (Exception ignored) {
         }
 
-        // For every player to display in the tab
-        this.players.forEach(tabPlayer -> {
+        TabController API = TabController.INSTANCE;
+
+        // For every player to display the tab
+        for (int i = 0; i < this.players.size(); i++) {
+            TabPlayer tabPlayer = this.players.get(i);
+
             if (tabPlayer.getTabPlayer() == null) {
                 return;
             }
 
-            elements.add(loader.getElementText());
+            // Process player name and skin
+            DynamicText listElement = loader.getElementText();
+            String text = listElement.getVisibleText();
+
+            if (tabPlayer.getGroup() != null) {
+                // Group formatting
+                text = new Message(text).processPlaceholder("group_format",
+                        tabPlayer.getGroup().getElementText().getVisibleText()).getMessage();
+            }
+
+            if (CustomTab.isPapiEnabled())
+                // Process PAPI
+                text = PlaceholderAPI.setPlaceholders(tabPlayer.getTabPlayer(), text);
+
+            // Place
+            int n = Settings.Tab.TAB_TITLES.getBoolean() ? 3 : 1;
+
+            // Set the avatar for that slot
+            if ((!avatarCache.contains(columnNumber, i + n) || !avatarCache.get(columnNumber, i + n).equals(tabPlayer.getTabPlayer().getUniqueId()))) {
+                API.setAvatar(columnNumber, i + n, tabPlayer.getTabPlayer(), this.player);
+                avatarCache.put(columnNumber, i + n, tabPlayer.getTabPlayer().getUniqueId());
+            }
+
+            // Set text
+            elements.add(new FrameText(-1, text));
+
             // Update text
             loader.getElementText().changeText();
-        });
+        }
     }
 
     /**

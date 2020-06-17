@@ -199,22 +199,6 @@ public abstract class TabColumn implements Listener {
 
             // Set placeholders
             if (CustomTab.isPapiEnabled()) {
-                // Check here for players because literally gay
-                if (this instanceof OnlineList) {
-                    // If in range
-                    if (i >= ((OnlineList) this).getPlayers().size() && !blank && i > (Settings.Tab.TAB_TITLES.getBoolean() ? 2 : 0)) {
-                        OnlineList.TabPlayer tabPlayer = ((OnlineList) this).getPlayers().get(i - (Settings.Tab.TAB_TITLES.getBoolean() ? 3 : 1));
-
-                        if (tabPlayer.getGroup() != null) {
-                            // Group formatting
-                            text = new Message(text).processPlaceholder("group_format",
-                                    tabPlayer.getGroup().getElementText().getVisibleText()).getMessage();
-                        }
-
-                        text = PlaceholderAPI.setPlaceholders(tabPlayer.getTabPlayer(), text);
-                    }
-                }
-
                 // Try render anything else.
                 // By this point it will be formatted by player
                 text = PlaceholderAPI.setPlaceholders(player, text);
@@ -246,23 +230,8 @@ public abstract class TabColumn implements Listener {
                 text = text.substring(0, (Settings.Tab.TAB_WIDTH.getInt() - (boldChars / 8)) - 4);
             }
 
-            // Get player to see if to display player skin icon
-            Player tabPlayer = null;
-            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                // Simply check for name
-                if (text.contains(onlinePlayer.getName())) tabPlayer = onlinePlayer;
-            }
-
             // Check all elements with text
             if ((i - 1) < sub.size()) {
-                if (tabPlayer != null && !tabPlayer.getName().trim().equalsIgnoreCase("")) {
-                    // Set the avatar for that slot
-                    if ((!avatarCache.contains(columnNumber, i) || !avatarCache.get(columnNumber, i).equals(tabPlayer.getUniqueId())) && !blank) {
-                        API.setAvatar(columnNumber, i, tabPlayer, this.player);
-                        avatarCache.put(columnNumber, i, tabPlayer.getUniqueId());
-                    }
-                }
-
                 // Set text in that slot as our final text
                 API.setText(columnNumber, i, text, this.player);
             } else {
@@ -299,6 +268,4 @@ public abstract class TabColumn implements Listener {
         }
 
     }
-
-
 }
