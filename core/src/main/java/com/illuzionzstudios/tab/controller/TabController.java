@@ -172,6 +172,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             this.handler = new NMS_1_14_R1();
         } else if (ServerVersion.equals(ServerVersion.V.v1_15)) {
             this.handler = new NMS_1_15_R1();
+        } else if (ServerVersion.equals(ServerVersion.V.v1_16)) {
+            this.handler = new NMS_1_16_R1();
         }
 
         // If NMS not handled, not available on server
