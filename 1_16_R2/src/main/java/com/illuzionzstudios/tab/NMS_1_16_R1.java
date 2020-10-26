@@ -9,7 +9,7 @@
  */
 package com.illuzionzstudios.tab;
 
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class NMS_1_16_R1 implements NMSHandler {

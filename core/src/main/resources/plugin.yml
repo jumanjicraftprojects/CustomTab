@@ -3,6 +3,7 @@ version: ${project.version}
 author: Illuzionz Studios
 main: com.illuzionzstudios.tab.CustomTab
 description: Custom tablist to display information
+api-version: "1.13"
 depend:
   - ProtocolLib
 softdepend:
