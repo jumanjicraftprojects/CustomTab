@@ -9,10 +9,10 @@
  */
 package com.illuzionzstudios.tab;
 
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class NMS_1_16_R1 implements NMSHandler {
+public class NMS_1_16_R3 implements NMSHandler {
 
     @Override
     public void setAvatar(int x, int y, Player player, Player... players) {
