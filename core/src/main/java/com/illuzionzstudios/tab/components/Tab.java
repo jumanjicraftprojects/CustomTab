@@ -14,12 +14,14 @@ import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.mist.scheduler.rate.Async;
 import com.illuzionzstudios.mist.scheduler.rate.Rate;
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown;
+import com.illuzionzstudios.tab.CustomTab;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.loader.TabLoader;
 import com.illuzionzstudios.tab.controller.TabController;
 import com.illuzionzstudios.tab.settings.Settings;
 import com.illuzionzstudios.tab.components.text.DynamicText;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -144,25 +146,33 @@ public class Tab {
 
         // Update text
         header.forEach(head -> {
-            head.changeText();
-
-            headerText.append(head.getVisibleText());
+            // PAPI
+            if (CustomTab.isPapiEnabled())
+                headerText.append(PlaceholderAPI.setPlaceholders(player, head.getVisibleText()));
+            else
+                headerText.append(head.getVisibleText());
 
             // Last element check
             if (!header.get(header.size() - 1).equals(head)) {
                 headerText.append("\n");
             }
+
+            head.changeText();
         });
 
         footer.forEach(foot -> {
-            foot.changeText();
-
-            footerText.append(foot.getVisibleText());
+            // PAPI
+            if (CustomTab.isPapiEnabled())
+                footerText.append(PlaceholderAPI.setPlaceholders(player, foot.getVisibleText()));
+            else
+                footerText.append(foot.getVisibleText());
 
             // Last element check
             if (!footer.get(footer.size() - 1).equals(foot)) {
                 footerText.append("\n");
             }
+
+            foot.changeText();
         });
 
         // Set the text in the tab

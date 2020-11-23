@@ -89,11 +89,6 @@ public class Settings extends PluginSettings {
         super(plugin);
     }
 
-    @Override
-    protected int getConfigVersion() {
-        return 1;
-    }
-
     /**
      * Load settings from file into server
      */

@@ -133,4 +133,9 @@ public class CustomTab extends SpigotPlugin {
     public Locale getPluginLocale() {
         return new TabLocale(this);
     }
+
+    @Override
+    public int getPluginId() {
+        return 78200;
+    }
 }

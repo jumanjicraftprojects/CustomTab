@@ -19,11 +19,6 @@ public class TabLocale extends Locale {
     }
 
     @Override
-    protected int getConfigVersion() {
-        return 1;
-    }
-
-    @Override
     public void loadLocale() {
 
     }

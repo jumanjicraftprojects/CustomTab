@@ -66,7 +66,7 @@ public class OnlineList extends TabColumn {
         for (int i = 0; i < this.players.size(); i++) {
             TabPlayer tabPlayer = this.players.get(i);
 
-            if (tabPlayer.getTabPlayer() == null) {
+            if (tabPlayer == null || tabPlayer.getTabPlayer() == null) {
                 return;
             }
 
