@@ -85,7 +85,7 @@ public class OnlineList extends TabColumn {
                 text = PlaceholderAPI.setPlaceholders(tabPlayer.getTabPlayer(), text);
 
             // Place
-            int n = Settings.Tab.TAB_TITLES.getBoolean() ? 3 : 1;
+            int n = Settings.TAB_TITLES.getBoolean() ? 3 : 1;
 
             // Set the avatar for that slot
             if ((!avatarCache.contains(columnNumber, i + n) || !avatarCache.get(columnNumber, i + n).equals(tabPlayer.getTabPlayer().getUniqueId()))) {
@@ -111,7 +111,7 @@ public class OnlineList extends TabColumn {
         boolean vanished = false;
 
         // Only if to hide from all
-        if (Settings.Tab.TAB_VANISH.getBoolean()) {
+        if (Settings.TAB_VANISH.getBoolean()) {
             for (MetadataValue meta : other.getMetadata("vanished")) {
                 if (meta.asBoolean()) vanished = true;
             }

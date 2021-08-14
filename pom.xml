@@ -6,7 +6,7 @@
 
     <groupId>com.illuzionzstudios</groupId>
     <artifactId>CustomTab</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
     <modules>
         <module>1_12_R1</module>
         <module>1_13_R2</module>

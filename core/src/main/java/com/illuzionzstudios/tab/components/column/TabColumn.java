@@ -75,8 +75,8 @@ public abstract class TabColumn implements Listener {
         this.columnNumber = columnNumber;
 
         // Set refresh cooldowns
-        elementCooldown = new PresetCooldown(Settings.Refresh.TAB_REFRESH.getInt());
-        pageScrollCooldown = new PresetCooldown(Settings.Page.PAGE_SCROLL_COOLDOWN.getInt());
+        elementCooldown = new PresetCooldown(Settings.TAB_REFRESH.getInt());
+        pageScrollCooldown = new PresetCooldown(Settings.PAGE_SCROLL_COOLDOWN.getInt());
 
         Bukkit.getServer().getPluginManager().registerEvents(this, CustomTab.getInstance());
         MinecraftScheduler.get().registerSynchronizationService(this);
@@ -140,30 +140,30 @@ public abstract class TabColumn implements Listener {
         // Our sub array, or our page
         List<DynamicText> sub = new ArrayList<>
                 (elements.subList(Math.max(0, Math.min(cursor, elements.size())),
-                        Math.min(elements.size(), cursor + (Settings.Page.PAGE_ELEMENTS.getInt() - 3))));
+                        Math.min(elements.size(), cursor + (Settings.PAGE_ELEMENTS.getInt() - 3))));
 
         // If titles enabled
-        if (Settings.Tab.TAB_TITLES.getBoolean()) {
+        if (Settings.TAB_TITLES.getBoolean()) {
             sub.add(0, getTitle());
 
             // Set our minimum tab length
             StringBuilder width = new StringBuilder();
-            for (int i = 0; i < Settings.Tab.TAB_WIDTH.getInt(); i++) {
+            for (int i = 0; i < Settings.TAB_WIDTH.getInt(); i++) {
                 width.append(" ");
             }
             sub.add(1, new FrameText(-1, width.toString()));
         }
 
-        double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.Page.PAGE_ELEMENTS.getInt())));
+        double size = (elements.size() + 2 + Math.floor((elements.size() / Settings.PAGE_ELEMENTS.getInt())));
 
         // If to show pagination info
         boolean pageInfo = false;
 
-        if (size >= Settings.Page.PAGE_ELEMENTS.getInt() - 1) {
+        if (size >= Settings.PAGE_ELEMENTS.getInt() - 1) {
             // Calculate page length //
-            double pageDelta = ((double) (cursor + (Settings.Tab.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.Page.PAGE_ELEMENTS.getInt()) + 1;
+            double pageDelta = ((double) (cursor + (Settings.TAB_TITLES.getBoolean() ? 3 : 1)) / Settings.PAGE_ELEMENTS.getInt()) + 1;
             int page = (int) (pageDelta < 2 ? Math.floor(pageDelta) : Math.ceil(pageDelta));
-            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.Page.PAGE_ELEMENTS.getInt())) / Settings.Page.PAGE_ELEMENTS.getInt());
+            int max = (int) Math.ceil((size + (2 * elements.size() / Settings.PAGE_ELEMENTS.getInt())) / Settings.PAGE_ELEMENTS.getInt());
 
             // If we can go to next page
             if (pageScrollCooldown.isReady()) {
@@ -184,14 +184,14 @@ public abstract class TabColumn implements Listener {
             }
 
             // Pagination text
-            String pagesText = new Message(Settings.Tab.TAB_PAGE_TEXT.getString())
+            String pagesText = new Message(Settings.TAB_PAGE_TEXT.getString())
                     .processPlaceholder("current_page", Math.max(1, page))
                     .processPlaceholder("max_page", Math.max(1, max)).getMessage();
             sub.add(new FrameText(-1, pagesText));
         }
 
         // For elements in the sub tab
-        for (int i = 1; i <= Settings.Page.PAGE_ELEMENTS.getInt(); i++) {
+        for (int i = 1; i <= Settings.PAGE_ELEMENTS.getInt(); i++) {
             boolean blank = (i - 1) >= sub.size();
 
             // Send update packet //
@@ -205,7 +205,7 @@ public abstract class TabColumn implements Listener {
             }
 
             // Trim text
-            if (text.length() > Settings.Tab.TAB_WIDTH.getInt()) {
+            if (text.length() > Settings.TAB_WIDTH.getInt()) {
                 // Check for colour code
                 boolean previousCode = false;
                 // If the text is currently bold
@@ -214,10 +214,10 @@ public abstract class TabColumn implements Listener {
                 int boldChars = 0;
 
                 char[] chars = text.toCharArray();
-                for (int j = 0; j < Settings.Tab.TAB_WIDTH.getInt(); j++) {
+                for (int j = 0; j < Settings.TAB_WIDTH.getInt(); j++) {
                     char c = chars[j];
 
-                    if (c == '§') {
+                    if (c == '\u00a7') {
                         previousCode = true;
                     } else if (previousCode) {
                         previousCode = false;
@@ -227,7 +227,8 @@ public abstract class TabColumn implements Listener {
                     }
                 }
 
-                text = text.substring(0, (Settings.Tab.TAB_WIDTH.getInt() - (boldChars / 8)) - 4);
+                // Bold chars count as 2 spaces
+                text = text.substring(0, (Settings.TAB_WIDTH.getInt() - (boldChars / 8)) - 4);
             }
 
             // Check all elements with text
@@ -256,12 +257,12 @@ public abstract class TabColumn implements Listener {
 
         // If page display at bottom
         if (pageInfo) {
-            cursor -= (Settings.Tab.TAB_TITLES.getBoolean() ? 3 : 1);
+            cursor -= (Settings.TAB_TITLES.getBoolean() ? 3 : 1);
         }
 
         // Check if cursor is greater than applicable
         // number of pages
-        if (cursor >= (size - ((Settings.Tab.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / (Settings.Page.PAGE_ELEMENTS.getInt())))) {
+        if (cursor >= (size - ((Settings.TAB_TITLES.getBoolean() ? 3 : 1) * elements.size() / (Settings.PAGE_ELEMENTS.getInt())))) {
             // Reset to page 1
             this.elements = null;
             cursor = 0;

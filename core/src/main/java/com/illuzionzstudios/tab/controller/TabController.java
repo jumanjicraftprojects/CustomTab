@@ -184,7 +184,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
                         new PlayerInfoData(
                                 handler.getDisplayProfile(x, y),
                                 Latency.FIVE.ping,
-                                EnumWrappers.NativeGameMode.NOT_SET,
+                                EnumWrappers.NativeGameMode.SURVIVAL,
                                 WrappedChatComponent.fromText("")
                         )
                 );
@@ -296,7 +296,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
                 new PlayerInfoData(
                         handler.getDisplayProfile(x, y),
                         Latency.FIVE.ping,
-                        EnumWrappers.NativeGameMode.NOT_SET,
+                        EnumWrappers.NativeGameMode.SURVIVAL,
                         WrappedChatComponent.fromText(text)
                 )
         );
@@ -324,7 +324,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
                 new PlayerInfoData(
                         handler.getDisplayProfile(x, y),
                         latency.ping,
-                        EnumWrappers.NativeGameMode.NOT_SET,
+                        EnumWrappers.NativeGameMode.SURVIVAL,
                         WrappedChatComponent.fromText("")
                 )
         );
@@ -427,7 +427,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
                     new PlayerInfoData(
                             gameProfile,
                             Latency.NONE.ping,
-                            EnumWrappers.NativeGameMode.NOT_SET,
+                            EnumWrappers.NativeGameMode.SURVIVAL,
                             WrappedChatComponent.fromText("")
                     )
             );
@@ -452,7 +452,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
                 new PlayerInfoData(
                         gameProfile,
                         Latency.NONE.ping,
-                        EnumWrappers.NativeGameMode.NOT_SET,
+                        EnumWrappers.NativeGameMode.SURVIVAL,
                         WrappedChatComponent.fromText("")
                 )
         );
@@ -475,7 +475,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
                 new PlayerInfoData(
                         handler.getSkinProfile(uuid),
                         Latency.FIVE.ping,
-                        EnumWrappers.NativeGameMode.NOT_SET,
+                        EnumWrappers.NativeGameMode.SURVIVAL,
                         WrappedChatComponent.fromText(name)
                 )
         );

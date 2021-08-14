@@ -95,5 +95,9 @@ public class Settings extends PluginSettings {
                 "players. This way you could have a player tab and a staff tab.",
                 " ",
                 "Any queries join our discord at https://discord.gg/DbJXzWq");
+
+        REFRESH_GROUP.load();
+        PAGE_GROUP.load();
+        TAB_GROUP.load();
     }
 }
