@@ -1,12 +1,3 @@
-/**
- * Copyright © 2020 Property of Illuzionz Studios, LLC
- * All rights reserved. No part of this publication may be reproduced, distributed, or
- * transmitted in any form or by any means, including photocopying, recording, or other
- * electronic or mechanical methods, without the prior written permission of the publisher,
- * except in the case of brief quotations embodied in critical reviews and certain other
- * noncommercial uses permitted by copyright law. Any licensing of this software overrides
- * this statement.
- */
 package com.illuzionzstudios.tab.controller;
 
 import com.comphenix.protocol.wrappers.*;
@@ -174,7 +165,10 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             this.handler = new NMS_1_15_R1();
         } else if (ServerVersion.equals(ServerVersion.V.v1_16)) {
             this.handler = new NMS_1_16_R3();
+        } else if (ServerVersion.equals(ServerVersion.V.v1_17)) {
+            this.handler = new NMS_1_17_R1();
         }
+
 
         // If NMS not handled, not available on server
         if (this.handler == null) {
@@ -184,8 +178,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
         }
 
         // Add default player slots
-        for (int x = 1; x <= Settings.Tab.TAB_COLUMNS.getInt(); x++) {
-            for (int y = 1; y <= Settings.Page.PAGE_ELEMENTS.getInt(); y++) {
+        for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
                 this.initialList.add(
                         new PlayerInfoData(
                                 handler.getDisplayProfile(x, y),
@@ -255,8 +249,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             handler.sendUnfilteredPacket(addInfo, player);
 
             // Make sure no skins loaded
-            for (int x = 1; x <= Settings.Tab.TAB_COLUMNS.getInt(); x++) {
-                for (int y = 1; y <= Settings.Page.PAGE_ELEMENTS.getInt(); y++) {
+            for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+                for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
                     this.hideAvatar(x, y, player);
                 }
             }
@@ -512,8 +506,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
         TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, event.getPlayer());
 
         // Make sure no skins loaded
-        for (int x = 1; x <= Settings.Tab.TAB_COLUMNS.getInt(); x++) {
-            for (int y = 1; y <= Settings.Page.PAGE_ELEMENTS.getInt(); y++) {
+        for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
                 this.hideAvatar(x, y, event.getPlayer());
             }
         }
@@ -546,7 +540,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             }
         }
 
-        return highest == null ? tabs.get(Settings.Tab.TAB_DEFAULT.getString().toLowerCase()) : highest;
+        return highest == null ? tabs.get(Settings.TAB_DEFAULT.getString().toLowerCase()) : highest;
     }
 
 }

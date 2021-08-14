@@ -16,6 +16,7 @@
         <module>impl</module>
         <module>1_8_R3</module>
         <module>1_16_R3</module>
+        <module>1_17_R1</module>
     </modules>
     <packaging>pom</packaging>
 

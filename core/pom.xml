@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -104,7 +104,14 @@
 
         <dependency>
             <groupId>com.illuzionzstudios</groupId>
-            <artifactId>1_16_R2</artifactId>
+            <artifactId>1_17_R1</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.illuzionzstudios</groupId>
+            <artifactId>1_16_R3</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
