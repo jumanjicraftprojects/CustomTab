@@ -12,10 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This handles caching and setting skins on that tab. Since
@@ -91,9 +88,12 @@ public interface NMSHandler {
     void addSkin(Player player, Player... players);
 
     default void addSkin(UUID uuid, GameProfile profile, Player... players) {
-        Property property = profile.getProperties().get("textures").iterator().next();
-
-        this.addSkin(uuid, property.getValue(), property.getSignature(), players);
+        Iterator<Property> iterator = profile.getProperties().get("textures").iterator();
+        // Make sure is valid
+        if (iterator.hasNext()) {
+            Property property = iterator.next();
+            this.addSkin(uuid, property.getValue(), property.getSignature(), players);
+        }
     }
 
     default void addSkin(UUID uuid, String value, String signature, Player... players) {

@@ -514,6 +514,8 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
 
         // Add skins for players
         for (Player player : Bukkit.getOnlinePlayers()) {
+            // Make sure player exists
+            if (player == null) continue;
             this.addSkin(player, event.getPlayer());
 
             if (!event.getPlayer().equals(player)) {
