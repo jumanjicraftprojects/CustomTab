@@ -8,3 +8,7 @@ depend:
   - ProtocolLib
 softdepend:
   - PlaceholderAPI
+
+permissions:
+  tab.command.reload:
+    default: op

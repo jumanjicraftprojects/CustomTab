@@ -50,6 +50,13 @@ public enum GroupController implements PluginController<SpigotPlugin> {
     public GroupLoader getGroup(Player player) {
         GroupLoader highest = null;
 
+        // Weird permissions deop while doing check
+        boolean wasOp = false;
+        if (player.isOp()) {
+            wasOp = true;
+            player.setOp(false);
+        }
+
         for (GroupLoader group : groups.values()) {
             // Has permission for group
             if (player.hasPermission(group.getPermission()) || group.getPermission().trim().equalsIgnoreCase("")) {
@@ -58,6 +65,10 @@ public enum GroupController implements PluginController<SpigotPlugin> {
                     highest = group;
                 }
             }
+        }
+
+        if (wasOp) {
+            player.setOp(true);
         }
 
         return highest;
