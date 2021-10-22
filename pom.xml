@@ -6,7 +6,7 @@
 
     <groupId>com.illuzionzstudios</groupId>
     <artifactId>CustomTab</artifactId>
-    <version>1.2.7</version>
+    <version>1.2.8</version>
     <modules>
         <module>1_12_R1</module>
         <module>1_13_R2</module>
@@ -25,9 +25,21 @@
             <id>dmulloy2-repo</id>
             <url>https://repo.dmulloy2.net/nexus/repository/public/</url>
         </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.IlluzionzDev</groupId>
+            <artifactId>Mist</artifactId>
+            <version>daf07ad887</version>
+            <scope>compile</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>

@@ -2,6 +2,7 @@ package com.illuzionzstudios.tab;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.wrappers.*;
+import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
 import com.illuzionzstudios.tab.packet.AbstractPacket;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.ping.Latency;
@@ -32,116 +33,99 @@ public interface NMSHandler {
     void setAvatar(int x, int y, Player player, Player... players);
 
     default void setAvatar(int x, int y, GameProfile profile, Player... players) {
-        Property property = profile.getProperties().get("textures").iterator().next();
+        MinecraftScheduler.get().desynchronize(() -> {
+            Property property = profile.getProperties().get("textures").iterator().next();
 
-        this.setAvatar(x, y, property.getValue(), property.getSignature(), players);
+            this.setAvatar(x, y, property.getValue(), property.getSignature(), players);
+        });
     }
 
     default void setAvatar(int x, int y, String value, String signature, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
-        WrappedGameProfile gameProfile = this.getDisplayProfile(x, y);
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+            WrappedGameProfile gameProfile = this.getDisplayProfile(x, y);
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
 
-        data.add(
-                new PlayerInfoData(
-                        gameProfile,
-                        Latency.FIVE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("")
-                )
-        );
+            data.add(
+                    new PlayerInfoData(
+                            gameProfile,
+                            Latency.FIVE.ping,
+                            EnumWrappers.NativeGameMode.SURVIVAL,
+                            WrappedChatComponent.fromText("")
+                    )
+            );
 
-        playerInfo.setData(data);
+            playerInfo.setData(data);
 
-        this.sendUnfilteredPacket(playerInfo, players);
+            this.sendUnfilteredPacket(playerInfo, players);
 
-        data.clear();
+            data.clear();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
 
-        gameProfile.getProperties().removeAll("textures");
+            gameProfile.getProperties().removeAll("textures");
 
-        gameProfile.getProperties().put("textures",
-                new WrappedSignedProperty(
-                        "textures",
-                        value,
-                        signature
-                )
-        );
+            gameProfile.getProperties().put("textures",
+                    new WrappedSignedProperty(
+                            "textures",
+                            value,
+                            signature
+                    )
+            );
 
-        data.add(
-                new PlayerInfoData(
-                        gameProfile,
-                        Latency.FIVE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("")
-                )
-        );
+            data.add(
+                    new PlayerInfoData(
+                            gameProfile,
+                            Latency.FIVE.ping,
+                            EnumWrappers.NativeGameMode.SURVIVAL,
+                            WrappedChatComponent.fromText("")
+                    )
+            );
 
-        playerInfo.setData(data);
+            playerInfo.setData(data);
 
-        this.sendUnfilteredPacket(playerInfo, players);
+            this.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     void addSkin(Player player, Player... players);
 
     default void addSkin(UUID uuid, GameProfile profile, Player... players) {
-        Iterator<Property> iterator = profile.getProperties().get("textures").iterator();
-        // Make sure is valid
-        if (iterator.hasNext()) {
-            Property property = iterator.next();
-            this.addSkin(uuid, property.getValue(), property.getSignature(), players);
-        }
+        MinecraftScheduler.get().desynchronize(() -> {
+            Iterator<Property> iterator = profile.getProperties().get("textures").iterator();
+            // Make sure is valid
+            if (iterator.hasNext()) {
+                Property property = iterator.next();
+                this.addSkin(uuid, property.getValue(), property.getSignature(), players);
+            }
+        });
     }
 
     default void addSkin(UUID uuid, String value, String signature, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
-        WrappedGameProfile gameProfile = this.getSkinProfile(uuid);
-
-        Player available = Bukkit.getPlayer(uuid);
-
-        if (available != null) {
-            gameProfile = new WrappedGameProfile(uuid, WrappedGameProfile.fromPlayer(available).getName());
-        }
-
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
-
-        gameProfile.getProperties().removeAll("textures");
-
-        gameProfile.getProperties().put("textures",
-                new WrappedSignedProperty(
-                        "textures",
-                        value,
-                        signature
-                )
-        );
-
-        data.add(
-                new PlayerInfoData(
-                        gameProfile,
-                        Latency.NONE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("")
-                )
-        );
-
-        playerInfo.setData(data);
-
-        this.removeSkin(uuid, players);
-        this.sendUnfilteredPacket(playerInfo, players);
-    }
-
-    default void removeSkins(Collection<UUID> uuids, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
-
-        for (UUID uuid : uuids) {
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
             WrappedGameProfile gameProfile = this.getSkinProfile(uuid);
+
+            Player available = Bukkit.getPlayer(uuid);
+
+            if (available != null) {
+                gameProfile = new WrappedGameProfile(uuid, WrappedGameProfile.fromPlayer(available).getName());
+            }
+
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+
+            gameProfile.getProperties().removeAll("textures");
+
+            gameProfile.getProperties().put("textures",
+                    new WrappedSignedProperty(
+                            "textures",
+                            value,
+                            signature
+                    )
+            );
 
             data.add(
                     new PlayerInfoData(
@@ -151,41 +135,72 @@ public interface NMSHandler {
                             WrappedChatComponent.fromText("")
                     )
             );
-        }
 
-        playerInfo.setData(data);
-        this.sendUnfilteredPacket(playerInfo, players);
+            playerInfo.setData(data);
+
+            this.removeSkin(uuid, players);
+            this.sendUnfilteredPacket(playerInfo, players);
+        });
+    }
+
+    default void removeSkins(Collection<UUID> uuids, Player... players) {
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+
+            for (UUID uuid : uuids) {
+                WrappedGameProfile gameProfile = this.getSkinProfile(uuid);
+
+                data.add(
+                        new PlayerInfoData(
+                                gameProfile,
+                                Latency.NONE.ping,
+                                EnumWrappers.NativeGameMode.SURVIVAL,
+                                WrappedChatComponent.fromText("")
+                        )
+                );
+            }
+
+            playerInfo.setData(data);
+            this.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     default void removeSkin(UUID uuid, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
-        WrappedGameProfile gameProfile = this.getSkinProfile(uuid);
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+            WrappedGameProfile gameProfile = this.getSkinProfile(uuid);
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
 
-        data.add(
-                new PlayerInfoData(
-                        gameProfile,
-                        Latency.NONE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("")
-                )
-        );
+            data.add(
+                    new PlayerInfoData(
+                            gameProfile,
+                            Latency.NONE.ping,
+                            EnumWrappers.NativeGameMode.SURVIVAL,
+                            WrappedChatComponent.fromText("")
+                    )
+            );
 
-        playerInfo.setData(data);
+            playerInfo.setData(data);
 
-        this.sendUnfilteredPacket(playerInfo, players);
+            this.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     default void sendUnfilteredPacket(AbstractPacket packet, Player... players) {
-        try {
-            for (Player player : players) {
-                ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet.getHandle(), false);
+        MinecraftScheduler.get().desynchronize(() -> {
+            try {
+                for (Player player : players) {
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet.getHandle(), false);
+                }
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     /**

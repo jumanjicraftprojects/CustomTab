@@ -9,14 +9,18 @@ import com.illuzionzstudios.mist.config.YamlConfig;
 import com.illuzionzstudios.mist.controller.PluginController;
 import com.illuzionzstudios.mist.plugin.SpigotPlugin;
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler;
+import com.illuzionzstudios.mist.util.TextUtil;
 import com.illuzionzstudios.tab.*;
-import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.bukkit.membrane.CachedSkin;
 import com.illuzionzstudios.tab.bukkit.membrane.Membrane;
+import com.illuzionzstudios.tab.components.Tab;
 import com.illuzionzstudios.tab.components.column.CustomColumn;
 import com.illuzionzstudios.tab.components.column.TabColumn;
 import com.illuzionzstudios.tab.components.column.list.type.OnlineList;
-import com.illuzionzstudios.tab.components.loader.*;
+import com.illuzionzstudios.tab.components.loader.ColumnLoader;
+import com.illuzionzstudios.tab.components.loader.ListLoader;
+import com.illuzionzstudios.tab.components.loader.Loader;
+import com.illuzionzstudios.tab.components.loader.TabLoader;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerInfo;
 import com.illuzionzstudios.tab.packet.WrapperPlayServerPlayerListHeaderFooter;
 import com.illuzionzstudios.tab.ping.Latency;
@@ -29,7 +33,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -41,24 +44,33 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
 
     INSTANCE;
 
+    public static final char DISPLAY_SLOT;
+    public static final char SKIN_SLOT;
+
+    static {
+        DISPLAY_SLOT = '\u0000';
+        SKIN_SLOT = '\u0001';
+    }
+
+    /**
+     * Initial list of player slots
+     */
+    public final List<PlayerInfoData> initialList = new ArrayList<>();
     /**
      * The currently displayed tabs
      */
     @Getter
     public HashMap<UUID, Tab> displayedTabs = new HashMap<>();
-
     /**
      * Loaded tab loaders to load tab components
      */
     @Getter
     public HashMap<String, Loader> loaders = new HashMap<>();
-
     /**
      * Indepent store for tabs
      */
     @Getter
     public HashMap<String, TabLoader> tabs = new HashMap<>();
-
     /**
      * For NMS
      */
@@ -69,7 +81,7 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
      * Display a tab to the player
      *
      * @param player Player to show tab
-     * @param tab Tab to display
+     * @param tab    Tab to display
      */
     public void displayTab(Player player, Tab tab) {
         if (this.displayedTabs.containsKey(player.getUniqueId())) {
@@ -137,19 +149,6 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
             displayTab(player, tabList);
         });
     }
-
-    public static final char DISPLAY_SLOT;
-    public static final char SKIN_SLOT;
-
-    static {
-        DISPLAY_SLOT = '\u0000';
-        SKIN_SLOT = '\u0001';
-    }
-
-    /**
-     * Initial list of player slots
-     */
-    public final List<PlayerInfoData> initialList = new ArrayList<>();
 
     public void initialize(SpigotPlugin plugin) {
         // Setup handler
@@ -239,156 +238,167 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
      * Re adds all slots
      */
     public void reloadSlots() {
-        WrapperPlayServerPlayerInfo addInfo = new WrapperPlayServerPlayerInfo();
-        addInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
-        addInfo.setData(this.initialList);
+        MinecraftScheduler.get().desynchronize(() -> {
+            WrapperPlayServerPlayerInfo addInfo = new WrapperPlayServerPlayerInfo();
+            addInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+            addInfo.setData(this.initialList);
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            // Load skins for player
-            TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, player);
-            handler.sendUnfilteredPacket(addInfo, player);
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                // Load skins for player
+                TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, player);
+                handler.sendUnfilteredPacket(addInfo, player);
 
-            // Make sure no skins loaded
-            for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
-                for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
-                    this.hideAvatar(x, y, player);
+                // Make sure no skins loaded
+                for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+                    for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
+                        this.hideAvatar(x, y, player);
+                    }
                 }
-            }
 
-            this.addSkin(player, player);
+                this.addSkin(player, player);
+            });
         });
     }
 
     /**
      * Set the header and footer of the tab
      *
-     * @param header Header message
-     * @param footer Footer message
+     * @param header  Header message
+     * @param footer  Footer message
      * @param players Players to send to
      */
     public void setHeaderFooter(String header, String footer, Player... players) {
-        WrapperPlayServerPlayerListHeaderFooter playerListHeaderFooter = new WrapperPlayServerPlayerListHeaderFooter();
+        MinecraftScheduler.get().desynchronize(() -> {
+            WrapperPlayServerPlayerListHeaderFooter playerListHeaderFooter = new WrapperPlayServerPlayerListHeaderFooter();
 
-        header = ChatColor.translateAlternateColorCodes('&', header);
-        footer = ChatColor.translateAlternateColorCodes('&', footer);
+            playerListHeaderFooter.setHeader(WrappedChatComponent.fromText(TextUtil.formatText(header)));
+            playerListHeaderFooter.setFooter(WrappedChatComponent.fromText(TextUtil.formatText(footer)));
 
-        playerListHeaderFooter.setHeader(WrappedChatComponent.fromText(header));
-        playerListHeaderFooter.setFooter(WrappedChatComponent.fromText(footer));
-
-        handler.sendUnfilteredPacket(playerListHeaderFooter, players);
+            handler.sendUnfilteredPacket(playerListHeaderFooter, players);
+        });
     }
 
     /**
      * Set text in the tab at x and y for players
      *
-     * @param x X to set
-     * @param y Y to set
-     * @param text Text to set
+     * @param x       X to set
+     * @param y       Y to set
+     * @param text    Text to set
      * @param players Players to set for
      */
     public void setText(int x, int y, String text, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
 
-        data.add(
-                new PlayerInfoData(
-                        handler.getDisplayProfile(x, y),
-                        Latency.FIVE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText(text)
-                )
-        );
+            data.add(
+                    new PlayerInfoData(
+                            handler.getDisplayProfile(x, y),
+                            Latency.FIVE.ping,
+                            EnumWrappers.NativeGameMode.SURVIVAL,
+                            WrappedChatComponent.fromText(text)
+                    )
+            );
 
-        playerInfo.setData(data);
+            playerInfo.setData(data);
 
-        handler.sendUnfilteredPacket(playerInfo, players);
+            handler.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     /**
      * Set the ping at a certain slot
      *
-     * @param x X to set
-     * @param y Y to set
+     * @param x       X to set
+     * @param y       Y to set
      * @param latency Latency to set
      * @param players Players to set for
      */
     public void setPing(int x, int y, Latency latency, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_LATENCY);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_LATENCY);
 
-        data.add(
-                new PlayerInfoData(
-                        handler.getDisplayProfile(x, y),
-                        latency.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("")
-                )
-        );
+            data.add(
+                    new PlayerInfoData(
+                            handler.getDisplayProfile(x, y),
+                            latency.ping,
+                            EnumWrappers.NativeGameMode.SURVIVAL,
+                            WrappedChatComponent.fromText("")
+                    )
+            );
 
-        playerInfo.setData(data);
+            playerInfo.setData(data);
 
-        handler.sendUnfilteredPacket(playerInfo, players);
+            handler.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     /**
      * Set perceived gamemode at x and y
      *
-     * @param x X to set
-     * @param y Y to set
+     * @param x        X to set
+     * @param y        Y to set
      * @param gameMode
      * @param players
      */
     public void setGameMode(int x, int y, EnumWrappers.NativeGameMode gameMode, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE);
 
-        data.add(
-                new PlayerInfoData(
-                        handler.getDisplayProfile(x, y),
-                        Latency.FIVE.ping,
-                        gameMode,
-                        WrappedChatComponent.fromText("")
-                )
-        );
+            data.add(
+                    new PlayerInfoData(
+                            handler.getDisplayProfile(x, y),
+                            Latency.FIVE.ping,
+                            gameMode,
+                            WrappedChatComponent.fromText("")
+                    )
+            );
 
-        playerInfo.setData(data);
+            playerInfo.setData(data);
 
-        handler.sendUnfilteredPacket(playerInfo, players);
+            handler.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     public void setGameMode(Player player, EnumWrappers.NativeGameMode gameMode, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE);
 
-        data.add(
-                new PlayerInfoData(WrappedGameProfile.fromPlayer(player),
-                        Latency.FIVE.ping,
-                        gameMode,
-                        WrappedChatComponent.fromText("")
-                )
-        );
+            data.add(
+                    new PlayerInfoData(WrappedGameProfile.fromPlayer(player),
+                            Latency.FIVE.ping,
+                            gameMode,
+                            WrappedChatComponent.fromText("")
+                    )
+            );
 
-        playerInfo.setData(data);
-        handler.sendUnfilteredPacket(playerInfo, players);
+            playerInfo.setData(data);
+            handler.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
 
     public void hideAvatar(int x, int y, Player... players) {
-        handler.setAvatar(
-                x,
-                y,
-                "eyJ0aW1lc3RhbXAiOjE0MTU4NzY5NDkxMTgsInByb2ZpbGVJZCI6IjY4MjVlMWFhNTA2NjQ4MjFhZmYxODA2MGM3NmI0NzY4IiwicHJvZmlsZU5hbWUiOiJDcnVua2xlU3RpY2tzIiwiaXNQdWJsaWMiOnRydWUsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80ZGJiMjQyNGE1NTBlMTk0YjY0MDc1NGM0Mzk1YzJhYjM0NjdkZmNlYTQ1NWM4YmVjYjMyYTBmNjZkMmE1In19fQ==",
-                "FG23YbDAsXVtWWh/flnIbYAYMEMdOhnbgMf0R1AFx0mLYylIm4C9ne/UzryD6FoZbjRo5eDL87XHGM3BWglooPaRs2IyP1SjlawAXToloazUn+D5U98r4TyV/sn6vds/LZxZg03SI1k3Tv0c/xEAVacR3ko63KbeFWvQ0SXfDtVDeh/EFzlcEZJvp0Ifr8J/NRNgzoaZzr8uE6G6Ta8Ha1v2gDTQBS1/1iSmhbOQzahEfhTA34R7rIKPfCYdK2tNi1uUXOoMEomjgNwjhemc3cJJy5K2nIcXmwNNLLoJD+ts/PydgTlmAr+TGuxXVd/1DXNkYTq6j20PYDKJnPq7JTyquN3rkiHJPsE+aGxg33gSQUr/e4ztjns9LDh3iWehKYwyfr70BcKIgIokzvQlARjSCNJ/XZ2SHVMnOXftWnkcchO1wDAWVQaSp+Iy9O1gMWZPxsie085ca/Pm8xowH2mTvajF5TNyNQ1z4zbzFHqZS0OcXGn+qOEbuatcfzVIBq7t8MyOeeac/rUIpPeBHuu2DV+58h3SSBVEVUUWVQ3h4mn3nenblxoboyMOug6Azg1TkvjSVgglVcfaXJkxU559KT72Z1ISon3sgAIgPOSJkl2PpKKK2XLwlHvb/c3tab+A7TT6mnokfMOdhWSnLPsUE/wtJ7F4EGzk0shM4T4=",
-                players
-        );
+        MinecraftScheduler.get().desynchronize(() -> {
+            handler.setAvatar(
+                    x,
+                    y,
+                    "eyJ0aW1lc3RhbXAiOjE0MTU4NzY5NDkxMTgsInByb2ZpbGVJZCI6IjY4MjVlMWFhNTA2NjQ4MjFhZmYxODA2MGM3NmI0NzY4IiwicHJvZmlsZU5hbWUiOiJDcnVua2xlU3RpY2tzIiwiaXNQdWJsaWMiOnRydWUsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80ZGJiMjQyNGE1NTBlMTk0YjY0MDc1NGM0Mzk1YzJhYjM0NjdkZmNlYTQ1NWM4YmVjYjMyYTBmNjZkMmE1In19fQ==",
+                    "FG23YbDAsXVtWWh/flnIbYAYMEMdOhnbgMf0R1AFx0mLYylIm4C9ne/UzryD6FoZbjRo5eDL87XHGM3BWglooPaRs2IyP1SjlawAXToloazUn+D5U98r4TyV/sn6vds/LZxZg03SI1k3Tv0c/xEAVacR3ko63KbeFWvQ0SXfDtVDeh/EFzlcEZJvp0Ifr8J/NRNgzoaZzr8uE6G6Ta8Ha1v2gDTQBS1/1iSmhbOQzahEfhTA34R7rIKPfCYdK2tNi1uUXOoMEomjgNwjhemc3cJJy5K2nIcXmwNNLLoJD+ts/PydgTlmAr+TGuxXVd/1DXNkYTq6j20PYDKJnPq7JTyquN3rkiHJPsE+aGxg33gSQUr/e4ztjns9LDh3iWehKYwyfr70BcKIgIokzvQlARjSCNJ/XZ2SHVMnOXftWnkcchO1wDAWVQaSp+Iy9O1gMWZPxsie085ca/Pm8xowH2mTvajF5TNyNQ1z4zbzFHqZS0OcXGn+qOEbuatcfzVIBq7t8MyOeeac/rUIpPeBHuu2DV+58h3SSBVEVUUWVQ3h4mn3nenblxoboyMOug6Azg1TkvjSVgglVcfaXJkxU559KT72Z1ISon3sgAIgPOSJkl2PpKKK2XLwlHvb/c3tab+A7TT6mnokfMOdhWSnLPsUE/wtJ7F4EGzk0shM4T4=",
+                    players
+            );
+        });
     }
 
     public void setAvatar(int x, int y, Player player, Player... players) {
@@ -396,33 +406,62 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
     }
 
     public void addSkin(Player player, Player... players) {
-        handler.addSkin(player, players);
+        MinecraftScheduler.get().desynchronize(() -> {
+            handler.addSkin(player, players);
+        });
     }
 
     public void addSkins(Map<UUID, CachedSkin> skins, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
 
-        skins.forEach(((uuid, skin) -> {
-            WrappedGameProfile gameProfile = handler.getSkinProfile(uuid);
 
-            Player available = Bukkit.getPlayer(uuid);
+            skins.forEach(((uuid, skin) -> {
+                WrappedGameProfile gameProfile = handler.getSkinProfile(uuid);
 
-            if (available != null) {
-                gameProfile = new WrappedGameProfile(uuid, WrappedGameProfile.fromPlayer(available).getName());
-            }
+                Player available = Bukkit.getPlayer(uuid);
 
-            gameProfile.getProperties().removeAll("textures");
+                if (available != null) {
+                    gameProfile = new WrappedGameProfile(uuid, WrappedGameProfile.fromPlayer(available).getName());
+                }
 
-            gameProfile.getProperties().put("textures",
-                    new WrappedSignedProperty(
-                            "textures",
-                            skin.value,
-                            skin.signature
-                    )
-            );
+                gameProfile.getProperties().removeAll("textures");
+
+                gameProfile.getProperties().put("textures",
+                        new WrappedSignedProperty(
+                                "textures",
+                                skin.value,
+                                skin.signature
+                        )
+                );
+                data.add(
+                        new PlayerInfoData(
+                                gameProfile,
+                                Latency.NONE.ping,
+                                EnumWrappers.NativeGameMode.SURVIVAL,
+                                WrappedChatComponent.fromText("")
+                        )
+                );
+            }));
+
+            playerInfo.setData(data);
+
+            handler.removeSkins(skins.keySet(), players);
+            handler.sendUnfilteredPacket(playerInfo, players);
+        });
+    }
+
+    public void removeSlot(int x, int y, Player... players) {
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+            WrappedGameProfile gameProfile = handler.getDisplayProfile(x, y);
+
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+
             data.add(
                     new PlayerInfoData(
                             gameProfile,
@@ -432,33 +471,9 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
                     )
             );
 
-        }));
-
-
-        playerInfo.setData(data);
-
-        handler.removeSkins(skins.keySet(), players);
-        handler.sendUnfilteredPacket(playerInfo, players);
-    }
-
-    public void removeSlot(int x, int y, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
-        WrappedGameProfile gameProfile = handler.getDisplayProfile(x, y);
-
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
-
-        data.add(
-                new PlayerInfoData(
-                        gameProfile,
-                        Latency.NONE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("")
-                )
-        );
-
-        playerInfo.setData(data);
-        handler.sendUnfilteredPacket(playerInfo, players);
+            playerInfo.setData(data);
+            handler.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     public void removeSkin(Player player, Player... players) {
@@ -466,23 +481,25 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
     }
 
     public void setName(UUID uuid, String name, Player... players) {
-        List<PlayerInfoData> data = new ArrayList<>();
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        MinecraftScheduler.get().desynchronize(() -> {
+            List<PlayerInfoData> data = new ArrayList<>();
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
 
-        data.add(
-                new PlayerInfoData(
-                        handler.getSkinProfile(uuid),
-                        Latency.FIVE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText(name)
-                )
-        );
+            data.add(
+                    new PlayerInfoData(
+                            handler.getSkinProfile(uuid),
+                            Latency.FIVE.ping,
+                            EnumWrappers.NativeGameMode.SURVIVAL,
+                            WrappedChatComponent.fromText(name)
+                    )
+            );
 
-        playerInfo.setData(data);
+            playerInfo.setData(data);
 
-        handler.sendUnfilteredPacket(playerInfo, players);
+            handler.sendUnfilteredPacket(playerInfo, players);
+        });
     }
 
     // Set the gamemode when gamemode is changed
@@ -493,35 +510,40 @@ public enum TabController implements Listener, PluginController<SpigotPlugin> {
         }
     }
 
+    /**
+     * TODO: Causing lag
+     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
+        MinecraftScheduler.get().desynchronize(() -> {
+            WrapperPlayServerPlayerInfo playerInfo = new WrapperPlayServerPlayerInfo();
 
-        playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
-        playerInfo.setData(this.initialList);
+            playerInfo.setAction(EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+            playerInfo.setData(this.initialList);
 
-        handler.sendUnfilteredPacket(playerInfo, event.getPlayer());
+            handler.sendUnfilteredPacket(playerInfo, event.getPlayer());
 
-        // Load skins for player
-        TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, event.getPlayer());
+            // Load skins for player
+            TabController.INSTANCE.addSkins(Membrane.INSTANCE.displaySkins, event.getPlayer());
 
-        // Make sure no skins loaded
-        for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
-            for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
-                this.hideAvatar(x, y, event.getPlayer());
+            // Make sure no skins loaded
+            for (int x = 1; x <= Settings.TAB_COLUMNS.getInt(); x++) {
+                for (int y = 1; y <= Settings.PAGE_ELEMENTS.getInt(); y++) {
+                    this.hideAvatar(x, y, event.getPlayer());
+                }
             }
-        }
 
-        // Add skins for players
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            // Make sure player exists
-            if (player == null) continue;
-            this.addSkin(player, event.getPlayer());
+            // Add skins for players
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                // Make sure player exists
+                if (player == null) continue;
+                this.addSkin(player, event.getPlayer());
 
-            if (!event.getPlayer().equals(player)) {
-                this.addSkin(event.getPlayer(), player);
+                if (!event.getPlayer().equals(player)) {
+                    this.addSkin(event.getPlayer(), player);
+                }
             }
-        }
+        });
     }
 
     /**
