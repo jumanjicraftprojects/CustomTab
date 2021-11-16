@@ -8,15 +8,7 @@
     <artifactId>CustomTab</artifactId>
     <version>1.2.8</version>
     <modules>
-        <module>1_12_R1</module>
-        <module>1_13_R2</module>
-        <module>1_14_R1</module>
-        <module>1_15_R1</module>
         <module>core</module>
-        <module>impl</module>
-        <module>1_8_R3</module>
-        <module>1_16_R3</module>
-        <module>1_17_R1</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -34,9 +26,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.IlluzionzDev</groupId>
+            <groupId>com.illuzionzstudios</groupId>
             <artifactId>Mist</artifactId>
-            <version>daf07ad887</version>
+            <version>kotlin-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 

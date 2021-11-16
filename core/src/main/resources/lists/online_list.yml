@@ -1,0 +1,73 @@
+# A simple online list
+# Id of this column for referencing it
+name: "online_list"
+
+# Page options
+page:
+  # Maximum amount of elements per page. If the
+  # elements go over this they will flow to the next
+  # page
+  elements: 20
+  # Interval in ticks between scrolling pages. Only applies
+  # if there is more than one page
+  interval: 100
+
+# The title of this tab column
+title:
+  # These are the different animation frames for
+  # this text. Each text element is iterated through
+  # to create a dynamic animation.
+  animations:
+    - "&a&lOnline Players &2%server_online%"
+    - "&2&lO&a&lnline Players &2%server_online%"
+    - "&a&lO&2&ln&a&lline Players &2%server_online%"
+    - "&a&lOn&2&ll&a&line Players &2%server_online%"
+    - "&a&lOnl&2&li&a&lne Players &2%server_online%"
+    - "&a&lOnli&2&ln&a&le Players &2%server_online%"
+    - "&a&lOnlin&2&le &a&lPlayers &2%server_online%"
+    - "&a&lOnline &2&lP&a&llayers &2%server_online%"
+    - "&a&lOnline P&2&ll&a&layers &2%server_online%"
+    - "&a&lOnline Pl&2&la&a&lyers &2%server_online%"
+    - "&a&lOnline Pla&2&ly&a&lers &2%server_online%"
+    - "&a&lOnline Play&2&le&a&lrs &2%server_online%"
+    - "&a&lOnline Playe&2&lr&a&ls &2%server_online%"
+    - "&a&lOnline Player&2&ls &2%server_online%"
+  # This is the interval (in ticks) between updating
+  # animation frames. This is limited by the tab update
+  # interval
+  interval: 5
+
+# What the list consists of. Here put
+# the element. Can put custom ones from addons
+# Types: online_players
+type: online_players
+
+# In what order to display elements
+# Put a custom sorter
+# Sorters: distance, number_variable, weight
+#
+# distance: The closest players to you are near the top
+# number_variable: A higher number appears higher
+#                  Taken from 'Sort Variable'
+# weight: Uses weight taken from the player group
+#         See 'Groups'. Higher weight appears at the top
+sorter: weight
+
+# This will be used for number_variable
+# to sort by number. Can use placeholders
+# so the value of the placeholder is used
+sort-variable: ""
+
+# Text for each element
+text:
+  # If this text will scroll across
+  scroll: false
+  # These are the different animation frames for
+  # this text. Each text element is iterated through
+  # to create a dynamic animation.
+  Animations:
+    - "%group_format%"
+  # This is the interval (in ticks) between updating
+  # animation frames. This is limited by the tab update
+  # interval
+  interval: 20

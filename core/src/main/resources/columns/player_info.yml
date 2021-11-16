@@ -1,0 +1,74 @@
+# Id of this column for referencing it
+name: "player_info"
+
+# Page options
+page:
+  # Maximum amount of elements per page. If the
+  # elements go over this they will flow to the next
+  # page
+  elements: 20
+  # Interval in ticks between scrolling pages. Only applies
+  # if there is more than one page
+  interval: 100
+
+# The title of this tab column
+title:
+  # These are the different animation frames for
+  # this text. Each text element is iterated through
+  # to create a dynamic animation.
+  animations:
+    - "&e&lPlayer Information"
+    - "&6&lP&e&llayer Information"
+    - "&e&lP&6&ll&e&layer Information"
+    - "&e&lPl&6&la&e&lyer Information"
+    - "&e&lPla&6&ly&e&ler Information"
+    - "&e&lPlay&6&le&e&lr Information"
+    - "&e&lPlaye&6&lr &e&lInformation"
+    - "&e&lPlayer &6&lI&e&lnformation"
+    - "&e&lPlayer I&6&ln&e&lformation"
+    - "&e&lPlayer In&6&lf&e&lormation"
+    - "&e&lPlayer Inf&6&lo&e&lrmation"
+    - "&e&lPlayer Info&6&lr&e&lmation"
+    - "&e&lPlayer Infor&6&lm&e&lation"
+    - "&e&lPlayer Inform&6&la&e&ltion"
+    - "&e&lPlayer Informa&6&lt&e&lion"
+    - "&e&lPlayer Informat&6&li&e&lon"
+    - "&e&lPlayer Informati&6&lo&e&ln"
+    - "&e&lPlayer Informatio&6&ln"
+  # This is the interval (in ticks) between updating
+  # animation frames. This is limited by the tab update
+  # interval
+  interval: 5
+
+# Text elements to display for this column
+text:
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  1:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7Money: $%vault_eco_balance_formatted%"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  2:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7Rank: %vault_rank%"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20

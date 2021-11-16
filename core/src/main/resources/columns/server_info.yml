@@ -1,0 +1,119 @@
+# Id of this column for referencing it
+name: "server_info"
+
+# Page options
+page:
+  # Maximum amount of elements per page. If the
+  # elements go over this they will flow to the next
+  # page
+  elements: 20
+  # Interval in ticks between scrolling pages. Only applies
+  # if there is more than one page
+  interval: 100
+
+# The title of this tab column
+title:
+  # These are the different animation frames for
+  # this text. Each text element is iterated through
+  # to create a dynamic animation.
+  animations:
+    - "&d&lServer Information"
+    - "&5&lS&d&lerver Information"
+    - "&d&lS&5&le&d&lrver Information"
+    - "&d&lSe&5&lr&d&lver Information"
+    - "&d&lSer&5&lv&d&ler Information"
+    - "&d&lServ&5&le&d&lr Information"
+    - "&d&lServe&5&lr &d&lInformation"
+    - "&d&lServer &5&lI&d&lnformation"
+    - "&d&lServer I&5&ln&d&lformation"
+    - "&d&lServer In&5&lf&d&lormation"
+    - "&d&lServer Inf&5&lo&d&lrmation"
+    - "&d&lServer Info&5&lr&d&lmation"
+    - "&d&lServer Infor&5&lm&d&lation"
+    - "&d&lServer Inform&5&la&d&ltion"
+    - "&d&lServer Informa&5&lt&d&lion"
+    - "&d&lServer Informat&5&li&d&lon"
+    - "&d&lServer Informati&5&lo&d&ln"
+    - "&d&lServer Informatio&5&ln"
+  # This is the interval (in ticks) between updating
+  # animation frames. This is limited by the tab update
+  # interval
+  interval: 5
+
+# Text elements to display for this column
+text:
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  1:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7Online Players: %server_online%"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  2:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7Unique Joins: %server_unique_joins%"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  3:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7Server Version: %server_version%"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  4:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7TPS: %server_tps_1%"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  5:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7Ram Usage: %server_ram_used%MB/%server_ram_total%MB"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20

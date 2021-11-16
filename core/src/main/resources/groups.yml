@@ -1,0 +1,31 @@
+# Way to configure groups such as tab displayed, scoreboard displayed etc
+groups:
+  # This is the default group
+  default:
+    # Permission for player to have this group. Set to blank here so all players have it
+    permission: ""
+    # The priority of this group, the player will have the group they qualify for that
+    # has the highest weight. A higher weight is a higher priority
+    weight: 1
+    # How to display this group on the tab and such
+    display:
+      # How to display this group on the tab
+      tab:
+        # If to scroll the text
+        scroll: false
+        # The animations to cycle through
+        animations:
+          - "&7Member %player_name%"
+        # How often in ticks to cycle through animations
+        interval: -1
+      # How to display the player's name above their head
+      tag:
+        # Lines of text to display. Since is tag can have multiple
+        text:
+          # First text element
+          1:
+            # The animations to cycle through
+            animations:
+              - "%player_name%"
+            # How often in ticks to cycle through animations
+            interval: -1

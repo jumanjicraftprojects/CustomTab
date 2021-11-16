@@ -1,0 +1,135 @@
+# The default tab
+# ID of this tab for referencing it
+name: "default"
+
+# Permission NEEDED to be able to view this tab
+permission: ""
+
+# The weight of this tab. This controls the
+# priority this tab is displayed if the player
+# meets overlapping requirements.
+# Higher number means higher priority
+weight: 1
+
+# Options for columns displayed in this tab
+columns:
+  # Whether to display titles at the top of each column.
+  # Adds the title then a blank spot then begins column text
+  display-titles: true
+
+  # The minimum width of each element in the tab.
+  # If there are no elements the columns will be at least this width
+  width: 50
+
+  # The columns to display in this tab mapped to
+  # their slot. The tab will be as wide as there are many columns.
+  # MAXIMUM of 4 columns on one tab
+  list:
+    # The number is which slot to display the column in
+    # and the value is the name of the column
+    # These here would make the tab 4 columns wide
+    1: "player_info"
+    2: "server_info"
+    3: "online_list"
+    4: "features"
+
+# The tab header. This is displayed at the top
+# of the tab above all columns
+header:
+  # Text to display in the header
+  text:
+    # These are the different text elements in
+    # the column. Maximum of configured tab elements
+    1:
+      # If this text will scroll across
+      scroll: false
+      # These are the different animation frames for
+      # this text. Each text element is iterated through
+      # to create a dynamic animation.
+      animations:
+        - " "
+      # This is the interval (in ticks) between updating
+      # animation frames. This is limited by the tab update
+      # interval
+      interval: 20
+    # These are the different text elements in
+    # the column. Maximum of configured tab elements
+    2:
+      # If this text will scroll across
+      scroll: false
+      # These are the different animation frames for
+      # this text. Each text element is iterated through
+      # to create a dynamic animation.
+      animations:
+        - "&b&lMinecraft Server"
+        - "&b&lM&9&li&b&lnecraft Server"
+        - "&b&lMi&9&ln&b&lecraft Server"
+        - "&b&lMin&9&le&b&lcraft Server"
+        - "&b&lMine&9&lc&b&lraft Server"
+        - "&b&lMinec&9&lr&b&laft Server"
+        - "&b&lMinecr&9&la&b&lft Server"
+        - "&b&lMinecra&9&lf&b&lt Server"
+        - "&b&lMinecraf&9&lt &b&lServer"
+        - "&b&lMinecraft &9&lS&b&lerver"
+        - "&b&lMinecraft S&9&le&b&lrver"
+        - "&b&lMinecraft Se&9&lr&b&lver"
+        - "&b&lMinecraft Ser&9&lv&b&ler"
+        - "&b&lMinecraft Serv&9&le&b&lr"
+        - "&b&lMinecraft Serve&9&lr"
+      # This is the interval (in ticks) between updating
+      # animation frames. This is limited by the tab update
+      # interval
+      interval: 5
+    # These are the different text elements in
+    # the column. Maximum of configured tab elements
+    3:
+      # If this text will scroll across
+      scroll: false
+      # These are the different animation frames for
+      # this text. Each text element is iterated through
+      # to create a dynamic animation.
+      animations:
+        - " "
+      # This is the interval (in ticks) between updating
+      # animation frames. This is limited by the tab update
+      # interval
+      interval: 20
+    # These are the different text elements in
+    # the column. Maximum of configured tab elements
+
+# The tab footer. This is displayed at the bottom
+# of the tab below all columns
+footer:
+  # Text to display in the footer
+  text:
+    # These are the different text elements in
+    # the column. Maximum of configured tab elements
+    1:
+      # If this text will scroll across
+      scroll: false
+      # These are the different animation frames for
+      # this text. Each text element is iterated through
+      # to create a dynamic animation.
+      animations:
+        - " "
+      # This is the interval (in ticks) between updating
+      # animation frames. This is limited by the tab update
+      # interval
+      interval: 20
+    # These are the different text elements in
+    # the column. Maximum of configured tab elements
+    # These are the different text elements in
+    # the column. Maximum of configured tab elements
+    2:
+      # If this text will scroll across
+      scroll: false
+      # These are the different animation frames for
+      # this text. Each text element is iterated through
+      # to create a dynamic animation.
+      animations:
+        - "&7&nwww.minecraftserver.com"
+        - "&7&nstore.minecraftserver.com"
+      # This is the interval (in ticks) between updating
+      # animation frames. This is limited by the tab update
+      # interval
+      interval: 40

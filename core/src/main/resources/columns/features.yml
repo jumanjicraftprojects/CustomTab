@@ -1,0 +1,50 @@
+# Id of this column for referencing it
+name: "features"
+
+# Page options
+page:
+  # Maximum amount of elements per page. If the
+  # elements go over this they will flow to the next
+  # page
+  elements: 20
+  # Interval in ticks between scrolling pages. Only applies
+  # if there is more than one page
+  interval: 100
+
+# The title of this tab column
+title:
+  # These are the different animation frames for
+  # this text. Each text element is iterated through
+  # to create a dynamic animation.
+  animations:
+    - "&c&lFeatures"
+    - "&4&lF&c&leatures"
+    - "&c&lF&4&le&c&latures"
+    - "&c&lFe&4&la&c&ltures"
+    - "&c&lFea&4&lt&c&lures"
+    - "&c&lFeat&4&lu&c&lres"
+    - "&c&lFeatu&4&lr&c&les"
+    - "&c&lFeatur&4&le&c&ls"
+    - "&c&lFeature&4&ls"
+  # This is the interval (in ticks) between updating
+  # animation frames. This is limited by the tab update
+  # interval
+  interval: 5
+
+# Text elements to display for this column
+text:
+  # These are the different text elements in
+  # the column. Maximum of configured tab elements
+  1:
+    # If this text will scroll across
+    # Removes animating text
+    scroll: false
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&8&l* &7Animated Tablist"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: 20
