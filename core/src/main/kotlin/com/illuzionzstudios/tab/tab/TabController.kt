@@ -1,5 +1,6 @@
 package com.illuzionzstudios.tab.tab
 
+import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.wrappers.*
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode
 import com.illuzionzstudios.mist.Logger
@@ -53,6 +54,8 @@ object TabController : PluginController {
     override fun initialize(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.registerSynchronizationService(this)
 
+        ProtocolLibrary.getProtocolManager().addPacketListener(LegacyBlocker(plugin))
+
         // Load tabs
         val tab = Tab("default")
         val column1: TabColumn = OnlineList("online_list")
@@ -83,6 +86,8 @@ object TabController : PluginController {
 
         tab.columns[1] = column1
         tab.columns[2] = column2
+        tab.columns[3] = column2
+//        tab.columns[4] = column2
         tab.header = listOf(FrameText(15, "&cTest Element", "&4Test Element"))
         tabs["default"] = tab
 
@@ -341,14 +346,14 @@ object TabController : PluginController {
             }
 
             // Add skins for players
-//            for (player in Bukkit.getOnlinePlayers()) {
-//                // Make sure player exists
-//                if (player == null) continue
-//                addSkin(player, event.player)
-//                if (event.player != player) {
-//                    addSkin(event.player, player)
-//                }
-//            }
+            for (player in Bukkit.getOnlinePlayers()) {
+                // Make sure player exists
+                if (player == null) continue
+                addSkin(player, event.player)
+                if (event.player != player) {
+                    addSkin(event.player, player)
+                }
+            }
 
             // Now display tab to player
             displayedTabs[event.player.uniqueId] = tab
