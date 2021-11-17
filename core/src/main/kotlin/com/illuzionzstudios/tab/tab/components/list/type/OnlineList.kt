@@ -35,13 +35,13 @@ class OnlineList(id: String) : TabList(id) {
         val list: MutableList<DynamicText> = ArrayList()
 
         // Add players to cache to display
-        if (players.size != Bukkit.getOnlinePlayers().size) {
+//        if (players.size != Bukkit.getOnlinePlayers().size) {
             players.clear()
             Bukkit.getOnlinePlayers().forEach { p: Player? ->
                 // Detect vanished players
                 if (!isVanished(player!!, p!!)) players.add(TabPlayer(p))
             }
-        }
+//        }
 
         try {
             Collections.sort(players)

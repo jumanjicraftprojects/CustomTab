@@ -332,29 +332,27 @@ object TabController : PluginController {
             playerInfo.data = tab.initialList
             playerInfo.sendPacket(event.player)
 
-            MinecraftScheduler.get()!!.synchronize {
-                // Remove all players from the tab
-                for (x in 1..tab.columns.size) {
-                    tab.avatarCache.remove(x, event.player.uniqueId)
-                    for (y in 1..tab.tab.columns[1]?.pageElements!!) {
-                        hideAvatar(x, y, event.player)
-                    }
-                }
-
-                // Add skins for players
-                for (player in Bukkit.getOnlinePlayers()) {
-                    // Make sure player exists
-                    if (player == null) continue
-                    addSkin(player, event.player)
-                    if (event.player != player) {
-                        addSkin(event.player, player)
-                    }
+            // Remove all players from the tab
+            for (x in 1..tab.columns.size) {
+                tab.avatarCache.remove(x, event.player.uniqueId)
+                for (y in 1..tab.tab.columns[1]?.pageElements!!) {
+                    hideAvatar(x, y, event.player)
                 }
             }
 
+            // Add skins for players
+//            for (player in Bukkit.getOnlinePlayers()) {
+//                // Make sure player exists
+//                if (player == null) continue
+//                addSkin(player, event.player)
+//                if (event.player != player) {
+//                    addSkin(event.player, player)
+//                }
+//            }
+
             // Now display tab to player
             displayedTabs[event.player.uniqueId] = tab
-            tab.render()
+            tab.render(true)
         }
     }
 

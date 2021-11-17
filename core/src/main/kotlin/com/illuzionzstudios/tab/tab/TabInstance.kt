@@ -5,6 +5,7 @@ import com.comphenix.protocol.wrappers.PlayerInfoData
 import com.comphenix.protocol.wrappers.WrappedChatComponent
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
+import com.illuzionzstudios.mist.scheduler.timer.Cooldown
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.model.DynamicText
@@ -37,7 +38,7 @@ class TabInstance(
      */
     var avatarCache: Table<Int, Int, UUID> = HashBasedTable.create()
 
-    private val refresh: PresetCooldown = PresetCooldown(100)
+    private var refresh: PresetCooldown = PresetCooldown(100)
 
     init {
         // Add default player slots
@@ -57,14 +58,12 @@ class TabInstance(
         for (column in tab.columns) {
             this.columns[column.key] = TabColumnInstance(player, this, column.value)
         }
-
-        refresh.go()
     }
 
     /**
      * Render this tab for a player
      */
-    fun render() {
+    fun render(refresh: Boolean = false) {
         // Build the header/footer text
         val headerText = StringBuilder()
         val footerText = StringBuilder()
@@ -106,20 +105,20 @@ class TabInstance(
             foot.changeText()
         }
 
-//        if (refresh.isReady) {
-//            // Add skins for players
-//            for (player in Bukkit.getOnlinePlayers()) {
-//                // Make sure player exists
-//                if (player == null) continue
-//                TabController.addSkin(player, this.player)
-//                if (this.player != player) {
-//                    TabController.addSkin(this.player, player)
-//                }
-//            }
+        if (refresh) {
+            // Add skins for players
+            for (player in Bukkit.getOnlinePlayers()) {
+                // Make sure player exists
+                if (player == null) continue
+                TabController.addSkin(player, this.player)
+                if (this.player != player) {
+                    TabController.addSkin(this.player, player)
+                }
+            }
 //
 //            refresh.reset()
 //            refresh.go()
-//        }
+        }
 
         // Render columns
         columns.forEach { (slot, column) ->
