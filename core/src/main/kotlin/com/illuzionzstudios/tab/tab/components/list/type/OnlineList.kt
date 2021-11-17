@@ -52,7 +52,7 @@ class OnlineList(id: String) : TabList(id) {
         for (i in players.indices) {
             val tabPlayer = players[i] ?: return ArrayList()
 
-            TabController.addSkin(tabPlayer.tabPlayer, player)
+//            TabController.addSkin(tabPlayer.tabPlayer, player)
 
             // Process player name and skin
             val listElement: DynamicText? = elementText

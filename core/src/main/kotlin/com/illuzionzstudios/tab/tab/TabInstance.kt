@@ -38,7 +38,7 @@ class TabInstance(
      */
     var avatarCache: Table<Int, Int, UUID> = HashBasedTable.create()
 
-    private var refresh: PresetCooldown = PresetCooldown(100)
+    private var refresh: Cooldown? = null
 
     init {
         // Add default player slots
@@ -58,6 +58,8 @@ class TabInstance(
         for (column in tab.columns) {
             this.columns[column.key] = TabColumnInstance(player, this, column.value)
         }
+
+        refresh = Cooldown(19)
     }
 
     /**
@@ -105,7 +107,19 @@ class TabInstance(
             foot.changeText()
         }
 
-        if (refresh) {
+//        if (refresh) {
+//            // Add skins for players
+//            for (player in Bukkit.getOnlinePlayers()) {
+//                // Make sure player exists
+//                if (player == null) continue
+//                TabController.addSkin(player, this.player)
+//                if (this.player != player) {
+//                    TabController.addSkin(this.player, player)
+//                }
+//            }
+//        }
+
+        if (this.refresh != null && this.refresh!!.isReady) {
             // Add skins for players
             for (player in Bukkit.getOnlinePlayers()) {
                 // Make sure player exists
@@ -115,9 +129,8 @@ class TabInstance(
                     TabController.addSkin(this.player, player)
                 }
             }
-//
-//            refresh.reset()
-//            refresh.go()
+
+            this.refresh = null
         }
 
         // Render columns
