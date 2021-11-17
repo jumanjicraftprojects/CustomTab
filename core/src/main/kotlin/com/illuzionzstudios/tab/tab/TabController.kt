@@ -24,15 +24,15 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
 import java.nio.ByteBuffer
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Controller for handling player tab instances and manipulating the tab
  */
-object TabController: PluginController {
+object TabController : PluginController {
 
     /**
      * Slots for displaying in tab
@@ -48,7 +48,7 @@ object TabController: PluginController {
     /**
      * All currently displaying tab instances
      */
-    val displayedTabs: MutableMap<UUID, Tab> = HashMap()
+    val displayedTabs: MutableMap<UUID, TabInstance> = HashMap()
 
     override fun initialize(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.registerSynchronizationService(this)
@@ -56,31 +56,43 @@ object TabController: PluginController {
         // Load tabs
         val tab = Tab("default")
         val column1: TabColumn = OnlineList("online_list")
-        val column2: TabColumn = SimpleColumn("column", listOf(
-            FrameText(15, "&cTest Element", "&4Test Element"),
-            FrameText(15, "&cTest Element", "&4Test Element"),
-            FrameText(15, "&cTest Element", "&4Test Element"),
-            FrameText(15, "&cTest Element", "&4Test Element"),
-            FrameText(15, "&cTest Element", "&4Test Element"),
-            FrameText(15, "&cTest Element", "&4Test Element")
-        ).toMutableList())
+        val column2: TabColumn = SimpleColumn(
+            "column", listOf(
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element"),
+                FrameText(15, "&cTest Element", "&4Test Element")
+            ).toMutableList()
+        )
         column1.title = FrameText(-1, "&a&lOnline")
         column2.title = FrameText(15, "&c&lTest Title", "&4&lTest Title")
 
-        tab.columns[0] = column1
-        tab.columns[1] = column2
+        tab.columns[1] = column1
+        tab.columns[2] = column2
         tab.header = listOf(FrameText(15, "&cTest Element", "&4Test Element"))
         tabs["default"] = tab
 
         object : BukkitRunnable() {
             override fun run() {
                 displayedTabs.forEach { (uuid, tab) ->
-                    val player: Player? = Bukkit.getPlayer(uuid)
-                    if (player != null)
-                        tab.render(player)
+                    tab.render()
                 }
             }
-        }.runTaskTimerAsynchronously(plugin,0, 1)
+        }.runTaskTimerAsynchronously(plugin, 0, 1)
     }
 
     override fun stop(plugin: SpigotPlugin) {
@@ -212,16 +224,18 @@ object TabController: PluginController {
     }
 
     fun addSkins(skins: MutableMap<UUID?, CachedSkin?>, vararg players: Player?) {
-        val data: MutableList<PlayerInfoData> =
-            ArrayList()
+        val data: MutableList<PlayerInfoData> = ArrayList()
         val playerInfo = PacketPlayServerPlayerInfo()
         playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
-        skins.forEach { uuid: UUID?, skin: CachedSkin? ->
+
+        skins.forEach { (uuid: UUID?, skin: CachedSkin?) ->
             var gameProfile: WrappedGameProfile = getSkinProfile(uuid)
             val available = Bukkit.getPlayer(uuid!!)
+
             if (available != null) {
                 gameProfile = WrappedGameProfile(uuid, WrappedGameProfile.fromPlayer(available).name)
             }
+
             gameProfile.properties.removeAll("textures")
             gameProfile.properties.put(
                 "textures",
@@ -241,6 +255,7 @@ object TabController: PluginController {
             )
         }
         playerInfo.data = data
+
         SkinController.removeSkins(skins.keys, *players)
         playerInfo.sendPacket(*players)
     }
@@ -308,36 +323,44 @@ object TabController: PluginController {
      */
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        val tab: Tab? = getTab(event.player)
+        MinecraftScheduler.get()!!.desynchronize {
+            val tab = TabInstance(event.player, getTab(event.player)!!)
 
-        // Send default list
-        val playerInfo = PacketPlayServerPlayerInfo()
-        playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
-        playerInfo.data = tab?.initialList
-        playerInfo.sendPacket(event.player)
-        // Load skins for player
-        addSkins(SkinController.displaySkins!!, event.player)
+            // Send default list
+            val playerInfo = PacketPlayServerPlayerInfo()
+            playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
+            playerInfo.data = tab.initialList
+            playerInfo.sendPacket(event.player)
 
-        // Make sure no skins loaded
-        for (x in 1..tab?.columns?.size!!) {
-            for (y in 1..tab.columns[0]?.pageElements!!) {
-                hideAvatar(x, y, event.player)
+            MinecraftScheduler.get()!!.synchronize {
+                // Remove all players from the tab
+                for (x in 1..tab.columns.size) {
+                    tab.avatarCache.remove(x, event.player.uniqueId)
+                    for (y in 1..tab.tab.columns[1]?.pageElements!!) {
+                        hideAvatar(x, y, event.player)
+                    }
+                }
+
+                // Add skins for players
+                for (player in Bukkit.getOnlinePlayers()) {
+                    // Make sure player exists
+                    if (player == null) continue
+                    addSkin(player, event.player)
+                    if (event.player != player) {
+                        addSkin(event.player, player)
+                    }
+                }
             }
-        }
 
-        // Add skins for players
-        for (player in Bukkit.getOnlinePlayers()) {
-            // Make sure player exists
-            if (player == null) continue
-            addSkin(player, event.player)
-            if (event.player != player) {
-                addSkin(event.player, player)
-            }
+            // Now display tab to player
+            displayedTabs[event.player.uniqueId] = tab
+            tab.render()
         }
+    }
 
-        // Now display tab to player
-        displayedTabs[event.player.uniqueId] = tab!!
-        tab.render(event.player)
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        displayedTabs.remove(event.player.uniqueId)
     }
 
     /**
@@ -349,7 +372,7 @@ object TabController: PluginController {
         displayedTabs.forEach { (uuid, tab) ->
             val player: Player? = Bukkit.getPlayer(uuid)
             if (player != null)
-                tab.render(player)
+                tab.render()
         }
     }
 

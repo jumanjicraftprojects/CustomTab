@@ -63,15 +63,14 @@ object SkinController : PluginController {
      * @param showEntry   If to show entry in tab
      */
     @JvmOverloads
-    fun setSkin(gameProfile: GameProfile?, skin: String?, showEntry: Boolean = true) {
+    fun setSkin(gameProfile: WrappedGameProfile?, skin: String?, showEntry: Boolean = true) {
         MinecraftScheduler.get()?.desynchronize {
             val cachedSkin: CachedSkin = getSkinFromMemory(skin)!!
-            val wrappedGameProfile = WrappedGameProfile.fromHandle(gameProfile)
-            wrappedGameProfile.properties.put(
+            gameProfile?.properties?.put(
                 "skin",
                 WrappedSignedProperty("textures", cachedSkin.value, cachedSkin.signature)
             )
-            if (showEntry) showEntry(wrappedGameProfile.uuid, cachedSkin)
+            if (showEntry) showEntry(gameProfile?.uuid, cachedSkin)
         }
     }
 
@@ -139,9 +138,9 @@ object SkinController : PluginController {
                     WrappedChatComponent.fromText("")
                 )
             )
-
             playerInfo.data = data
             playerInfo.sendPacket(*players)
+
             data.clear()
 
             // Insert new avatar
@@ -187,8 +186,7 @@ object SkinController : PluginController {
      */
     fun addSkin(uuid: UUID?, profile: WrappedGameProfile, vararg players: Player?) {
         MinecraftScheduler.get()?.desynchronize {
-            val iterator: Iterator<WrappedSignedProperty> =
-                profile.properties["textures"].iterator()
+            val iterator: Iterator<WrappedSignedProperty> = profile.properties["textures"].iterator()
             // Make sure is valid
             if (iterator.hasNext()) {
                 val property = iterator.next()

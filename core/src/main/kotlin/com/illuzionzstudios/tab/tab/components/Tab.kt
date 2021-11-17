@@ -3,9 +3,9 @@ package com.illuzionzstudios.tab.tab.components
 import com.comphenix.protocol.wrappers.EnumWrappers
 import com.comphenix.protocol.wrappers.PlayerInfoData
 import com.comphenix.protocol.wrappers.WrappedChatComponent
+import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.model.DynamicText
-import com.illuzionzstudios.tab.settings.Settings
 import com.illuzionzstudios.tab.tab.Ping
 import com.illuzionzstudios.tab.tab.TabController
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
@@ -24,11 +24,6 @@ class Tab(
      */
     val id: String
 ) {
-
-    /**
-     * Initial list of player slots. Dummy slots before data is filled in
-     */
-    val initialList: MutableList<PlayerInfoData> = ArrayList()
 
     // ----------------------------------------
     // General options
@@ -69,75 +64,5 @@ class Tab(
 
     var header: List<DynamicText> = ArrayList()
     var footer: List<DynamicText> = ArrayList()
-
-    init {
-        // Add default player slots
-        for (x in 1..columns.size) {
-            for (y in 1..columns[0]?.pageElements!!) {
-                initialList.add(
-                    PlayerInfoData(
-                        TabController.getDisplayProfile(x, y),
-                        Ping.FIVE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("Test")
-                    )
-                )
-            }
-        }
-    }
-
-    /**
-     * Render this tab for a player
-     */
-    fun render(player: Player) {
-        // Build the header/footer text
-        val headerText = StringBuilder()
-        val footerText = StringBuilder()
-
-        // Update text
-        header.forEach { head: DynamicText ->
-            // PAPI
-            if (CustomTab.instance!!.papiEnabled) headerText.append(
-                PlaceholderAPI.setPlaceholders(
-                    player,
-                    head.getVisibleText()
-                )
-            ) else headerText.append(head.getVisibleText())
-
-            // Last element check
-            if (header[header.size - 1] != head) {
-                headerText.append("\n")
-            }
-
-            // Change for next render
-            head.changeText()
-        }
-
-        footer.forEach { foot: DynamicText ->
-            // PAPI
-            if (CustomTab.instance!!.papiEnabled) footerText.append(
-                PlaceholderAPI.setPlaceholders(
-                    player,
-                    foot.getVisibleText()
-                )
-            ) else footerText.append(foot.getVisibleText())
-
-            // Last element check
-            if (footer[footer.size - 1] != foot) {
-                footerText.append("\n")
-            }
-
-            // Change for next render
-            foot.changeText()
-        }
-
-        // Render columns
-        columns.forEach { (slot, column) ->
-            column.render(slot + 1, player, displayTitles, elementWidth)
-        }
-
-        // Set the header and footer
-        TabController.setHeaderFooter(headerText.toString(), footerText.toString(), player)
-    }
 
 }
