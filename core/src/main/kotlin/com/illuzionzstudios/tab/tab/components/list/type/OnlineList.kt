@@ -50,6 +50,7 @@ class OnlineList(id: String) : TabList(id) {
 
         // For every player to display the tab
         for (i in players.indices) {
+            if (players.isEmpty()) return list
             val tabPlayer = players[i] ?: return ArrayList()
 
 //            TabController.addSkin(tabPlayer.tabPlayer, player)
@@ -75,7 +76,6 @@ class OnlineList(id: String) : TabList(id) {
             // Check if not set at all
             // Set the avatar for that slot
             if (!tabInstance.avatarCache.contains(slot, i + n) || !tabInstance.avatarCache[slot, i + n].equals(tabPlayer.tabPlayer.uniqueId)) {
-                SkinController.setDefaultAvatar(slot, i + n, player)
                 TabController.setAvatar(slot, i + n, tabPlayer.tabPlayer, player)
                 tabInstance.avatarCache.put(slot, i + n, tabPlayer.tabPlayer.uniqueId)
             }

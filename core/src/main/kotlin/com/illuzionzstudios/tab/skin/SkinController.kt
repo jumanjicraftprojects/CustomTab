@@ -261,7 +261,7 @@ object SkinController : PluginController {
      * Remove the skin from a UUID
      */
     fun removeSkin(uuid: UUID?, vararg players: Player?) {
-        MinecraftScheduler.get()?.synchronize {
+        MinecraftScheduler.get()?.desynchronize {
             val data: MutableList<PlayerInfoData> = ArrayList()
             val playerInfo = PacketPlayServerPlayerInfo()
             val gameProfile: WrappedGameProfile = TabController.getSkinProfile(uuid)

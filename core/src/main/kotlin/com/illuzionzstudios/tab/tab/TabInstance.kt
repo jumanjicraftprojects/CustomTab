@@ -39,6 +39,7 @@ class TabInstance(
     var avatarCache: Table<Int, Int, UUID> = HashBasedTable.create()
 
     private var refresh: Cooldown? = null
+    private var refresh2: Cooldown? = null
 
     init {
         // Add default player slots
@@ -59,7 +60,8 @@ class TabInstance(
             this.columns[column.key] = TabColumnInstance(player, this, column.value)
         }
 
-        refresh = Cooldown(19)
+        refresh = Cooldown(1)
+        refresh2 = Cooldown(21)
     }
 
     /**
@@ -107,18 +109,6 @@ class TabInstance(
             foot.changeText()
         }
 
-//        if (refresh) {
-//            // Add skins for players
-//            for (player in Bukkit.getOnlinePlayers()) {
-//                // Make sure player exists
-//                if (player == null) continue
-//                TabController.addSkin(player, this.player)
-//                if (this.player != player) {
-//                    TabController.addSkin(this.player, player)
-//                }
-//            }
-//        }
-
         if (this.refresh != null && this.refresh!!.isReady) {
             // Add skins for players
             for (player in Bukkit.getOnlinePlayers()) {
@@ -132,6 +122,43 @@ class TabInstance(
 
             this.refresh = null
         }
+
+        if (this.refresh2 != null && this.refresh2!!.isReady) {
+            // Add skins for players
+            for (player in Bukkit.getOnlinePlayers()) {
+                // Make sure player exists
+                if (player == null) continue
+                TabController.addSkin(player, this.player)
+                if (this.player != player) {
+                    TabController.addSkin(this.player, player)
+                }
+            }
+
+            this.refresh2 = null
+        }
+
+//        if (refresh) {
+//            for (player in Bukkit.getOnlinePlayers()) {
+//                // Make sure player exists
+//                if (player == null) continue
+//                TabController.removeSkin(player, this.player)
+//                if (this.player != player) {
+//                    TabController.removeSkin(this.player, player)
+//                }
+//            }
+//        }
+
+//        if (refresh) {
+//            // Add skins for players
+//            for (player in Bukkit.getOnlinePlayers()) {
+//                // Make sure player exists
+//                if (player == null) continue
+//                TabController.addSkin(player, this.player)
+//                if (this.player != player) {
+//                    TabController.addSkin(this.player, player)
+//                }
+//            }
+//        }
 
         // Render columns
         columns.forEach { (slot, column) ->
