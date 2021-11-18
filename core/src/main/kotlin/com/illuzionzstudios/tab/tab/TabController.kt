@@ -25,6 +25,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
 import java.nio.ByteBuffer
@@ -86,8 +87,8 @@ object TabController : PluginController {
 
         tab.columns[1] = column1
         tab.columns[2] = column2
-        tab.columns[3] = column2
-//        tab.columns[4] = column2
+        tab.columns[3] = column1
+        tab.columns[4] = column2
         tab.header = listOf(FrameText(15, "&cTest Element", "&4Test Element"))
         tabs["default"] = tab
 

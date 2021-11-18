@@ -60,10 +60,7 @@ class OnlineList(id: String) : TabList(id) {
             var text: String? = listElement?.getVisibleText()
             if (tabPlayer.group != null) {
                 // Group formatting
-                text = MistString.of(text)?.toString(
-                    "group_format",
-                    tabPlayer.group.tabDisplay.getVisibleText()
-                ).toString()
+                text = MistString.of(text)?.toString("group_format", tabPlayer.group.tabDisplay.getVisibleText()).toString()
             }
             if (CustomTab.instance!!.papiEnabled) // Process PAPI
                 text = PlaceholderAPI.setPlaceholders(tabPlayer.tabPlayer, text)
