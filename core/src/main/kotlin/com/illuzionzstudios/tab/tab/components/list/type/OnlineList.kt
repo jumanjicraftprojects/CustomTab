@@ -1,16 +1,13 @@
 package com.illuzionzstudios.tab.tab.components.list.type
 
 import com.illuzionzstudios.mist.config.locale.MistString
-import com.illuzionzstudios.mist.util.TextUtil
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.group.Group
 import com.illuzionzstudios.tab.group.GroupController
 import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.model.FrameText
-import com.illuzionzstudios.tab.settings.Locale
-import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.TabController
-import com.illuzionzstudios.tab.tab.TabInstance
+import com.illuzionzstudios.tab.tab.instance.TabInstance
 import com.illuzionzstudios.tab.tab.components.list.SortType
 import com.illuzionzstudios.tab.tab.components.list.TabList
 import me.clip.placeholderapi.PlaceholderAPI
@@ -18,8 +15,6 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.ceil
-import kotlin.math.floor
 
 /**
  * A list that displays online players

@@ -1,4 +1,4 @@
-package com.illuzionzstudios.tab.tab
+package com.illuzionzstudios.tab.tab.instance
 
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.mist.util.TextUtil
@@ -6,6 +6,7 @@ import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.model.FrameText
 import com.illuzionzstudios.tab.settings.Locale
+import com.illuzionzstudios.tab.tab.TabController
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.entity.Player

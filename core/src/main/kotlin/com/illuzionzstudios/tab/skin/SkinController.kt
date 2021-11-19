@@ -19,30 +19,18 @@ import java.util.*
 object SkinController : PluginController {
 
     /**
-     * All our stored skins
+     * All our stored skins for reference
      */
-    private val skins: HashSet<CachedSkin?> = HashSet()
+    private val skins: HashSet<CachedSkin> = HashSet()
 
     /**
      * Default skin for if none is supplied
      */
-    private val UNKNOWN_SKIN: CachedSkin = CachedSkin(
+    val UNKNOWN_SKIN: CachedSkin = CachedSkin(
         "unknown",
         "eyJ0aW1lc3RhbXAiOjE0MTU4NzY5NDkxMTgsInByb2ZpbGVJZCI6IjY4MjVlMWFhNTA2NjQ4MjFhZmYxODA2MGM3NmI0NzY4IiwicHJvZmlsZU5hbWUiOiJDcnVua2xlU3RpY2tzIiwiaXNQdWJsaWMiOnRydWUsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80ZGJiMjQyNGE1NTBlMTk0YjY0MDc1NGM0Mzk1YzJhYjM0NjdkZmNlYTQ1NWM4YmVjYjMyYTBmNjZkMmE1In19fQ==",
         "FG23YbDAsXVtWWh/flnIbYAYMEMdOhnbgMf0R1AFx0mLYylIm4C9ne/UzryD6FoZbjRo5eDL87XHGM3BWglooPaRs2IyP1SjlawAXToloazUn+D5U98r4TyV/sn6vds/LZxZg03SI1k3Tv0c/xEAVacR3ko63KbeFWvQ0SXfDtVDeh/EFzlcEZJvp0Ifr8J/NRNgzoaZzr8uE6G6Ta8Ha1v2gDTQBS1/1iSmhbOQzahEfhTA34R7rIKPfCYdK2tNi1uUXOoMEomjgNwjhemc3cJJy5K2nIcXmwNNLLoJD+ts/PydgTlmAr+TGuxXVd/1DXNkYTq6j20PYDKJnPq7JTyquN3rkiHJPsE+aGxg33gSQUr/e4ztjns9LDh3iWehKYwyfr70BcKIgIokzvQlARjSCNJ/XZ2SHVMnOXftWnkcchO1wDAWVQaSp+Iy9O1gMWZPxsie085ca/Pm8xowH2mTvajF5TNyNQ1z4zbzFHqZS0OcXGn+qOEbuatcfzVIBq7t8MyOeeac/rUIpPeBHuu2DV+58h3SSBVEVUUWVQ3h4mn3nenblxoboyMOug6Azg1TkvjSVgglVcfaXJkxU559KT72Z1ISon3sgAIgPOSJkl2PpKKK2XLwlHvb/c3tab+A7TT6mnokfMOdhWSnLPsUE/wtJ7F4EGzk0shM4T4="
     )
-
-    private const val MAX_SKIN_ENTRIES = 5000
-
-    /**
-     * A map of skins to a UUID
-     */
-    val displaySkins: MutableMap<UUID?, CachedSkin?>? =
-        Collections.synchronizedMap(object : LinkedHashMap<UUID?, CachedSkin?>(MAX_SKIN_ENTRIES * 2) {
-            override fun removeEldestEntry(eldest: Map.Entry<UUID?, CachedSkin?>): Boolean {
-                return size > MAX_SKIN_ENTRIES
-            }
-        })
 
     override fun initialize(plugin: SpigotPlugin) {
         skins.add(UNKNOWN_SKIN)
@@ -53,53 +41,11 @@ object SkinController : PluginController {
     }
 
     /**
-     * Sets skin of game profile
-     * could be an npc or player.
-     * Mostly useful for setting a fake player in
-     * tab for custom images
-     *
-     * @param gameProfile Game profile object
-     * @param skin        Skin ID
-     * @param showEntry   If to show entry in tab
-     */
-    @JvmOverloads
-    fun setSkin(gameProfile: WrappedGameProfile?, skin: String?, showEntry: Boolean = true) {
-        MinecraftScheduler.get()?.desynchronize {
-            val cachedSkin: CachedSkin = getSkinFromMemory(skin)!!
-            gameProfile?.properties?.put(
-                "skin",
-                WrappedSignedProperty("textures", cachedSkin.value, cachedSkin.signature)
-            )
-            if (showEntry) showEntry(gameProfile?.uuid, cachedSkin)
-        }
-    }
-
-    /**
-     * Show the skin entry on the tab from a cached skin
-     */
-    private fun showEntry(uuid: UUID?, skin: CachedSkin) {
-        for (player in Bukkit.getOnlinePlayers()) {
-            addSkin(uuid, skin.value, skin.signature, player)
-        }
-        displaySkins!![uuid] = skin
-    }
-
-    /**
-     * Remove a skin entry for a player
-     */
-    fun removeEntry(uuid: UUID?) {
-        for (player in Bukkit.getOnlinePlayers()) {
-            removeSkin(uuid, player)
-            displaySkins!!.remove(uuid)
-        }
-    }
-
-    /**
      * Retrieve a cached skin by the name of the skin
      */
-    fun getSkinFromMemory(name: String?): CachedSkin? {
+    fun getSkin(name: String?): CachedSkin? {
         for (skin in skins) {
-            if (skin?.name.equals(name, true)) {
+            if (skin.name.equals(name, true)) {
                 return skin
             }
         }

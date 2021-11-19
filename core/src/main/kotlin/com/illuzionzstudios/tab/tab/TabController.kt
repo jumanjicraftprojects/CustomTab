@@ -1,6 +1,5 @@
 package com.illuzionzstudios.tab.tab
 
-import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.wrappers.*
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode
 import com.illuzionzstudios.mist.Logger
@@ -20,12 +19,12 @@ import com.illuzionzstudios.tab.tab.components.Tab
 import com.illuzionzstudios.tab.tab.components.column.SimpleColumn
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
 import com.illuzionzstudios.tab.tab.components.list.type.OnlineList
+import com.illuzionzstudios.tab.tab.instance.TabInstance
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
 import java.nio.ByteBuffer
@@ -54,8 +53,6 @@ object TabController : PluginController {
 
     override fun initialize(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.registerSynchronizationService(this)
-
-//        ProtocolLibrary.getProtocolManager().addPacketListener(LegacyBlocker(plugin))
 
         // Load tabs
         val tab = Tab("default")

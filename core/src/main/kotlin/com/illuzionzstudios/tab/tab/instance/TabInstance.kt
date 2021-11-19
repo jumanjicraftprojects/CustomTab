@@ -1,4 +1,4 @@
-package com.illuzionzstudios.tab.tab
+package com.illuzionzstudios.tab.tab.instance
 
 import com.comphenix.protocol.wrappers.EnumWrappers
 import com.comphenix.protocol.wrappers.PlayerInfoData
@@ -6,9 +6,10 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.illuzionzstudios.mist.scheduler.timer.Cooldown
-import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.model.DynamicText
+import com.illuzionzstudios.tab.tab.Ping
+import com.illuzionzstudios.tab.tab.TabController
 import com.illuzionzstudios.tab.tab.components.Tab
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
