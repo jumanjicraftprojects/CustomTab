@@ -41,8 +41,6 @@ header:
     # These are the different text elements in
     # the column. Maximum of configured tab elements
     1:
-      # If this text will scroll across
-      scroll: false
       # These are the different animation frames for
       # this text. Each text element is iterated through
       # to create a dynamic animation.
@@ -51,12 +49,10 @@ header:
       # This is the interval (in ticks) between updating
       # animation frames. This is limited by the tab update
       # interval
-      interval: 20
+      interval: -1
     # These are the different text elements in
     # the column. Maximum of configured tab elements
     2:
-      # If this text will scroll across
-      scroll: false
       # These are the different animation frames for
       # this text. Each text element is iterated through
       # to create a dynamic animation.
@@ -83,8 +79,6 @@ header:
     # These are the different text elements in
     # the column. Maximum of configured tab elements
     3:
-      # If this text will scroll across
-      scroll: false
       # These are the different animation frames for
       # this text. Each text element is iterated through
       # to create a dynamic animation.
@@ -93,7 +87,7 @@ header:
       # This is the interval (in ticks) between updating
       # animation frames. This is limited by the tab update
       # interval
-      interval: 20
+      interval: -1
     # These are the different text elements in
     # the column. Maximum of configured tab elements
 
@@ -105,8 +99,6 @@ footer:
     # These are the different text elements in
     # the column. Maximum of configured tab elements
     1:
-      # If this text will scroll across
-      scroll: false
       # These are the different animation frames for
       # this text. Each text element is iterated through
       # to create a dynamic animation.
@@ -115,14 +107,12 @@ footer:
       # This is the interval (in ticks) between updating
       # animation frames. This is limited by the tab update
       # interval
-      interval: 20
+      interval: -1
     # These are the different text elements in
     # the column. Maximum of configured tab elements
     # These are the different text elements in
     # the column. Maximum of configured tab elements
     2:
-      # If this text will scroll across
-      scroll: false
       # These are the different animation frames for
       # this text. Each text element is iterated through
       # to create a dynamic animation.

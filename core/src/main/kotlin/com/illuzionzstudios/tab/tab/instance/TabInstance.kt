@@ -8,6 +8,7 @@ import com.google.common.collect.Table
 import com.illuzionzstudios.mist.scheduler.timer.Cooldown
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.model.DynamicText
+import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.Ping
 import com.illuzionzstudios.tab.tab.TabController
 import com.illuzionzstudios.tab.tab.components.Tab
@@ -69,7 +70,7 @@ class TabInstance(
     /**
      * Render this tab for a player
      */
-    fun render(refresh: Boolean = false) {
+    fun render() {
         // Build the header/footer text
         val headerText = StringBuilder()
         val footerText = StringBuilder()
@@ -112,14 +113,18 @@ class TabInstance(
         }
 
         // Remove actual player on tab after delay so skins don't bug out :(
-        if (this.refresh != null && this.refresh!!.isReady) {
+        // This is because usually we should have 4 columns with 20 elements, if
+        // we want less we have to cheat
+        val pageElements: Int = tab.columns[0]?.pageElements ?: 0
+        val tryAddSkins: Boolean = tab.columns.size == 4 && pageElements >= 20
+        if (this.refresh != null && this.refresh!!.isReady && tryAddSkins) {
             // Add skins for players
             for (player in Bukkit.getOnlinePlayers()) {
                 // Make sure player exists
                 if (player == null) continue
-                TabController.addSkin(player, this.player)
+                SkinController.addSkin(player, this.player)
                 if (this.player != player) {
-                    TabController.addSkin(this.player, player)
+                    SkinController.addSkin(this.player, player)
                 }
             }
 

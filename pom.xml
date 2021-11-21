@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.illuzionzstudios</groupId>
             <artifactId>Mist</artifactId>
-            <version>kotlin-SNAPSHOT</version>
+            <version>v1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 

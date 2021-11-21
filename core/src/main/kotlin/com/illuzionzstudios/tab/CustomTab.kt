@@ -2,8 +2,10 @@ package com.illuzionzstudios.tab
 
 import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.PluginSettings
+import com.illuzionzstudios.mist.config.YamlConfig
 import com.illuzionzstudios.mist.config.locale.PluginLocale
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
+import com.illuzionzstudios.tab.command.TabCommand
 import com.illuzionzstudios.tab.group.GroupController
 import com.illuzionzstudios.tab.settings.Locale
 import com.illuzionzstudios.tab.settings.Settings
@@ -56,6 +58,7 @@ class CustomTab: SpigotPlugin() {
     }
 
     override fun onRegisterReloadables() {
+        registerMainCommand(TabCommand(), "tab", "customtab")
         reloadables.registerController(SkinController)
         reloadables.registerController(GroupController)
         reloadables.registerController(TabController)

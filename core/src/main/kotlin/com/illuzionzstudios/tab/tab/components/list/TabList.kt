@@ -3,6 +3,7 @@ package com.illuzionzstudios.tab.tab.components.list
 import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.model.FrameText
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
+import com.illuzionzstudios.tab.tab.components.list.type.OnlineList
 
 /**
  * An instance of a tab list which auto-fills
@@ -29,6 +30,17 @@ abstract class TabList(id: String) : TabColumn(id) {
     /**
      * The text element for each list element
      */
-    var elementText: DynamicText? = FrameText(-1, "&7Test &f%player_name%")
+    var elementText: DynamicText? = FrameText(-1, "&f%player_name%")
+
+    companion object {
+
+        /**
+         * Get a tab list from type. Currently only online luist
+         */
+        fun getListFromType(type: ListType, id: String): TabList? {
+            return OnlineList(id)
+        }
+
+    }
 
 }

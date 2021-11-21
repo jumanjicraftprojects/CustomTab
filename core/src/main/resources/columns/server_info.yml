@@ -45,9 +45,6 @@ text:
   # These are the different text elements in
   # the column. Maximum of configured tab elements
   1:
-    # If this text will scroll across
-    # Removes animating text
-    scroll: false
     # These are the different animation frames for
     # this text. Each text element is iterated through
     # to create a dynamic animation.
@@ -60,9 +57,6 @@ text:
   # These are the different text elements in
   # the column. Maximum of configured tab elements
   2:
-    # If this text will scroll across
-    # Removes animating text
-    scroll: false
     # These are the different animation frames for
     # this text. Each text element is iterated through
     # to create a dynamic animation.
@@ -75,9 +69,6 @@ text:
   # These are the different text elements in
   # the column. Maximum of configured tab elements
   3:
-    # If this text will scroll across
-    # Removes animating text
-    scroll: false
     # These are the different animation frames for
     # this text. Each text element is iterated through
     # to create a dynamic animation.
@@ -90,9 +81,6 @@ text:
   # These are the different text elements in
   # the column. Maximum of configured tab elements
   4:
-    # If this text will scroll across
-    # Removes animating text
-    scroll: false
     # These are the different animation frames for
     # this text. Each text element is iterated through
     # to create a dynamic animation.
@@ -105,9 +93,6 @@ text:
   # These are the different text elements in
   # the column. Maximum of configured tab elements
   5:
-    # If this text will scroll across
-    # Removes animating text
-    scroll: false
     # These are the different animation frames for
     # this text. Each text element is iterated through
     # to create a dynamic animation.

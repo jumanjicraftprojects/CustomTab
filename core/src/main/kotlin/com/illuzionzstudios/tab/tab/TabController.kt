@@ -3,6 +3,8 @@ package com.illuzionzstudios.tab.tab
 import com.comphenix.protocol.wrappers.*
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode
 import com.illuzionzstudios.mist.Logger
+import com.illuzionzstudios.mist.config.YamlConfig
+import com.illuzionzstudios.mist.config.serialization.loader.DirectoryLoader
 import com.illuzionzstudios.mist.controller.PluginController
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
@@ -18,7 +20,12 @@ import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.components.Tab
 import com.illuzionzstudios.tab.tab.components.column.SimpleColumn
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
+import com.illuzionzstudios.tab.tab.components.item.TabItem
+import com.illuzionzstudios.tab.tab.components.list.TabList
 import com.illuzionzstudios.tab.tab.components.list.type.OnlineList
+import com.illuzionzstudios.tab.tab.components.loader.TabColumnLoader
+import com.illuzionzstudios.tab.tab.components.loader.TabListLoader
+import com.illuzionzstudios.tab.tab.components.loader.TabLoader
 import com.illuzionzstudios.tab.tab.instance.TabInstance
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -45,6 +52,8 @@ object TabController : PluginController {
      * All loaded tab instances
      */
     val tabs: MutableMap<String, Tab> = HashMap()
+    val columns: MutableMap<String, TabColumn> = HashMap()
+    val lists: MutableMap<String, TabList> = HashMap()
 
     /**
      * All currently displaying tab instances
@@ -54,52 +63,46 @@ object TabController : PluginController {
     override fun initialize(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.registerSynchronizationService(this)
 
+        // If files/directories don't exists, create
+        YamlConfig.loadInternalYaml(plugin, "columns", "features.yml")
+        YamlConfig.loadInternalYaml(plugin, "columns", "player_info.yml")
+        YamlConfig.loadInternalYaml(plugin, "columns", "server_info.yml")
+
+        YamlConfig.loadInternalYaml(plugin, "lists", "online_list.yml")
+
+        YamlConfig.loadInternalYaml(plugin, "tabs", "default.yml")
+
+        // Load columns
+        DirectoryLoader(TabColumnLoader::class.java, "columns").loaders.forEach {
+            columns[it.`object`.id] = it.`object`
+        }
+
+        Logger.debug("Columns: $columns")
+
+        // Load lists
+        DirectoryLoader(TabListLoader::class.java, "lists").loaders.forEach {
+            lists[it.`object`.id] = it.`object`
+        }
+
+        Logger.debug("Lists: $lists")
+
         // Load tabs
-        val tab = Tab("default")
-        val column1: TabColumn = OnlineList("online_list")
-        val column2: TabColumn = SimpleColumn(
-            "column", listOf(
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element"),
-                FrameText(15, "&cTest Element", "&4Test Element")
-            ).toMutableList()
-        )
-        column1.title = FrameText(-1, "&a&lOnline")
-        column2.title = FrameText(15, "&c&lTest Title", "&4&lTest Title")
+        DirectoryLoader(TabLoader::class.java, "tabs").loaders.forEach {
+            tabs[it.`object`.id] = it.`object`
+        }
 
-        tab.columns[1] = column1
-        tab.columns[2] = column2
-        tab.columns[3] = column1
-        tab.columns[4] = column2
-        tab.header = listOf(FrameText(15, "&cTest Element", "&4Test Element"))
-        tabs["default"] = tab
-
-        object : BukkitRunnable() {
-            override fun run() {
-                displayedTabs.forEach { (uuid, tab) ->
-                    tab.render()
-                }
-            }
-        }.runTaskTimerAsynchronously(plugin, 0, 1)
+        Logger.debug("Tabs: $tabs")
     }
 
     override fun stop(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.dismissSynchronizationService(this)
+
+        // Clear all running tab instances
+        displayedTabs.clear()
+        // Clear all loaded tabs
+        tabs.clear()
+        columns.clear()
+        lists.clear()
     }
 
     /**
@@ -116,6 +119,21 @@ object TabController : PluginController {
             playerListHeaderFooter.footer = WrappedChatComponent.fromText(TextUtil.formatText(footer))
             playerListHeaderFooter.sendPacket(*players)
         }
+    }
+
+    /**
+     * Sets a tab item at a certain spot on the tab. For the dynamic text
+     * always sets current visible text so have to change it manually
+     */
+    fun setTabItem(x: Int, y: Int, item: TabItem, vararg players: Player?) {
+        // Current text
+        setText(x, y, item.getText().getVisibleText(), *players)
+
+        // Update skin if needed
+        SkinController.setAvatar(x, y, item.getSkin(), *players)
+
+        // Ping
+        setPing(x, y, item.getPing(), *players)
     }
 
     /**
@@ -218,79 +236,6 @@ object TabController : PluginController {
         SkinController.setDefaultAvatar(x, y, *players)
     }
 
-    fun setAvatar(x: Int, y: Int, player: Player?, vararg players: Player?) {
-        SkinController.setAvatar(x, y, player!!, *players)
-    }
-
-    fun addSkin(player: Player?, vararg players: Player?) {
-        SkinController.addSkin(player!!, *players)
-    }
-
-    fun addSkins(skins: MutableMap<UUID?, CachedSkin?>, vararg players: Player?) {
-        val data: MutableList<PlayerInfoData> = ArrayList()
-        val playerInfo = PacketPlayServerPlayerInfo()
-        playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
-
-        skins.forEach { (uuid: UUID?, skin: CachedSkin?) ->
-            var gameProfile: WrappedGameProfile = getSkinProfile(uuid)
-            val available = Bukkit.getPlayer(uuid!!)
-
-            if (available != null) {
-                gameProfile = WrappedGameProfile(uuid, WrappedGameProfile.fromPlayer(available).name)
-            }
-
-            gameProfile.properties.removeAll("textures")
-            gameProfile.properties.put(
-                "textures",
-                WrappedSignedProperty(
-                    "textures",
-                    skin?.value,
-                    skin?.signature
-                )
-            )
-            data.add(
-                PlayerInfoData(
-                    gameProfile,
-                    Ping.NONE.ping,
-                    NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromText("")
-                )
-            )
-        }
-        playerInfo.data = data
-
-        SkinController.removeSkins(skins.keys, *players)
-        playerInfo.sendPacket(*players)
-    }
-
-    /**
-     * Remove a slot from the tab
-     */
-    fun removeSlot(x: Int, y: Int, vararg players: Player?) {
-        val data: MutableList<PlayerInfoData> =
-            ArrayList()
-        val playerInfo = PacketPlayServerPlayerInfo()
-        val gameProfile: WrappedGameProfile = getDisplayProfile(x, y)
-        playerInfo.action = EnumWrappers.PlayerInfoAction.REMOVE_PLAYER
-        data.add(
-            PlayerInfoData(
-                gameProfile,
-                Ping.NONE.ping,
-                NativeGameMode.SURVIVAL,
-                WrappedChatComponent.fromText("")
-            )
-        )
-        playerInfo.data = data
-        playerInfo.sendPacket(*players)
-    }
-
-    /**
-     * Remove a skin for a player
-     */
-    fun removeSkin(player: Player, vararg players: Player?) {
-        SkinController.removeSkin(player.uniqueId, *players)
-    }
-
     /**
      * Set the name on a profile for a UUID
      */
@@ -343,19 +288,9 @@ object TabController : PluginController {
                 }
             }
 
-            // Add skins for players
-//            for (player in Bukkit.getOnlinePlayers()) {
-//                // Make sure player exists
-//                if (player == null) continue
-//                addSkin(player, event.player)
-//                if (event.player != player) {
-//                    addSkin(event.player, player)
-//                }
-//            }
-
             // Now display tab to player
             displayedTabs[event.player.uniqueId] = tab
-            tab.render(true)
+            tab.render()
         }
     }
 
@@ -369,7 +304,6 @@ object TabController : PluginController {
      */
     @Async(rate = Rate.TICK)
     fun renderTabs() {
-        Logger.debug("Ticking")
         displayedTabs.forEach { (uuid, tab) ->
             val player: Player? = Bukkit.getPlayer(uuid)
             if (player != null)

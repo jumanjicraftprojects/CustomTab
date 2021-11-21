@@ -2,6 +2,7 @@ package com.illuzionzstudios.tab.tab.components.column
 
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.tab.model.DynamicText
+import com.illuzionzstudios.tab.tab.components.item.TabItem
 import org.bukkit.entity.Player
 
 /**
@@ -31,11 +32,11 @@ abstract class TabColumn(
     /**
      * The title for this column
      */
-    var title: DynamicText? = null
+    var title: TabItem? = null
 
     /**
-     * Custom implementation to add elements
+     * Custom implementation to add [TabItem]
      */
-    abstract fun render(slot: Int, player: Player?, displayTitles: Boolean): MutableList<DynamicText>
+    abstract fun render(slot: Int, player: Player?, displayTitles: Boolean): MutableList<TabItem>
 
 }

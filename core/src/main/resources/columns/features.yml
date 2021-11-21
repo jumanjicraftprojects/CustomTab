@@ -36,9 +36,13 @@ text:
   # These are the different text elements in
   # the column. Maximum of configured tab elements
   1:
-    # If this text will scroll across
-    # Removes animating text
-    scroll: false
+    # Skin to display for this element
+    skin:
+      # If provided looks for a skin already in the system
+      name: ""
+      # Else uses these values for a custom skin
+      value: "ewogICJ0aW1lc3RhbXAiIDogMTYwMTk1MTk0NTc2MSwKICAicHJvZmlsZUlkIiA6ICI2MTI4MTA4MjU5M2Q0OGQ2OWIzMmI3YjlkMzIxMGUxMiIsCiAgInByb2ZpbGVOYW1lIiA6ICJPbF9OaWNrNjY2IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzdhZjVkOTdiMzBkZThmYWZkMzY0ZTYxZTU5MGYyYWVmNGQ4N2U5ZjdjZGZkMDExZmIwMzRjZjFmOTBlNGE0YSIKICAgIH0KICB9Cn0="
+      signature: "P0hx4QdG/09PV9qJD88ph5djUSPEyMJZUqE41JhkmW5JP5Z+FZnpXKkXiCNVMcTkPNFlezChIAZMKEcPRsRZSPvX1oK8daa37NHdaFptaWHHWSovzwOUxYzuPvjWditbYysf1BXt+Dws/pjUu40un0XknPTj5op4gk+hXt56Q3PmT5DiFxAHLdPY69aXjsvXNB90B/6q/Y55BSdPVQ8oIqJUxfC8mnNaQIU59/hTGBXd1F5N6PEpHyzuY9IGxgDP5Mjpcqwb/lIJnht+apJPFa6r4It/yYB0V4h32ba+UCgzYt3IQ/mu6Q6eZlBYH/EppPi0CxOK7iEZTEKJ7kz11tRCX7ER4FRIe0uMzQ6TjcKitaHw9uDhcW8Hls1pdQQoiejQu+K3lycD8al+TuhblmeZO0Yy4BAfxCeZlFyn609D6YoxRwxQK6q/bgQJnM2fwntQxTYCvimPp5rVthFENnThV4N7KUwp5mD8hB8vsqbiFUeWKVsNWxeIEmziCHLPHr/Kh/aYgP+vcNo4QKAYqIvfE6W6m0R4xgDG8PKnAPAuwmf3vGTEOwnAUpK1UyRPryA9nuZby3APiQFzgpfSR2Y8kVJuiCLek1hQLYzEp5CQWvE2EgMbJCt8PDT4iirANjkpZBFy7Mt1DjlNRqCWyf+1uj9F43gpCYPLaEEMfgg="
     # These are the different animation frames for
     # this text. Each text element is iterated through
     # to create a dynamic animation.

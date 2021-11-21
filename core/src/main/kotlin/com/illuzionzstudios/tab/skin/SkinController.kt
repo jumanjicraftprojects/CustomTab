@@ -59,6 +59,16 @@ object SkinController : PluginController {
     /**
      * Set the skin avatar at a slot to a profiles skin
      */
+    fun setAvatar(x: Int, y: Int, skin: CachedSkin, vararg players: Player?) {
+        MinecraftScheduler.get()?.desynchronize {
+            val property = skin.getProperty()
+            this.setAvatar(x, y, property.value, property.signature, *players)
+        }
+    }
+
+    /**
+     * Set the skin avatar at a slot to a profiles skin
+     */
     fun setAvatar(x: Int, y: Int, profile: WrappedGameProfile, vararg players: Player?) {
         MinecraftScheduler.get()?.desynchronize {
             val property = profile.properties["textures"].iterator().next()
@@ -173,32 +183,6 @@ object SkinController : PluginController {
             )
             playerInfo.data = data
             removeSkin(uuid, *players)
-            playerInfo.sendPacket(*players)
-        }
-    }
-
-    /**
-     * Remove the skin instances on a collection of UUIDs
-     */
-    fun removeSkins(uuids: Collection<UUID?>, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            playerInfo.action = EnumWrappers.PlayerInfoAction.REMOVE_PLAYER
-
-            for (uuid in uuids) {
-                val gameProfile: WrappedGameProfile = TabController.getSkinProfile(uuid)
-                data.add(
-                    PlayerInfoData(
-                        gameProfile,
-                        Ping.NONE.ping,
-                        EnumWrappers.NativeGameMode.SURVIVAL,
-                        WrappedChatComponent.fromText("")
-                    )
-                )
-            }
-
-            playerInfo.data = data
             playerInfo.sendPacket(*players)
         }
     }
