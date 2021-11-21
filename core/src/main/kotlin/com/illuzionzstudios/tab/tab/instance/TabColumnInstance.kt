@@ -153,8 +153,9 @@ class TabColumnInstance(
                 TabController.setText(slot, i, text, player)
                 TabController.setPing(slot, i, element?.getPing() ?: Ping.FIVE, player)
 
-                if (!instance.avatarCache.contains(slot, i)) {
-                    SkinController.setAvatar(slot, i, element?.getSkin() ?: SkinController.UNKNOWN_SKIN, player)
+                // Only set if custom skin
+                if (!instance.avatarCache.contains(slot, i) && element?.getSkin() != null) {
+                    SkinController.setAvatar(slot, i, element.getSkin() ?: SkinController.UNKNOWN_SKIN, player)
                     instance.avatarCache.put(slot, i, player.uniqueId)
                 }
             } else {

@@ -21,13 +21,12 @@ class TabLoader(directory: String, fileName: String): YamlFileLoader<Tab>(direct
         tab.permission = file?.getString("permission") ?: ""
         tab.weight = file?.getInt("weight") ?: 1
 
-        tab.displayTitles = file?.getBoolean("columns.display-titles") ?: false
+        tab.displayTitles = file?.getBoolean("columns.display-titles", true) ?: true
         tab.elementWidth = file?.getInt("columns.width") ?: 50
 
         // Load columns into tab
         // COLUMNS MUST BE LOADED FIRST
         file?.getConfigurationSection("columns.list")?.getKeys(false)?.forEach {
-            Logger.debug("List Name: " + file.getString("columns.list.$it"))
             // Try columns then list
             tab.columns[it.toInt()] = TabController.columns[file.getString("columns.list.$it")] ?: TabController.lists[file.getString("columns.list.$it")]!!
         }

@@ -14,12 +14,10 @@ import com.illuzionzstudios.tab.tab.components.item.TabItem
 class TabColumnLoader(directory: String, fileName: String) : YamlFileLoader<TabColumn>(directory, fileName) {
 
     override fun loadYamlObject(file: YamlConfig?): TabColumn {
-        Logger.debug(file?.getKeys(true).toString())
         val column = SimpleColumn(file?.getString("name") ?: "default")
 
         column.pageElements = file?.getInt("page.elements") ?: 20
         column.pageInterval = PresetCooldown(file?.getInt("page.interval") ?: 100)
-        Logger.debug("Interval " + file?.getInt("page.interval"))
 
         column.title = TabItemLoader(file?.getConfigurationSection("title")!!).`object`
 

@@ -77,21 +77,15 @@ object TabController : PluginController {
             columns[it.`object`.id] = it.`object`
         }
 
-        Logger.debug("Columns: $columns")
-
         // Load lists
         DirectoryLoader(TabListLoader::class.java, "lists").loaders.forEach {
             lists[it.`object`.id] = it.`object`
         }
 
-        Logger.debug("Lists: $lists")
-
         // Load tabs
         DirectoryLoader(TabLoader::class.java, "tabs").loaders.forEach {
             tabs[it.`object`.id] = it.`object`
         }
-
-        Logger.debug("Tabs: $tabs")
     }
 
     override fun stop(plugin: SpigotPlugin) {
@@ -119,21 +113,6 @@ object TabController : PluginController {
             playerListHeaderFooter.footer = WrappedChatComponent.fromText(TextUtil.formatText(footer))
             playerListHeaderFooter.sendPacket(*players)
         }
-    }
-
-    /**
-     * Sets a tab item at a certain spot on the tab. For the dynamic text
-     * always sets current visible text so have to change it manually
-     */
-    fun setTabItem(x: Int, y: Int, item: TabItem, vararg players: Player?) {
-        // Current text
-        setText(x, y, item.getText().getVisibleText(), *players)
-
-        // Update skin if needed
-        SkinController.setAvatar(x, y, item.getSkin(), *players)
-
-        // Ping
-        setPing(x, y, item.getPing(), *players)
     }
 
     /**
@@ -279,14 +258,6 @@ object TabController : PluginController {
             playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
             playerInfo.data = tab.initialList
             playerInfo.sendPacket(event.player)
-
-            // Remove all players from the tab
-            for (x in 1..tab.columns.size) {
-                tab.avatarCache.remove(x, event.player.uniqueId)
-                for (y in 1..tab.tab.columns[1]?.pageElements!!) {
-                    hideAvatar(x, y, event.player)
-                }
-            }
 
             // Now display tab to player
             displayedTabs[event.player.uniqueId] = tab

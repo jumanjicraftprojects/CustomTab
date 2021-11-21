@@ -1,6 +1,8 @@
 package com.illuzionzstudios.tab.skin
 
 import com.comphenix.protocol.wrappers.*
+import com.illuzionzstudios.mist.Logger
+import com.illuzionzstudios.mist.config.YamlConfig
 import com.illuzionzstudios.mist.controller.PluginController
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
@@ -33,7 +35,13 @@ object SkinController : PluginController {
     )
 
     override fun initialize(plugin: SpigotPlugin) {
+        // Make sure skins file exists
+        YamlConfig.loadInternalYaml(plugin, "", "skins.yml")
+
+        // Add default skins
         skins.add(UNKNOWN_SKIN)
+        // Load skins from skins.yml
+        skins.addAll(SkinLoader().`object`)
     }
 
     override fun stop(plugin: SpigotPlugin) {

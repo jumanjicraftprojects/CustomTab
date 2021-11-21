@@ -1,8 +1,6 @@
 package com.illuzionzstudios.tab.tab.instance
 
-import com.comphenix.protocol.wrappers.EnumWrappers
-import com.comphenix.protocol.wrappers.PlayerInfoData
-import com.comphenix.protocol.wrappers.WrappedChatComponent
+import com.comphenix.protocol.wrappers.*
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.illuzionzstudios.mist.scheduler.timer.Cooldown
@@ -49,9 +47,22 @@ class TabInstance(
         // Add default player slots
         for (x in 1..tab.columns.size) {
             for (y in 1..tab.columns[1]?.pageElements!!) {
+                val profile: WrappedGameProfile = TabController.getDisplayProfile(x, y)
+
+                // Set default skin for inital list
+                profile.properties.removeAll("textures")
+                profile.properties.put(
+                    "textures",
+                    WrappedSignedProperty(
+                        "textures",
+                        SkinController.UNKNOWN_SKIN.value,
+                        SkinController.UNKNOWN_SKIN.signature
+                    )
+                )
+
                 initialList.add(
                     PlayerInfoData(
-                        TabController.getDisplayProfile(x, y),
+                        profile,
                         Ping.FIVE.ping,
                         EnumWrappers.NativeGameMode.SURVIVAL,
                         WrappedChatComponent.fromText("")
@@ -117,7 +128,7 @@ class TabInstance(
         // we want less we have to cheat
         val pageElements: Int = tab.columns[0]?.pageElements ?: 0
         val tryAddSkins: Boolean = tab.columns.size == 4 && pageElements >= 20
-        if (this.refresh != null && this.refresh!!.isReady && tryAddSkins) {
+        if (this.refresh != null && this.refresh!!.isReady && !tryAddSkins) {
             // Add skins for players
             for (player in Bukkit.getOnlinePlayers()) {
                 // Make sure player exists

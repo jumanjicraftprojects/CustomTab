@@ -1,5 +1,6 @@
 package com.illuzionzstudios.tab.tab.components.loader
 
+import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.ConfigSection
 import com.illuzionzstudios.mist.config.serialization.loader.type.YamlSectionLoader
 import com.illuzionzstudios.tab.skin.CachedSkin
@@ -16,10 +17,19 @@ class TabItemLoader(section: ConfigSection): YamlSectionLoader<TabItem>(section)
 
     override fun loadObject(file: ConfigSection?): TabItem {
         val ping: Ping = Ping.valueOf(file?.getString("ping", "FIVE")?.uppercase() ?: "FIVE")
+
+        val customSkin: Boolean = (file?.contains("skin.value", true) == true && file.contains("skin.signature", true))
+                && (file.getString("skin.value")?.trim()?.isNotBlank() == true && file.getString("skin.signature")?.trim()?.isNotBlank() == true)
+        val namedSkin: Boolean = !customSkin && file?.contains("skin.name") == true && file.getString("skin.name")?.trim()?.isNotBlank() == true
+
         // Load skin element
-        val skin: CachedSkin = if ((file?.getString("name") ?: "").trim().isEmpty())
-            CachedSkin(RandomStringUtils.randomAlphabetic(12), file?.getString("value") ?: "", file?.getString("signature") ?: "") else
-                SkinController.UNKNOWN_SKIN
+        var skin: CachedSkin? = null
+
+        if (customSkin)
+            skin = CachedSkin(RandomStringUtils.randomAlphabetic(12), file?.getString("skin.value") ?: "", file?.getString("skin.signature") ?: "")
+        else if (namedSkin) {
+            skin = SkinController.getSkin(file?.getString("skin.name"))
+        }
 
         return TextTabItem(DynamicTextLoader(file!!).`object`, skin, ping,)
     }
