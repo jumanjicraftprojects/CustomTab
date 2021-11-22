@@ -28,6 +28,9 @@ import com.illuzionzstudios.tab.tab.components.loader.TabColumnLoader
 import com.illuzionzstudios.tab.tab.components.loader.TabListLoader
 import com.illuzionzstudios.tab.tab.components.loader.TabLoader
 import com.illuzionzstudios.tab.tab.instance.TabInstance
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.chat.ComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -35,6 +38,7 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.ChatPaginator
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -92,6 +96,11 @@ object TabController : PluginController {
         DirectoryLoader(TabLoader::class.java, "tabs").loaders.forEach {
             tabs[it.`object`.id] = it.`object`
         }
+
+        // Reshow tabs if needed
+        Bukkit.getOnlinePlayers().forEach {
+            displayTab(it)
+        }
     }
 
     override fun stop(plugin: SpigotPlugin) {
@@ -139,7 +148,7 @@ object TabController : PluginController {
                     getDisplayProfile(x, y),
                     Ping.FIVE.ping,
                     NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromText(text)
+                    WrappedChatComponent.fromChatMessage(text)[0]
                 )
             )
             playerInfo.data = data
@@ -256,17 +265,24 @@ object TabController : PluginController {
      */
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
+        displayTab(event.player)
+    }
+
+    /**
+     * Displays the tab to the player
+     */
+    fun displayTab(player: Player, tab: Tab? = getTab(player)) {
         MinecraftScheduler.get()!!.desynchronize {
-            val tab = TabInstance(event.player, getTab(event.player)!!)
+            val tab = TabInstance(player, tab!!)
 
             // Send default list
             val playerInfo = PacketPlayServerPlayerInfo()
             playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
             playerInfo.data = tab.initialList
-            playerInfo.sendPacket(event.player)
+            playerInfo.sendPacket(player)
 
             // Now display tab to player
-            displayedTabs[event.player.uniqueId] = tab
+            displayedTabs[player.uniqueId] = tab
             tab.render()
         }
     }

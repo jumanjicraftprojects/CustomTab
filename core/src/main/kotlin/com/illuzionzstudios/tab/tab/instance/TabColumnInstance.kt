@@ -123,30 +123,30 @@ class TabColumnInstance(
                 text = PlaceholderAPI.setPlaceholders(player, text)
             }
 
-            // Trim text
-            if (text.length > elementWidth) {
-                // Check for colour code
-                var previousCode = false
-                // If the text is currently bold
-                var isBold = false
-                // Total number of bold characters
-                var boldChars = 0
-                val chars = text.toCharArray()
-                for (j in 0 until elementWidth) {
-                    val c = chars[j]
-                    if (c == '\u00a7') {
-                        previousCode = true
-                    } else if (previousCode) {
-                        previousCode = false
-                        isBold = c == 'l' || c == 'L'
-                    } else {
-                        boldChars += if (isBold) 1 else 0
-                    }
-                }
-
-                // Bold chars count as 2 spaces
-                text = text.substring(0, elementWidth - boldChars / 8 - 4)
-            }
+//            // Trim text
+//            if (text.length > elementWidth) {
+//                // Check for colour code
+//                var previousCode = false
+//                // If the text is currently bold
+//                var isBold = false
+//                // Total number of bold characters
+//                var boldChars = 0
+//                val chars = text.toCharArray()
+//                for (j in 0 until elementWidth) {
+//                    val c = chars[j]
+//                    if (c == '\u00a7') {
+//                        previousCode = true
+//                    } else if (previousCode) {
+//                        previousCode = false
+//                        isBold = c == 'l' || c == 'L'
+//                    } else {
+//                        boldChars += if (isBold) 1 else 0
+//                    }
+//                }
+//
+//                // Bold chars count as 2 spaces
+//                text = text.substring(0, elementWidth - boldChars / 8 - 4)
+//            }
 
             // Check all elements with text
             if (i - 1 < sub.size) {

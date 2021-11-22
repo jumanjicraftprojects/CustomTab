@@ -53,11 +53,7 @@ class OnlineList(id: String) : TabList(id) {
             val tabPlayer = players[i] ?: return ArrayList()
 
             // Process player name and skin
-            var listElement: TabItem = elementText
-            if (GroupController.getGroup(tabPlayer.tabPlayer) != null) {
-                val groupFormat = GroupController.getGroup(tabPlayer.tabPlayer)?.tabDisplay
-                listElement = groupFormat!!
-            }
+            val listElement: TabItem = GroupController.getGroup(tabPlayer.tabPlayer)?.tabDisplay ?: elementText
 
             // Place
             val n = if (displayTitles) 3 else 1
