@@ -25,10 +25,16 @@ class TabItemLoader(section: ConfigSection): YamlSectionLoader<TabItem>(section)
         // Load skin element
         var skin: CachedSkin? = null
 
-        if (customSkin)
-            skin = CachedSkin(RandomStringUtils.randomAlphabetic(12), file?.getString("skin.value") ?: "", file?.getString("skin.signature") ?: "")
-        else if (namedSkin) {
-            skin = SkinController.getSkin(file?.getString("skin.name"))
+        if (namedSkin) {
+            // Weird doesn't call if just straight assign
+            val found: CachedSkin? = SkinController.getSkin(file?.getString("skin.name"))
+            skin = found
+        } else if (customSkin) {
+            skin = CachedSkin(
+                RandomStringUtils.randomAlphabetic(12),
+                file?.getString("skin.value") ?: "",
+                file?.getString("skin.signature") ?: ""
+            )
         }
 
         return TextTabItem(DynamicTextLoader(file!!).`object`, skin, ping,)

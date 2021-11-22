@@ -57,7 +57,11 @@ class FrameText(interval: Int, frames: List<String?>?): DynamicText {
         getInterval()!!.reset()
         getInterval()!!.go()
 
-        visibleText = if (cycle?.hasNext() == true) cycle?.next() ?: getOriginalText() else getOriginalText()
+        visibleText = try {
+            if (cycle?.hasNext() == true) cycle?.next() ?: getOriginalText() else getOriginalText()
+        } catch (ex: Throwable) {
+            getOriginalText()
+        }
         return visibleText
     }
 
