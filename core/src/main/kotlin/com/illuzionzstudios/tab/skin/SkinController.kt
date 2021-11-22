@@ -23,7 +23,7 @@ object SkinController : PluginController {
     /**
      * All our stored skins for reference
      */
-    private val skins: HashSet<CachedSkin> = HashSet()
+    val skins: HashSet<CachedSkin> = HashSet()
 
     /**
      * Default skin for if none is supplied
@@ -35,13 +35,8 @@ object SkinController : PluginController {
     )
 
     override fun initialize(plugin: SpigotPlugin) {
-        // Make sure skins file exists
-        YamlConfig.loadInternalYaml(plugin, "", "skins.yml")
-
         // Add default skins
         skins.add(UNKNOWN_SKIN)
-        // Load skins from skins.yml
-        skins.addAll(SkinLoader().`object`)
     }
 
     override fun stop(plugin: SpigotPlugin) {

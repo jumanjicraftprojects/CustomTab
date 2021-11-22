@@ -19,7 +19,7 @@ columns:
 
   # The minimum width of each element in the tab.
   # If there are no elements the columns will be at least this width
-  width: 50
+  width: 30
 
   # The columns to display in this tab mapped to
   # their slot. The tab will be as wide as there are many columns.

@@ -17,6 +17,7 @@ import com.illuzionzstudios.tab.packet.PacketPlayerListHeaderFooter
 import com.illuzionzstudios.tab.settings.Settings
 import com.illuzionzstudios.tab.skin.CachedSkin
 import com.illuzionzstudios.tab.skin.SkinController
+import com.illuzionzstudios.tab.skin.SkinLoader
 import com.illuzionzstudios.tab.tab.components.Tab
 import com.illuzionzstudios.tab.tab.components.column.SimpleColumn
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
@@ -62,6 +63,11 @@ object TabController : PluginController {
 
     override fun initialize(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.registerSynchronizationService(this)
+
+        // Make sure skins file exists
+        YamlConfig.loadInternalYaml(plugin, "", "skins.yml")
+        // Load skins from skins.yml
+        SkinController.skins.addAll(SkinLoader().`object`)
 
         // If files/directories don't exists, create
         YamlConfig.loadInternalYaml(plugin, "columns", "features.yml")

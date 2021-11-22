@@ -17,19 +17,14 @@ class TabItemLoader(section: ConfigSection): YamlSectionLoader<TabItem>(section)
 
     override fun loadObject(file: ConfigSection?): TabItem {
         val ping: Ping = Ping.valueOf(file?.getString("ping", "FIVE")?.uppercase() ?: "FIVE")
+        val center: Boolean = file?.getBoolean("center") ?: false
 
         val customSkin: Boolean = (file?.contains("skin.value", true) == true && file.contains("skin.signature", true))
                 && (file.getString("skin.value")?.trim()?.isNotBlank() == true && file.getString("skin.signature")?.trim()?.isNotBlank() == true)
-        val namedSkin: Boolean = !customSkin && file?.contains("skin.name") == true && file.getString("skin.name")?.trim()?.isNotBlank() == true
 
         // Load skin element
-        var skin: CachedSkin? = null
-
-        if (namedSkin) {
-            // Weird doesn't call if just straight assign
-            val found: CachedSkin? = SkinController.getSkin(file?.getString("skin.name"))
-            skin = found
-        } else if (customSkin) {
+        var skin: CachedSkin? = SkinController.getSkin(file?.getString("skin.name"))
+        if (customSkin) {
             skin = CachedSkin(
                 RandomStringUtils.randomAlphabetic(12),
                 file?.getString("skin.value") ?: "",
@@ -37,7 +32,7 @@ class TabItemLoader(section: ConfigSection): YamlSectionLoader<TabItem>(section)
             )
         }
 
-        return TextTabItem(DynamicTextLoader(file!!).`object`, skin, ping,)
+        return TextTabItem(DynamicTextLoader(file!!).`object`, skin, ping, center)
     }
 
     override fun save(): Boolean {

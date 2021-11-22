@@ -26,4 +26,9 @@ interface TabItem {
      */
     fun getPing(): Ping
 
+    /**
+     * If this tab element will be centered
+     */
+    fun isCenter(): Boolean
+
 }

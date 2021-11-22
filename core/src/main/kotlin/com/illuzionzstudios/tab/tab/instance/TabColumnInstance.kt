@@ -65,6 +65,7 @@ class TabColumnInstance(
 
         // If titles enabled
         if (displayTitles) {
+            // Center title
             sub.add(0, tab.title)
 
             // Set our minimum tab length
@@ -149,6 +150,9 @@ class TabColumnInstance(
 
             // Check all elements with text
             if (i - 1 < sub.size) {
+                if (element?.isCenter() == true) {
+                    text = TextUtil.getCenteredString(text, elementWidth)
+                }
                 // Set text in that slot as our final text
                 TabController.setText(slot, i, text, player)
                 TabController.setPing(slot, i, element?.getPing() ?: Ping.FIVE, player)
