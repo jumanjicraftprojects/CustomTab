@@ -6,14 +6,14 @@ import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 /**
  * Text that consists of multiple frames to cycle through
  */
-class FrameText(interval: Int, frames: List<String?>?): DynamicText {
+class FrameText(interval: Int, frames: List<String>?): DynamicText {
 
     constructor(interval: Int, vararg frames: String) : this(interval, listOf(*frames))
 
     /**
      * Frames to go through
      */
-    private var frames: List<String?>? = null
+    private var frames: List<String>? = null
 
     /**
      * Iterator for frames
@@ -67,7 +67,7 @@ class FrameText(interval: Int, frames: List<String?>?): DynamicText {
 
     override fun getInterval(): PresetCooldown? = interval
 
-    override fun setFrames(frames: List<String?>) {
+    override fun setFrames(frames: List<String>) {
         this.frames = frames
 
         // Create frame cycle again
@@ -75,5 +75,5 @@ class FrameText(interval: Int, frames: List<String?>?): DynamicText {
         if ((cycle as MutableIterator<String?>?)?.hasNext()!!) visibleText = (cycle as MutableIterator<String?>?)?.next()
     }
 
-    override fun getFrames(): List<String?>? = frames
+    override fun getFrames(): List<String>? = frames
 }

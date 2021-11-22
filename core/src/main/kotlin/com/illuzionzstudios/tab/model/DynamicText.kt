@@ -30,11 +30,11 @@ interface DynamicText {
     /**
      * @param frames Update the text's frames
      */
-    fun setFrames(frames: List<String?>)
+    fun setFrames(frames: List<String>)
 
     /**
      * @return Get the frames of the text
      */
-    fun getFrames(): List<String?>?
+    fun getFrames(): List<String>?
 
 }

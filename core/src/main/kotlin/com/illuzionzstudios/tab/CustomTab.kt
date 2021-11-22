@@ -58,9 +58,9 @@ class CustomTab: SpigotPlugin() {
     }
 
     override fun onRegisterReloadables() {
+        reloadables.registerController(GroupController)
         registerMainCommand(TabCommand(), "tab", "customtab")
         reloadables.registerController(SkinController)
-        reloadables.registerController(GroupController)
         reloadables.registerController(TabController)
     }
 

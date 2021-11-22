@@ -1,5 +1,6 @@
 package com.illuzionzstudios.tab.tab.components.list.type
 
+import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.locale.MistString
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.group.Group
@@ -51,17 +52,12 @@ class OnlineList(id: String) : TabList(id) {
             if (players.isEmpty()) return list
             val tabPlayer = players[i] ?: return ArrayList()
 
-//            TabController.addSkin(tabPlayer.tabPlayer, player)
-
             // Process player name and skin
-            val listElement: DynamicText? = elementText
-            var text: String? = listElement?.getVisibleText()
-            if (tabPlayer.group != null) {
-                // Group formatting
-                text = MistString.of(text)?.toString("group_format", tabPlayer.group.tabDisplay.getVisibleText()).toString()
+            var listElement: TabItem = elementText
+            if (GroupController.getGroup(tabPlayer.tabPlayer) != null) {
+                val groupFormat = GroupController.getGroup(tabPlayer.tabPlayer)?.tabDisplay
+                listElement = groupFormat!!
             }
-            if (CustomTab.instance!!.papiEnabled) // Process PAPI
-                text = PlaceholderAPI.setPlaceholders(tabPlayer.tabPlayer, text)
 
             // Place
             val n = if (displayTitles) 3 else 1
@@ -76,8 +72,7 @@ class OnlineList(id: String) : TabList(id) {
             }
 
             // Set text
-            list.add(TextTabItem(text ?: ""))
-            elementText?.changeText()
+            list.add(listElement)
         }
 
         return list
@@ -100,21 +95,16 @@ class OnlineList(id: String) : TabList(id) {
         val tabPlayer: Player
     ) : Comparable<TabPlayer?> {
 
-        /**
-         * The group of the player
-         */
-        val group: Group? = GroupController.getGroup(tabPlayer)
-
         // The greater the number, the higher priority
         // PAPI Here
         private val weight: Int
             get() {
                 // Make sure has group
-                if (group == null) return 0
+                if (GroupController.getGroup(tabPlayer) == null) return 0
 
                 var weight = 0
                 when (sorter) {
-                    SortType.WEIGHT -> weight += group.weight
+                    SortType.WEIGHT -> weight += GroupController.getGroup(tabPlayer)?.weight ?: 0
                     SortType.STRING_VARIABLE -> {
                     }
                     SortType.NUMBER_VARIABLE -> {

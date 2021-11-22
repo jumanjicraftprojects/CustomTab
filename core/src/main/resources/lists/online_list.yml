@@ -52,7 +52,7 @@ text:
   # this text. Each text element is iterated through
   # to create a dynamic animation.
   animations:
-    - '%player_name%'
+    - '{group_format}'
   # This is the interval (in ticks) between updating
   # animation frames. This is limited by the tab update
   # interval

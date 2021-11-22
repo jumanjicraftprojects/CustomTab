@@ -3,6 +3,8 @@ package com.illuzionzstudios.tab.tab.components.list
 import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.model.FrameText
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
+import com.illuzionzstudios.tab.tab.components.item.TabItem
+import com.illuzionzstudios.tab.tab.components.item.TextTabItem
 import com.illuzionzstudios.tab.tab.components.list.type.OnlineList
 
 /**
@@ -30,7 +32,7 @@ abstract class TabList(id: String) : TabColumn(id) {
     /**
      * The text element for each list element
      */
-    var elementText: DynamicText? = FrameText(-1, "&f%player_name%")
+    var elementText: TabItem = TextTabItem(-1, "&f%player_name%")
 
     companion object {
 
