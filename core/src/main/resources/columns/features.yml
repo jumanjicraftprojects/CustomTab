@@ -35,7 +35,7 @@ text:
     # this text. Each text element is iterated through
     # to create a dynamic animation.
     animations:
-      - "&8&l* &7Animated Tablist"
+      - "&#9083feG&#8e86fer&#8b88fda&#898bfdd&#878efci&#8490fce&#8293fbn&#8095fbt&#7d98fas &#799dfai&#76a0f9n &#72a5f8t&#6fa8f8h&#6daaf7e &#68aff6t&#66b2f6a&#64b5f6b"
     # This is the interval (in ticks) between updating
     # animation frames. This is limited by the tab update
     # interval

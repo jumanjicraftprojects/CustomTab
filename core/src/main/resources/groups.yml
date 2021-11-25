@@ -11,8 +11,8 @@ default:
     tab:
       # The animations to cycle through
       animations:
-        - "#2367fbM#3f83fbe#5a9ffcm#76bbfcb#91d7fce#acf2fdr &f%player_name%"
-        - "#28befbM#34b6fbe#40affcm#4ca7fcb#589ffce#6398fdr &7%player_name%"
+        - "&#2efbd1M&#48fbb6e&#61fc9bm&#7bfc80b&#94fc65e&#adfd4ar &7%player_name%"
+        - "&#fba447M&#fb8a47e&#fc7048m&#fc5648b&#fc3c48e&#fd2249r &7%player_name%"
       # How often in ticks to cycle through animations
       interval: 20
     # How to display the player's name above their head

@@ -83,6 +83,16 @@ header:
       # this text. Each text element is iterated through
       # to create a dynamic animation.
       animations:
+        - "&fNew Dungeons out now!"
+      # This is the interval (in ticks) between updating
+      # animation frames. This is limited by the tab update
+      # interval
+      interval: -1
+    4:
+      # These are the different animation frames for
+      # this text. Each text element is iterated through
+      # to create a dynamic animation.
+      animations:
         - " "
       # This is the interval (in ticks) between updating
       # animation frames. This is limited by the tab update
@@ -98,7 +108,7 @@ footer:
   text:
     # These are the different text elements in
     # the column. Maximum of configured tab elements
-    1:
+    0:
       # These are the different animation frames for
       # this text. Each text element is iterated through
       # to create a dynamic animation.
@@ -106,20 +116,19 @@ footer:
         - " "
       # This is the interval (in ticks) between updating
       # animation frames. This is limited by the tab update
-      # interval
+      # interval. Should be set to -1 for animations with
+      # a single animation frame
       interval: -1
-    # These are the different text elements in
-    # the column. Maximum of configured tab elements
-    # These are the different text elements in
-    # the column. Maximum of configured tab elements
     2:
-      # These are the different animation frames for
-      # this text. Each text element is iterated through
-      # to create a dynamic animation.
       animations:
-        - "&7&nwww.minecraftserver.com"
-        - "&7&nstore.minecraftserver.com"
-      # This is the interval (in ticks) between updating
-      # animation frames. This is limited by the tab update
-      # interval
-      interval: 40
+        - "&c&lSTOREWIDE SALE 25% OFF"
+        - "&4&lSTOREWIDE SALE 25% OFF"
+      interval: 20
+    3:
+      animations:
+        - "&c/buy &for visit &cbuy.server.com"
+      interval: -1
+    99:
+      animations:
+        - " "
+      interval: -1
