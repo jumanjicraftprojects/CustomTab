@@ -9,6 +9,7 @@ import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.model.FrameText
 import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.TabController
+import com.illuzionzstudios.tab.tab.components.item.PlayerTabItem
 import com.illuzionzstudios.tab.tab.components.item.TabItem
 import com.illuzionzstudios.tab.tab.components.item.TextTabItem
 import com.illuzionzstudios.tab.tab.instance.TabInstance
@@ -23,7 +24,7 @@ import kotlin.collections.ArrayList
 /**
  * A list that displays online players
  */
-class OnlineList(id: String) : TabList(id) {
+class OnlineList(id: String) : TabList<Player>(id) {
 
     /**
      * Player's on the tab
@@ -34,13 +35,15 @@ class OnlineList(id: String) : TabList(id) {
         val list: MutableList<TabItem> = ArrayList()
 
         // Add players to cache to display
-//        if (players.size != Bukkit.getOnlinePlayers().size) {
-            players.clear()
-            Bukkit.getOnlinePlayers().forEach { p: Player? ->
-                // Detect vanished players
-                if (!isVanished(player!!, p!!)) players.add(TabPlayer(p))
-            }
-//        }
+        players.clear()
+        Bukkit.getOnlinePlayers().forEach { p: Player? ->
+            // Detect vanished players
+            if (isVanished(player!!, p!!)) return@forEach
+            // Filter
+            if (!filter.test(p)) return@forEach
+
+            players.add(TabPlayer(p))
+        }
 
         try {
             Collections.sort(players)
@@ -68,7 +71,7 @@ class OnlineList(id: String) : TabList(id) {
             }
 
             // Set text
-            list.add(listElement)
+            list.add(PlayerTabItem(tabPlayer.tabPlayer, listElement))
         }
 
         return list

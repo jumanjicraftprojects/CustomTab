@@ -126,7 +126,7 @@ class TabInstance(
         // Remove actual player on tab after delay so skins don't bug out :(
         // This is because usually we should have 4 columns with 20 elements, if
         // we want less we have to cheat
-        val pageElements: Int = tab.columns[0]?.pageElements ?: 0
+        val pageElements: Int = tab.columns[1]?.pageElements ?: 0
         val tryAddSkins: Boolean = tab.columns.size == 4 && pageElements >= 20
         if (this.refresh != null && this.refresh!!.isReady && !tryAddSkins) {
             // Add skins for players

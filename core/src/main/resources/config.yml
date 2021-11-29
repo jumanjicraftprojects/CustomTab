@@ -1,5 +1,3 @@
-# Mock of config files for my sake
-
 settings:
   # The language file to use for the plugin
   # More language files (if available) can be found in the plugins locale folder.

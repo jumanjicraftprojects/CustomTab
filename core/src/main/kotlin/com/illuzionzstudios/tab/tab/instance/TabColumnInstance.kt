@@ -11,6 +11,7 @@ import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.Ping
 import com.illuzionzstudios.tab.tab.TabController
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
+import com.illuzionzstudios.tab.tab.components.item.PlayerTabItem
 import com.illuzionzstudios.tab.tab.components.item.TabItem
 import com.illuzionzstudios.tab.tab.components.item.TextTabItem
 import me.clip.placeholderapi.PlaceholderAPI
@@ -55,6 +56,9 @@ class TabColumnInstance(
             // Refresh
             if (check.size != elements.size) elements = check
         }
+
+        // Filter
+        elements = elements.filter { it.getFilter().test(player) }.toMutableList()
 
         // Our sub array, or our page
         val sub: MutableList<TabItem?> = ArrayList(
@@ -119,9 +123,9 @@ class TabColumnInstance(
 
             // Set placeholders
             if (CustomTab.instance!!.papiEnabled) {
-                // Try render anything else.
-                // By this point it will be formatted by player
-                text = PlaceholderAPI.setPlaceholders(player, text)
+                text = if (element is PlayerTabItem) {
+                    PlaceholderAPI.setPlaceholders(element.player, text)
+                } else PlaceholderAPI.setPlaceholders(player, text)
             }
 
             // Trim text

@@ -76,4 +76,8 @@ class FrameText(interval: Int, frames: List<String>?): DynamicText {
     }
 
     override fun getFrames(): List<String>? = frames
+
+    override fun copy(): DynamicText {
+        return FrameText(this.interval?.wait ?: -1, this.frames)
+    }
 }

@@ -19,7 +19,7 @@ title:
   # this text. Each text element is iterated through
   # to create a dynamic animation.
   animations:
-    - "&e&lPlayer Info"
+    - "&e&lProfile"
   # This is the interval (in ticks) between updating
   # animation frames. This is limited by the tab update
   # interval

@@ -23,7 +23,7 @@ title:
   # This is the interval (in ticks) between updating
   # animation frames. This is limited by the tab update
   # interval
-  interval: 5
+  interval: -1
   center: true
 
 # Text elements to display for this column
@@ -39,4 +39,18 @@ text:
     # This is the interval (in ticks) between updating
     # animation frames. This is limited by the tab update
     # interval
-    interval: 20
+    interval: -1
+  2:
+    requirement:
+      type: near
+      value: world,955,120,497
+      input: 5
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "Near Location"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: -1

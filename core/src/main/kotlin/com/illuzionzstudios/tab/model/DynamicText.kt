@@ -5,7 +5,7 @@ import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 /**
  * An instance of dynamic text that can constantly be changing
  */
-interface DynamicText {
+interface DynamicText: Cloneable {
 
     /**
      * @return Default text to display
@@ -36,5 +36,7 @@ interface DynamicText {
      * @return Get the frames of the text
      */
     fun getFrames(): List<String>?
+
+    fun copy(): DynamicText
 
 }

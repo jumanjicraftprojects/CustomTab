@@ -58,7 +58,7 @@ object TabController : PluginController {
      */
     val tabs: MutableMap<String, Tab> = HashMap()
     val columns: MutableMap<String, TabColumn> = HashMap()
-    val lists: MutableMap<String, TabList> = HashMap()
+    val lists: MutableMap<String, TabList<*>> = HashMap()
 
     /**
      * All currently displaying tab instances
@@ -73,27 +73,18 @@ object TabController : PluginController {
         // Load skins from skins.yml
         SkinController.skins.addAll(SkinLoader().`object`)
 
-        // If files/directories don't exists, create
-        YamlConfig.loadInternalYaml(plugin, "columns", "features.yml")
-        YamlConfig.loadInternalYaml(plugin, "columns", "player_info.yml")
-        YamlConfig.loadInternalYaml(plugin, "columns", "server_info.yml")
-
-        YamlConfig.loadInternalYaml(plugin, "lists", "online_list.yml")
-
-        YamlConfig.loadInternalYaml(plugin, "tabs", "default.yml")
-
         // Load columns
-        DirectoryLoader(TabColumnLoader::class.java, "columns").loaders.forEach {
+        DirectoryLoader(TabColumnLoader::class.java, "columns", listOf("features.yml", "player_info.yml", "server_info.yml")).loaders.forEach {
             columns[it.`object`.id] = it.`object`
         }
 
         // Load lists
-        DirectoryLoader(TabListLoader::class.java, "lists").loaders.forEach {
+        DirectoryLoader(TabListLoader::class.java, "lists", listOf("online_list.yml")).loaders.forEach {
             lists[it.`object`.id] = it.`object`
         }
 
         // Load tabs
-        DirectoryLoader(TabLoader::class.java, "tabs").loaders.forEach {
+        DirectoryLoader(TabLoader::class.java, "tabs", listOf("default.yml")).loaders.forEach {
             tabs[it.`object`.id] = it.`object`
         }
 
