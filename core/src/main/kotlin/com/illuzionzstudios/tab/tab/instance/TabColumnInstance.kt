@@ -119,8 +119,8 @@ class TabColumnInstance(
             }
             // Pagination text
             val pagesText: MistString = Locale.TAB_PAGE_TEXT.toString("current_page", max(1, currentPage)).toString("max_page", max(1, maxPage))
-//            sub.add(tab.pageItem ?: TextTabItem(pagesText.toString()))
-            sub.add(TextTabItem(SkinController.UNKNOWN_SKIN, -1, pagesText.toString()))
+            sub.add(tab.pageItem ?: TextTabItem(SkinController.UNKNOWN_SKIN, -1, pagesText.toString()))
+//            sub.add(TextTabItem(SkinController.UNKNOWN_SKIN, -1, pagesText.toString()))
         }
 
         // For elements in the sub tab
@@ -129,6 +129,7 @@ class TabColumnInstance(
 
             // Send update packet //
             var text = TextUtil.formatText(element?.getText()?.getVisibleText() ?: "")
+            text = text.mist.toString("current_page", max(1, currentPage)).toString("max_page", max(1, maxPage)).toString()
 
             // Set placeholders
             if (CustomTab.instance!!.papiEnabled) {
