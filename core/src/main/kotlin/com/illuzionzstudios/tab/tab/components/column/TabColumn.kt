@@ -37,7 +37,7 @@ abstract class TabColumn(
     /**
      * The amount of ticks between changing through pages
      */
-    var pageInterval: PresetCooldown = PresetCooldown(100)
+    var pageInterval: Int = 100
 
     /**
      * The title for this column

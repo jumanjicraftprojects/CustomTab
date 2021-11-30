@@ -21,7 +21,7 @@ class TabColumnLoader(directory: String, fileName: String) : YamlFileLoader<TabC
         column.pageItem = TabItemLoader(file?.getConfigurationSection("page.text")).`object` ?: BlankTabItem()
 
         column.pageElements = file?.getInt("page.elements") ?: 20
-        column.pageInterval = PresetCooldown(file?.getInt("page.interval") ?: 100)
+        column.pageInterval = file?.getInt("page.interval") ?: 100
 
         column.title = TabItemLoader(file?.getConfigurationSection("title")!!).`object`
 

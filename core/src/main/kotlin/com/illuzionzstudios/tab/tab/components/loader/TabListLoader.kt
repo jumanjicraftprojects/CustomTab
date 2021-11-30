@@ -26,7 +26,7 @@ class TabListLoader(directory: String, fileName: String) : YamlFileLoader<TabLis
         list.pageItem = TabItemLoader(file?.getConfigurationSection("page.text")).`object` ?: BlankTabItem()
 
         list.pageElements = file?.getInt("page.elements") ?: 20
-        list.pageInterval = PresetCooldown(file?.getInt("config.interval") ?: 100)
+        list.pageInterval = file?.getInt("config.interval") ?: 100
 
         list.title = TabItemLoader(file?.getConfigurationSection("title")!!).`object`
         list.sorter = SortType.valueOf(file.getString("sorter")?.uppercase() ?: "WEIGHT")

@@ -40,6 +40,8 @@ class TabColumnInstance(
      */
     var pageCursor = 0
 
+    var interval: PresetCooldown = PresetCooldown(tab.pageInterval)
+
     /**
      * Render this tab column for a player
      *
@@ -97,7 +99,7 @@ class TabColumnInstance(
             maxPage = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt()
 
             // If we can go to next page
-            if (tab.pageInterval.isReady) {
+            if (interval.isReady) {
                 instance.avatarCache.rowKeySet().removeIf {it == slot}
                 // Don't update if on a null page
                 if (currentPage > maxPage) {
@@ -110,8 +112,8 @@ class TabColumnInstance(
                 // Go to next page
                 elements = check
                 pageInfo = true
-                tab.pageInterval.reset()
-                tab.pageInterval.go()
+                interval.reset()
+                interval.go()
             }
 
             // Pagination text
