@@ -56,7 +56,7 @@ class OnlineList(id: String) : TabList<Player>(id) {
 
                 // Check if not set at all
                 // Set the avatar for that slot
-                if (!tabInstance.avatarCache.contains(slot, i + n) || !tabInstance.avatarCache[slot, i + n].equals(TabController.getSkinFromPlayer(tabPlayer.tabPlayer.uniqueId))) {
+                if (!tabInstance.avatarCache.contains(slot, i + n) || tabInstance.avatarCache[slot, i + n] != TabController.getSkinFromPlayer(tabPlayer.tabPlayer.uniqueId)) {
                     SkinController.setAvatar(slot, i + n, TabController.getSkinFromPlayer(tabPlayer.tabPlayer.uniqueId), player)
                     tabInstance.avatarCache.put(slot, i + n, TabController.getSkinFromPlayer(tabPlayer.tabPlayer.uniqueId))
                 }

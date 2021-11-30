@@ -3,6 +3,7 @@ package com.illuzionzstudios.tab.tab.components.item
 import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.model.FrameText
 import com.illuzionzstudios.tab.skin.CachedSkin
+import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.Ping
 import org.bukkit.entity.Player
 import java.util.function.Predicate
@@ -59,7 +60,7 @@ open class TextTabItem(
     ) : this(FrameText(interval, *frames), skin, ping, filter, center)
 
     override fun getText(): DynamicText = text0
-    override fun getSkin(): CachedSkin? = skin0
+    override fun getSkin(): CachedSkin = skin0 ?: SkinController.UNKNOWN_SKIN
     override fun getPing(): Ping = ping0
     override fun getFilter(): Predicate<Player> = filter0
     override fun isCenter(): Boolean = isCenter0

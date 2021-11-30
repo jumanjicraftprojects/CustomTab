@@ -114,12 +114,13 @@ class TabColumnInstance(
                 pageInfo = true
                 interval.reset()
                 interval.go()
-            }
 
+                instance.avatarCache.row(slot).clear()
+            }
             // Pagination text
             val pagesText: MistString = Locale.TAB_PAGE_TEXT.toString("current_page", max(1, currentPage)).toString("max_page", max(1, maxPage))
 //            sub.add(tab.pageItem ?: TextTabItem(pagesText.toString()))
-            sub.add(TextTabItem(pagesText.toString()))
+            sub.add(TextTabItem(SkinController.UNKNOWN_SKIN, -1, pagesText.toString()))
         }
 
         // For elements in the sub tab
@@ -171,9 +172,9 @@ class TabColumnInstance(
                 TabController.setPing(slot, i, element?.getPing() ?: Ping.FIVE, player)
 
                 // Only set if custom skin
-                if (!instance.avatarCache.contains(slot, i) && element?.getSkin() != null && element.getSkin() != instance.avatarCache.get(slot, i)) {
-                    SkinController.setAvatar(slot, i, element.getSkin() ?: SkinController.UNKNOWN_SKIN, player)
-                    instance.avatarCache.put(slot, i, element.getSkin() ?: SkinController.UNKNOWN_SKIN)
+                if ((!instance.avatarCache.contains(slot, i) && element?.getSkin() != null) || (element?.getSkin() != instance.avatarCache.get(slot, i))) {
+                    SkinController.setAvatar(slot, i, element?.getSkin() ?: SkinController.UNKNOWN_SKIN, player)
+                    instance.avatarCache.put(slot, i, element?.getSkin() ?: SkinController.UNKNOWN_SKIN)
                 }
             } else {
                 // Otherwise text not defined so set blank
@@ -215,7 +216,8 @@ class TabColumnInstance(
         if (reloadSkins) {
             // TODO: Only refresh changed elements
             // Refresh column
-            instance.avatarCache.rowKeySet().removeIf {it == slot}
+//            instance.avatarCache.rowKeySet().removeIf {it == slot}
+            instance.avatarCache.row(slot).clear()
         }
     }
 

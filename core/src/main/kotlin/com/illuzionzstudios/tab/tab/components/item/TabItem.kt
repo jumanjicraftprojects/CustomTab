@@ -21,7 +21,7 @@ interface TabItem {
     /**
      * Gets the skin avatar to be represented by this entry
      */
-    fun getSkin(): CachedSkin?
+    fun getSkin(): CachedSkin
 
     /**
      * Represents the ping value of this element
