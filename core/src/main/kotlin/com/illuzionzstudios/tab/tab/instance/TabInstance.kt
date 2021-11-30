@@ -6,6 +6,7 @@ import com.google.common.collect.Table
 import com.illuzionzstudios.mist.scheduler.timer.Cooldown
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.model.DynamicText
+import com.illuzionzstudios.tab.skin.CachedSkin
 import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.Ping
 import com.illuzionzstudios.tab.tab.TabController
@@ -36,7 +37,7 @@ class TabInstance(
     /**
      * Cached icon skins
      */
-    var avatarCache: Table<Int, Int, UUID> = HashBasedTable.create()
+    var avatarCache: Table<Int, Int, CachedSkin> = HashBasedTable.create()
 
     /**
      * A cooldown to refresh the tab after a bit

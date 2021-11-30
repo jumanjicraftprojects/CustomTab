@@ -8,7 +8,7 @@ import com.illuzionzstudios.tab.model.FrameText
 /**
  * For loading straight dynamic text from a section
  */
-class DynamicTextLoader(section: ConfigSection): YamlSectionLoader<DynamicText>(section) {
+class DynamicTextLoader(section: ConfigSection?): YamlSectionLoader<DynamicText>(section) {
 
     override fun loadObject(file: ConfigSection?): DynamicText {
         val animations: List<String> = file?.getStringList("animations") ?: ArrayList()

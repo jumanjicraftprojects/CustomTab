@@ -6,6 +6,7 @@ import com.illuzionzstudios.mist.config.serialization.loader.YamlFileLoader
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.tab.tab.components.column.SimpleColumn
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
+import com.illuzionzstudios.tab.tab.components.item.BlankTabItem
 import com.illuzionzstudios.tab.tab.components.item.TabItem
 
 /**
@@ -15,6 +16,9 @@ class TabColumnLoader(directory: String, fileName: String) : YamlFileLoader<TabC
 
     override fun loadYamlObject(file: YamlConfig?): TabColumn {
         val column = SimpleColumn(file?.getString("name") ?: "default")
+
+        column.pageEnabled = file?.getBoolean("page.enabled") ?: true
+        column.pageItem = TabItemLoader(file?.getConfigurationSection("page.text")).`object` ?: BlankTabItem()
 
         column.pageElements = file?.getInt("page.elements") ?: 20
         column.pageInterval = PresetCooldown(file?.getInt("page.interval") ?: 100)

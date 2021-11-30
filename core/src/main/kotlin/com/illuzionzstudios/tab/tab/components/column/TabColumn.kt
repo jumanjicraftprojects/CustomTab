@@ -20,9 +20,19 @@ abstract class TabColumn(
     // ----------------------------------------
 
     /**
+     * If pagination is enabled
+     */
+    var pageEnabled: Boolean = true
+
+    /**
      * The height of each column
      */
     var pageElements: Int = 20
+
+    /**
+     * Item to display for pagination
+     */
+    var pageItem: TabItem? = null
 
     /**
      * The amount of ticks between changing through pages

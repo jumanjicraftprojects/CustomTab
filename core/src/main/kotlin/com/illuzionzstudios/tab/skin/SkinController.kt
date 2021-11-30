@@ -14,6 +14,7 @@ import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Handles our skins for the player and tabs
@@ -23,7 +24,7 @@ object SkinController : PluginController {
     /**
      * All our stored skins for reference
      */
-    val skins: HashSet<CachedSkin> = HashSet()
+    val skins: MutableMap<String, CachedSkin> = HashMap()
 
     /**
      * Default skin for if none is supplied
@@ -36,23 +37,22 @@ object SkinController : PluginController {
 
     override fun initialize(plugin: SpigotPlugin) {
         // Add default skins
-        skins.add(UNKNOWN_SKIN)
+        addSkin(UNKNOWN_SKIN)
     }
 
     override fun stop(plugin: SpigotPlugin) {
         skins.clear()
     }
 
+    fun addSkin(skin: CachedSkin) {
+        skins[skin.name] = skin
+    }
+
     /**
      * Retrieve a cached skin by the name of the skin
      */
     fun getSkin(name: String?): CachedSkin? {
-        for (skin in skins) {
-            if (skin.name.equals(name, true)) {
-                return skin
-            }
-        }
-        return null
+        return skins[name]
     }
 
     fun setDefaultAvatar(x: Int, y: Int, vararg players: Player?) {

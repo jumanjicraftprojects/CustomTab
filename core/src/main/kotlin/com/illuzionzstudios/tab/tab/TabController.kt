@@ -71,7 +71,9 @@ object TabController : PluginController {
         // Make sure skins file exists
         YamlConfig.loadInternalYaml(plugin, "", "skins.yml")
         // Load skins from skins.yml
-        SkinController.skins.addAll(SkinLoader().`object`)
+        SkinLoader().`object`.forEach {
+            SkinController.addSkin(it)
+        }
 
         // Load columns
         DirectoryLoader(TabColumnLoader::class.java, "columns", listOf("features.yml", "player_info.yml", "server_info.yml")).loaders.forEach {
@@ -259,6 +261,12 @@ object TabController : PluginController {
         displayTab(event.player)
     }
 
+
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        displayedTabs.remove(event.player.uniqueId)
+    }
+
     /**
      * Displays the tab to the player
      */
@@ -276,11 +284,6 @@ object TabController : PluginController {
             displayedTabs[player.uniqueId] = tab
             tab.render()
         }
-    }
-
-    @EventHandler
-    fun onPlayerQuit(event: PlayerQuitEvent) {
-        displayedTabs.remove(event.player.uniqueId)
     }
 
     /**
@@ -336,4 +339,25 @@ object TabController : PluginController {
         )
     }
 
+    fun getSkinFromPlayer(uuid: UUID): CachedSkin {
+        var skin: CachedSkin? = SkinController.getSkin(uuid.toString())
+
+        if (skin == null) {
+            val profile = WrappedGameProfile.fromPlayer(Bukkit.getPlayer(uuid))
+            var value = ""
+            var signature = ""
+            val iterator: Iterator<WrappedSignedProperty> = profile.properties["textures"].iterator()
+            // Make sure is valid
+            if (iterator.hasNext()) {
+                val property = iterator.next()
+                value = property.value
+                signature = property.signature
+            }
+
+            skin = CachedSkin(uuid.toString(), value, signature)
+            SkinController.addSkin(skin)
+        }
+
+        return skin
+    }
 }

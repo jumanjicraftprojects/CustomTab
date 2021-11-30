@@ -1,6 +1,7 @@
 package com.illuzionzstudios.tab.tab.instance
 
 import com.illuzionzstudios.mist.config.locale.MistString
+import com.illuzionzstudios.mist.config.locale.mist
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.mist.util.TextUtil
 import com.illuzionzstudios.tab.CustomTab
@@ -47,18 +48,19 @@ class TabColumnInstance(
      */
     fun render(slot: Int, displayTitles: Boolean, elementWidth: Int) {
         // Check if to refresh
-        val check: MutableList<TabItem> = tab.render(slot, player, displayTitles)
+        val check: MutableList<TabItem> = tab.render(slot, player, displayTitles).filter { it.getFilter().test(player) }.toMutableList()
+        var reloadSkins = false
 
-        // If not the same, re-render
+        // If no elements, try get from to render
         if (elements.isEmpty()) {
             elements = check
         } else {
-            // Refresh
-            if (check.size != elements.size) elements = check
+            // If current elements differ to new elements to render, re render elements
+            if (check.size != elements.size) {
+                elements = check
+                reloadSkins = true
+            }
         }
-
-        // Filter
-        elements = elements.filter { it.getFilter().test(player) }.toMutableList()
 
         // Our sub array, or our page
         val sub: MutableList<TabItem?> = ArrayList(
@@ -85,17 +87,20 @@ class TabColumnInstance(
 
         // If to show pagination info
         var pageInfo = false
+        var currentPage = 1
+        var maxPage = 1
 
-        if (size >= tab.pageElements - 1) {
+        if (size >= tab.pageElements - 1 && tab.pageEnabled) {
             // Calculate page length //
             val pageDelta: Double = (pageCursor + if (displayTitles) 3 else 1).toDouble() / tab.pageElements + 1
-            val page = (if (pageDelta < 2) floor(pageDelta) else ceil(pageDelta)).toInt()
-            val max = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt()
+            currentPage = (if (pageDelta < 2) floor(pageDelta) else ceil(pageDelta)).toInt()
+            maxPage = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt()
 
             // If we can go to next page
             if (tab.pageInterval.isReady) {
+                instance.avatarCache.rowKeySet().removeIf {it == slot}
                 // Don't update if on a null page
-                if (page > max) {
+                if (currentPage > maxPage) {
                     // Reset to page 1
                     elements = ArrayList()
                     pageCursor = 0
@@ -110,7 +115,8 @@ class TabColumnInstance(
             }
 
             // Pagination text
-            val pagesText: MistString = Locale.TAB_PAGE_TEXT.toString("current_page", max(1, page)).toString("max_page", max(1, max))
+            val pagesText: MistString = Locale.TAB_PAGE_TEXT.toString("current_page", max(1, currentPage)).toString("max_page", max(1, maxPage))
+//            sub.add(tab.pageItem ?: TextTabItem(pagesText.toString()))
             sub.add(TextTabItem(pagesText.toString()))
         }
 
@@ -163,9 +169,9 @@ class TabColumnInstance(
                 TabController.setPing(slot, i, element?.getPing() ?: Ping.FIVE, player)
 
                 // Only set if custom skin
-                if (!instance.avatarCache.contains(slot, i) && element?.getSkin() != null) {
+                if (!instance.avatarCache.contains(slot, i) && element?.getSkin() != null && element.getSkin() != instance.avatarCache.get(slot, i)) {
                     SkinController.setAvatar(slot, i, element.getSkin() ?: SkinController.UNKNOWN_SKIN, player)
-                    instance.avatarCache.put(slot, i, player.uniqueId)
+                    instance.avatarCache.put(slot, i, element.getSkin() ?: SkinController.UNKNOWN_SKIN)
                 }
             } else {
                 // Otherwise text not defined so set blank
@@ -202,6 +208,12 @@ class TabColumnInstance(
             // Reset to page 1
             elements = ArrayList()
             pageCursor = 0
+        }
+
+        if (reloadSkins) {
+            // TODO: Only refresh changed elements
+            // Refresh column
+            instance.avatarCache.rowKeySet().removeIf {it == slot}
         }
     }
 

@@ -5,6 +5,7 @@ import com.illuzionzstudios.mist.config.YamlConfig
 import com.illuzionzstudios.mist.config.serialization.loader.YamlFileLoader
 import com.illuzionzstudios.mist.requirement.PlayerRequirementLoader
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
+import com.illuzionzstudios.tab.tab.components.item.BlankTabItem
 import com.illuzionzstudios.tab.tab.components.list.ListType
 import com.illuzionzstudios.tab.tab.components.list.SortType
 import com.illuzionzstudios.tab.tab.components.list.TabList
@@ -20,6 +21,9 @@ class TabListLoader(directory: String, fileName: String) : YamlFileLoader<TabLis
         val listType = ListType.valueOf(file?.getString("type")?.uppercase() ?: "ONLINE_PLAYERS")
         val list: TabList<*> = TabList.getListFromType(listType, file?.getString("name") ?: "default")
             ?: OnlineList(file?.getString("name") ?: "default")
+
+        list.pageEnabled = file?.getBoolean("page.enabled") ?: true
+        list.pageItem = TabItemLoader(file?.getConfigurationSection("page.text")).`object` ?: BlankTabItem()
 
         list.pageElements = file?.getInt("page.elements") ?: 20
         list.pageInterval = PresetCooldown(file?.getInt("config.interval") ?: 100)

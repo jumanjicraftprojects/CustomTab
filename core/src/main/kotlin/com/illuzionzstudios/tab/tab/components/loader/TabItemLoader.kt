@@ -17,7 +17,7 @@ import java.util.function.Predicate
 /**
  * Responsible for loading a tab item from a config section
  */
-class TabItemLoader(section: ConfigSection): YamlSectionLoader<TabItem>(section) {
+class TabItemLoader(section: ConfigSection?): YamlSectionLoader<TabItem>(section) {
 
     override fun loadObject(file: ConfigSection?): TabItem {
         val ping: Ping = Ping.valueOf(file?.getString("ping", "FIVE")?.uppercase() ?: "FIVE")

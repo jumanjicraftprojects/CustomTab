@@ -3,6 +3,11 @@ name: "player_info"
 
 # Page options
 page:
+  # If enabled, the total number of elements go over
+  # the below 'elements' option, it will create a new
+  # page and display the remaining elements on all the
+  # new pages
+  enabled: true
   # Maximum amount of elements per page. If the
   # elements go over this they will flow to the next
   # page
@@ -10,6 +15,17 @@ page:
   # Interval in ticks between scrolling pages. Only applies
   # if there is more than one page
   interval: 100
+  # The text element for page text
+  text:
+    # These are the different animation frames for
+    # this text. Each text element is iterated through
+    # to create a dynamic animation.
+    animations:
+      - "&7{current_page}&8/&7{max_page}"
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval
+    interval: -1
 
 # The title of this tab column
 title:
