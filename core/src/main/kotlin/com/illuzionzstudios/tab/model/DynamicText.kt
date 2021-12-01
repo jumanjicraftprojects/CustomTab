@@ -36,7 +36,4 @@ interface DynamicText: Cloneable {
      * @return Get the frames of the text
      */
     fun getFrames(): List<String>?
-
-    fun copy(): DynamicText
-
 }

@@ -1,7 +1,7 @@
 # This is the default group
 default:
   # Permission for player to have this group. Set to blank here so all players have it
-  permission: ""
+  permission: ''
   # The priority of this group, the player will have the group they qualify for that
   # has the highest weight. A higher weight is a higher priority
   weight: 1
@@ -11,17 +11,20 @@ default:
     tab:
       # The animations to cycle through
       animations:
-        - "&8Member &7%player_name%"
+        - '&8Member &7%player_name%'
       # How often in ticks to cycle through animations
       interval: -1
-    # How to display the player's name above their head
-    tag:
-      # Lines of text to display. Since is tag can have multiple
-      text:
-        # First text element
-        1:
-          # The animations to cycle through
-          animations:
-            - "%player_name%"
-          # How often in ticks to cycle through animations
-          interval: -1
+
+owner:
+  permission: tab.owner
+  weight: 99
+  display:
+    tab:
+      animations:
+        - '&4Owner &c%player_name%'
+        - '&cO&4wner &c%player_name%'
+        - '&4O&cw&4ner &c%player_name%'
+        - '&4Ow&cn&4er &c%player_name%'
+        - '&4Own&ce&4r &c%player_name%'
+        - '&4Owne&cr &c%player_name%'
+      interval: 10

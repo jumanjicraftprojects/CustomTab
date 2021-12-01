@@ -71,13 +71,28 @@ text:
     # '&#111111'. Here is a good tool for generating gradient
     # text. https://rgb.birdflop.com/
     animations:
-      - "&7Money: $%vault_eco_balance_formatted%"
+      - '&e&lStats'
     # This is the interval (in ticks) between updating
     # animation frames. This is limited by the tab update
     # interval. Recommended being -1 if only
     # has one frame as doesn't actually animate
-    interval: 20
-  2:
+    interval: -1
+  '2':
     animations:
-      - "&7Rank: %vault_rank%"
-    interval: 20
+      - '&e▌ Playtime: &f%statistic_time_played%'
+    interval: -1
+  '3':
+    animations:
+      - '&e▌ Deaths: &f%statistic_deaths%'
+    interval: -1
+  '4':
+    animations:
+      - '&e▌ Coins: &6%vault_eco_balance_commas%'
+    interval: -1
+  '5':
+    animations:
+      - '&e▌ Add more here...'
+      - '&e▌ Add more here&6&l.&e..'
+      - '&e▌ Add more here.&6&l.&e.'
+      - '&e▌ Add more here..&6&l.'
+    interval: 10

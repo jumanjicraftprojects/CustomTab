@@ -89,12 +89,8 @@ text:
       - '&#fb6a60▌ &#f46d6aA&#ed7075n&#e6737fi&#df768am&#d87994a&#d17c9ft&#ca7fa9e &#c281b4y&#bb84beo&#b487c9u&#ad8ad3r &#a68ddet&#9f90e8e&#9893f3x&#9196fdt'
     interval: 20
   '3':
-    # A requirement for this element to appear. If conditions aren't met
-    # this element wont display. See WIKI LINK for more ifno
     requirement:
-      # The type of requirement
       type: region
-      # First value
       value: region1
     animations:
       - ' '
@@ -118,8 +114,6 @@ text:
       - ' '
     interval: -1
   '7':
-    skin:
-      name: aqua
     animations:
       - '&b&lCustom Skins'
     interval: -1
@@ -129,4 +123,54 @@ text:
       signature: Wkc6UVNtcmB7dCUcUnbefPJ9+SrFSzJSdCp/c3XxhIA703MImbvF7Iy0p/nEQ0dWNzkzfvu7GcRI/zU61TjLYxzP2VrTbtHnxlsV5Rer/tcUk4M5KZGUxW+SL1K/HMl/1PLZ5KMBKQ9TO0kSPiYvAczVjYHACkYcgE34YJadmqGDrSObdthysVao/od1/BpDtqUHrpj89g5/R+kocAhI6YumImVNBI/vFabnXoindH8kCr/jlrRaRgJn2r1+woWMlT3gJvdrT+bpJwf789/pAOqpHwvzPxnrI+1jQkODpWJF4mpE7NvVYKNb7UyHYChQUlP1CNV1GqKaXaKrQqDWQ2LuhKxsQ/QK5VHbKCWXsrdqOI8KDXpztCgbJCasHsK2SblIIvXwgImvNIJEu7fFxUm1VuEbljFwKv6LXm7jm0Hmj9/4x8QviGUSCu3CAHvKdXf0OAtVrP9QO/x20mFxkeivy4J14OvMj40BTC/BqLTq4SbzLNMAjXwqJqeNywNyzCvmq2BtT+93rHb5XhmbmF/yGbYHQrnumsqU5ON9mdZ88aJy+XfNMZ9UfS0quNzW4eLWvr4NJVEMcVNkNYUsRmG+sAbl71ScJRZfG41HlSSbOXY3YzNBfoWBTLArLfq+r9rsHw0Cnpv8XfVYVTbbmeHTCOdoKOZrLMH1h8C/vZM=
     animations:
       - '&b▌ Display custom skins'
+    interval: -1
+  '9':
+    animations:
+      - ' '
+    interval: -1
+  '10':
+    animations:
+      - '&a&lPing'
+    interval: -1
+  '11':
+    ping: ONE
+    animations:
+      - '&a▌ Set the ping of'
+    interval: -1
+  '12':
+    ping: TWO
+    animations:
+      - '&a▌ elements like so'
+    interval: -1
+  '19':
+    animations:
+      - ' '
+    interval: -1
+  '13':
+    animations:
+      - '&d&lInfo'
+    interval: -1
+  '14':
+    animations:
+      - '&d▌ Feel free to browse the'
+    interval: -1
+  '15':
+    animations:
+      - '&d▌ wiki to find out how'
+    interval: -1
+  '16':
+    animations:
+      - '&d▌ powerful the plugin'
+      - '&d▌ &5p&dowerful the plugin'
+      - '&d▌ p&5o&dwerful the plugin'
+      - '&d▌ po&5w&derful the plugin'
+      - '&d▌ pow&5e&drful the plugin'
+      - '&d▌ powe&5r&dful the plugin'
+      - '&d▌ power&5f&dul the plugin'
+      - '&d▌ powerf&5u&dl the plugin'
+      - '&d▌ powerfu&5l &dthe plugin'
+    interval: 5
+  '17':
+    animations:
+      - '&d▌ really is!'
     interval: -1

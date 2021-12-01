@@ -53,7 +53,7 @@ class FrameText(interval: Int, frames: List<String>?): DynamicText {
 
     override fun changeText(): String? {
         // Check changing cooldown
-        if (!getInterval()!!.isReady || cycle == null) return visibleText
+        if (getInterval()!!.wait <= -1 || !getInterval()!!.isReady || cycle == null) return visibleText
         getInterval()!!.reset()
         getInterval()!!.go()
 
@@ -76,8 +76,4 @@ class FrameText(interval: Int, frames: List<String>?): DynamicText {
     }
 
     override fun getFrames(): List<String>? = frames
-
-    override fun copy(): DynamicText {
-        return FrameText(this.interval?.wait ?: -1, this.frames)
-    }
 }
