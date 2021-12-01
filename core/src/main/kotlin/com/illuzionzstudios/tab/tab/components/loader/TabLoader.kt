@@ -3,10 +3,13 @@ package com.illuzionzstudios.tab.tab.components.loader
 import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.YamlConfig
 import com.illuzionzstudios.mist.config.serialization.loader.YamlFileLoader
+import com.illuzionzstudios.mist.requirement.PlayerRequirementLoader
 import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.tab.TabController
 import com.illuzionzstudios.tab.tab.components.Tab
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
+import org.bukkit.entity.Player
+import java.util.function.Predicate
 
 /**
  * This is the object that loads the tab from our config. If we want
@@ -18,7 +21,10 @@ class TabLoader(directory: String, fileName: String): YamlFileLoader<Tab>(direct
     override fun loadYamlObject(file: YamlConfig?): Tab {
         val tab = Tab(file?.getString("name") ?: "default")
 
-        tab.permission = file?.getString("permission") ?: ""
+        var filter: Predicate<Player> = Predicate<Player> { true }
+        if (file?.getConfigurationSection("requirement") != null)
+            filter = PlayerRequirementLoader(file.getConfigurationSection("requirement")!!).`object`
+        tab.requirement = filter
         tab.weight = file?.getInt("weight") ?: 1
 
         tab.displayTitles = file?.getBoolean("columns.display-titles", true) ?: true

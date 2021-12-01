@@ -77,24 +77,56 @@ text:
     # '&#111111'. Here is a good tool for generating gradient
     # text. https://rgb.birdflop.com/
     animations:
-      - "&#9083feG&#8e86fer&#8b88fda&#898bfdd&#878efci&#8490fce&#8293fbn&#8095fbt&#7d98fas &#799dfai&#76a0f9n &#72a5f8t&#6fa8f8h&#6daaf7e &#68aff6t&#66b2f6a&#64b5f6b"
+      - '&#084cfb&lG&#1d61fb&lr&#3176fc&la&#468bfc&ld&#5ba0fc&li&#6fb4fc&le&#84c9fd&ln&#98defd&lt&#adf3fd&ls'
     # This is the interval (in ticks) between updating
     # animation frames. This is limited by the tab update
     # interval. Recommended being -1 if only
     # has one frame as doesn't actually animate
     interval: -1
-  2:
+  '2':
+    animations:
+      - '&#1d76fb▌ &#2578fbA&#2c7afbn&#347cfbi&#3c7ffcm&#4481fca&#4b83fct&#5385fce &#5b87fcy&#6389fco&#6a8bfcu&#728dfcr &#7a90fdt&#8292fde&#8994fdx&#9196fdt'
+      - '&#fb6a60▌ &#f46d6aA&#ed7075n&#e6737fi&#df768am&#d87994a&#d17c9ft&#ca7fa9e &#c281b4y&#bb84beo&#b487c9u&#ad8ad3r &#a68ddet&#9f90e8e&#9893f3x&#9196fdt'
+    interval: 20
+  '3':
+    # A requirement for this element to appear. If conditions aren't met
+    # this element wont display. See WIKI LINK for more ifno
+    requirement:
+      # The type of requirement
+      type: region
+      # First value
+      value: region1
+    animations:
+      - ' '
+    interval: -1
+  '4':
     requirement:
       type: region
       value: region1
-    skin:
-      name: white
     animations:
-      - "In Region"
+      - '&c&lConditional Text'
     interval: -1
-  3:
-    skin:
-      name: discord
+  '5':
+    requirement:
+      type: region
+      value: region1
     animations:
-      - "&9/discord"
+      - '&c▌ I only appear in spawn!'
+    interval: -1
+  '6':
+    animations:
+      - ' '
+    interval: -1
+  '7':
+    skin:
+      name: aqua
+    animations:
+      - '&b&lCustom Skins'
+    interval: -1
+  '8':
+    skin:
+      value: ewogICJ0aW1lc3RhbXAiIDogMTYzODMzMTE3NDI2NCwKICAicHJvZmlsZUlkIiA6ICI2MzMyMDgwZTY3YTI0Y2MxYjE3ZGJhNzZmM2MwMGYxZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJUZWFtSHlkcmEiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzk2ODJjOTM1MmQyMGM4NWUwZWRkOWMwZWExMGY3NDQwZjE3NGI2YjAxMzMyODY5NWZmZTBmOGNiZmY0ZmM4MCIKICAgIH0KICB9Cn0=
+      signature: Wkc6UVNtcmB7dCUcUnbefPJ9+SrFSzJSdCp/c3XxhIA703MImbvF7Iy0p/nEQ0dWNzkzfvu7GcRI/zU61TjLYxzP2VrTbtHnxlsV5Rer/tcUk4M5KZGUxW+SL1K/HMl/1PLZ5KMBKQ9TO0kSPiYvAczVjYHACkYcgE34YJadmqGDrSObdthysVao/od1/BpDtqUHrpj89g5/R+kocAhI6YumImVNBI/vFabnXoindH8kCr/jlrRaRgJn2r1+woWMlT3gJvdrT+bpJwf789/pAOqpHwvzPxnrI+1jQkODpWJF4mpE7NvVYKNb7UyHYChQUlP1CNV1GqKaXaKrQqDWQ2LuhKxsQ/QK5VHbKCWXsrdqOI8KDXpztCgbJCasHsK2SblIIvXwgImvNIJEu7fFxUm1VuEbljFwKv6LXm7jm0Hmj9/4x8QviGUSCu3CAHvKdXf0OAtVrP9QO/x20mFxkeivy4J14OvMj40BTC/BqLTq4SbzLNMAjXwqJqeNywNyzCvmq2BtT+93rHb5XhmbmF/yGbYHQrnumsqU5ON9mdZ88aJy+XfNMZ9UfS0quNzW4eLWvr4NJVEMcVNkNYUsRmG+sAbl71ScJRZfG41HlSSbOXY3YzNBfoWBTLArLfq+r9rsHw0Cnpv8XfVYVTbbmeHTCOdoKOZrLMH1h8C/vZM=
+    animations:
+      - '&b▌ Display custom skins'
     interval: -1

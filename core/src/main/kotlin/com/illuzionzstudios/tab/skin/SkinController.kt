@@ -1,17 +1,13 @@
 package com.illuzionzstudios.tab.skin
 
 import com.comphenix.protocol.wrappers.*
-import com.illuzionzstudios.mist.Logger
-import com.illuzionzstudios.mist.config.YamlConfig
 import com.illuzionzstudios.mist.controller.PluginController
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
 import com.illuzionzstudios.tab.packet.PacketPlayServerPlayerInfo
 import com.illuzionzstudios.tab.tab.Ping
 import com.illuzionzstudios.tab.tab.TabController
-import com.mojang.authlib.GameProfile
 import org.bukkit.Bukkit
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.collections.HashMap

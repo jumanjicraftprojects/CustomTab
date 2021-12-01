@@ -43,7 +43,10 @@ title:
     name: light_purple
   # These are the different animation frames for
   # this text. Each text element is iterated through
-  # to create a dynamic animation.
+  # to create a dynamic animation. Colors are supported here
+  # along with 1.16+ HEX codes. Hex codes can be used with
+  # '&#111111'. Here is a good tool for generating gradient
+  # text. https://rgb.birdflop.com/
   animations:
     - "&d&lServer Info"
     # This is the interval (in ticks) between updating
@@ -61,6 +64,12 @@ text:
   # the column. The key doesn't matter and items are put
   # in the order they are entered
   1:
+    # The custom skin for this tab element. There are multiple ways they're
+    # defined. You can set the 'name' element here which will take
+    # a skin from the skins.yml file. Otherwise you can directly specify the
+    # 'value' and 'signature' like in skins.yml but right here under 'skin:'
+    skin:
+      name: discord
     # These are the different animation frames for
     # this text. Each text element is iterated through
     # to create a dynamic animation. Colors are supported here
@@ -68,21 +77,9 @@ text:
     # '&#111111'. Here is a good tool for generating gradient
     # text. https://rgb.birdflop.com/
     animations:
-      - "&7Online Players: %server_online%"
+      - " &9/discord"
     # This is the interval (in ticks) between updating
     # animation frames. This is limited by the tab update
     # interval. Recommended being -1 if only
     # has one frame as doesn't actually animate
-    interval: 20
-  2:
-    animations:
-      - "&7Unique Joins: %server_unique_joins%"
-    interval: 20
-  3:
-    animations:
-      - "&7Server Version: %server_version%"
-    interval: 20
-  4:
-    animations:
-      - "&7TPS: %server_tps_1%"
-    interval: 20
+    interval: -1

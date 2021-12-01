@@ -3,6 +3,7 @@ package com.illuzionzstudios.tab.tab.components
 import com.comphenix.protocol.wrappers.EnumWrappers
 import com.comphenix.protocol.wrappers.PlayerInfoData
 import com.comphenix.protocol.wrappers.WrappedChatComponent
+import com.illuzionzstudios.mist.requirement.PlayerRequirement
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.tab.CustomTab
 import com.illuzionzstudios.tab.model.DynamicText
@@ -11,6 +12,7 @@ import com.illuzionzstudios.tab.tab.TabController
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.entity.Player
+import java.util.function.Predicate
 
 /**
  * A tab data object that contains info about the tab and options
@@ -32,7 +34,7 @@ class Tab(
     /**
      * Permission needed to view this tab
      */
-    var permission: String = ""
+    var requirement: Predicate<Player> = Predicate<Player> { true }
 
     /**
      * The weight of the tab

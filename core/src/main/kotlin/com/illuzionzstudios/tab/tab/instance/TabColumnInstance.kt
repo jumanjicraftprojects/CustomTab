@@ -100,7 +100,6 @@ class TabColumnInstance(
 
             // If we can go to next page
             if (interval.isReady) {
-                instance.avatarCache.rowKeySet().removeIf {it == slot}
                 // Don't update if on a null page
                 if (currentPage > maxPage) {
                     // Reset to page 1
@@ -128,6 +127,8 @@ class TabColumnInstance(
 
             // Send update packet //
             var text = TextUtil.formatText(element?.getText()?.getVisibleText() ?: "")
+
+            // Global placeholders
             text = text.mist.toString("current_page", max(1, currentPage)).toString("max_page", max(1, maxPage)).toString()
 
             // Set placeholders

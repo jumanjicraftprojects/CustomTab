@@ -1,8 +1,10 @@
 # ID of this tab for referencing it
 name: "default"
 
-# Permission NEEDED to be able to view this tab
-permission: ""
+# Requirement needed to view this tab
+requirement:
+  type: permission
+  value: ""
 
 # The weight of this tab. This controls the
 # priority this tab is displayed if the player
@@ -28,9 +30,9 @@ columns:
     # The number is which slot to display the column in
     # and the value is the name of the column
     # These here would make the tab 4 columns wide
-    1: "player_info"
-    2: "server_info"
-    3: "online_list"
+    1: "online_list"
+    2: "player_info"
+    3: "server_info"
     4: "features"
 
 # The tab header. This is displayed at the top
@@ -75,7 +77,7 @@ header:
       interval: 5
     3:
       animations:
-        - "&fNew Dungeons out now!"
+        - '&7&o(( With a new tab experience ))'
       interval: -1
     4:
       animations:
@@ -93,8 +95,8 @@ footer:
       interval: -1
     2:
       animations:
-        - "&c&lSTOREWIDE SALE 25% OFF"
-        - "&4&lSTOREWIDE SALE 25% OFF"
+        - '&c&lSTOREWIDE SALE 25% OFF'
+        - '&4&lSTOREWIDE SALE 25% OFF'
       interval: 20
     3:
       animations:

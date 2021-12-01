@@ -305,12 +305,12 @@ object TabController : PluginController {
      */
     fun getTab(player: Player): Tab? {
         var highest: Tab? = null
-        for (group in tabs.values) {
+        for (tab in tabs.values) {
             // Has permission for tab
-            if (player.hasPermission(group.permission) || group.permission.trim().equals("", true)) {
-                val compare = (highest?.weight ?: 0).compareTo(group.weight)
+            if (tab.requirement.test(player)) {
+                val compare = (highest?.weight ?: 0).compareTo(tab.weight)
                 if (compare < 0) {
-                    highest = group
+                    highest = tab
                 }
             }
         }
