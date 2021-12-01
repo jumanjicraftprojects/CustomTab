@@ -23,6 +23,7 @@ class TabListLoader(directory: String, fileName: String) : YamlFileLoader<TabLis
             ?: OnlineList(file?.getString("name") ?: "default")
 
         list.pageEnabled = file?.getBoolean("page.enabled") ?: true
+        list.maxPages = file?.getInt("page.max", 5) ?: 5
         list.pageItem = TabItemLoader(file?.getConfigurationSection("page.text")).`object` ?: BlankTabItem()
 
         list.pageElements = file?.getInt("page.elements") ?: 20

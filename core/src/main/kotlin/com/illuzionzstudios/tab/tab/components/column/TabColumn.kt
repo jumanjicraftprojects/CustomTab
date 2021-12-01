@@ -25,6 +25,11 @@ abstract class TabColumn(
     var pageEnabled: Boolean = true
 
     /**
+     * Maximum amount of pages to create
+     */
+    var maxPages: Int = 5
+
+    /**
      * The height of each column
      */
     var pageElements: Int = 20

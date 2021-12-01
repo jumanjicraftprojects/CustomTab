@@ -1,4 +1,3 @@
-# The default tab
 # ID of this tab for referencing it
 name: "default"
 
@@ -18,7 +17,8 @@ columns:
   display-titles: true
 
   # The minimum width of each element in the tab.
-  # If there are no elements the columns will be at least this width
+  # If there are no elements the columns will be at least this width.
+  # If elements are over this text length they will be trimmed
   width: 30
 
   # The columns to display in this tab mapped to
@@ -39,23 +39,23 @@ header:
   # Text to display in the header
   text:
     # These are the different text elements in
-    # the column. Maximum of configured tab elements
+    # the column. The key doesn't matter and items are put
+    # in the order they are entered
     1:
       # These are the different animation frames for
       # this text. Each text element is iterated through
-      # to create a dynamic animation.
+      # to create a dynamic animation. Colors are supported here
+      # along with 1.16+ HEX codes. Hex codes can be used with
+      # '&#111111'. Here is a good tool for generating gradient
+      # text. https://rgb.birdflop.com/
       animations:
         - " "
       # This is the interval (in ticks) between updating
       # animation frames. This is limited by the tab update
-      # interval
+      # interval. Recommended being -1 if only
+      # has one frame as doesn't actually animate
       interval: -1
-    # These are the different text elements in
-    # the column. Maximum of configured tab elements
     2:
-      # These are the different animation frames for
-      # this text. Each text element is iterated through
-      # to create a dynamic animation.
       animations:
         - "&b&lMinecraft Server"
         - "&b&lM&9&li&b&lnecraft Server"
@@ -72,52 +72,24 @@ header:
         - "&b&lMinecraft Ser&9&lv&b&ler"
         - "&b&lMinecraft Serv&9&le&b&lr"
         - "&b&lMinecraft Serve&9&lr"
-      # This is the interval (in ticks) between updating
-      # animation frames. This is limited by the tab update
-      # interval
       interval: 5
-    # These are the different text elements in
-    # the column. Maximum of configured tab elements
     3:
-      # These are the different animation frames for
-      # this text. Each text element is iterated through
-      # to create a dynamic animation.
       animations:
         - "&fNew Dungeons out now!"
-      # This is the interval (in ticks) between updating
-      # animation frames. This is limited by the tab update
-      # interval
       interval: -1
     4:
-      # These are the different animation frames for
-      # this text. Each text element is iterated through
-      # to create a dynamic animation.
       animations:
         - " "
-      # This is the interval (in ticks) between updating
-      # animation frames. This is limited by the tab update
-      # interval
       interval: -1
-    # These are the different text elements in
-    # the column. Maximum of configured tab elements
 
 # The tab footer. This is displayed at the bottom
 # of the tab below all columns
 footer:
   # Text to display in the footer
   text:
-    # These are the different text elements in
-    # the column. Maximum of configured tab elements
     0:
-      # These are the different animation frames for
-      # this text. Each text element is iterated through
-      # to create a dynamic animation.
       animations:
         - " "
-      # This is the interval (in ticks) between updating
-      # animation frames. This is limited by the tab update
-      # interval. Should be set to -1 for animations with
-      # a single animation frame
       interval: -1
     2:
       animations:

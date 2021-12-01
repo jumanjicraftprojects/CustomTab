@@ -96,7 +96,7 @@ class TabColumnInstance(
             // Calculate page length //
             val pageDelta: Double = (pageCursor + if (displayTitles) 3 else 1).toDouble() / tab.pageElements + 1
             currentPage = (if (pageDelta < 2) floor(pageDelta) else ceil(pageDelta)).toInt()
-            maxPage = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt()
+            maxPage = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt().coerceAtMost(tab.maxPages)
 
             // If we can go to next page
             if (interval.isReady) {
@@ -120,7 +120,6 @@ class TabColumnInstance(
             // Pagination text
             val pagesText: MistString = Locale.TAB_PAGE_TEXT.toString("current_page", max(1, currentPage)).toString("max_page", max(1, maxPage))
             sub.add(tab.pageItem ?: TextTabItem(SkinController.UNKNOWN_SKIN, -1, pagesText.toString()))
-//            sub.add(TextTabItem(SkinController.UNKNOWN_SKIN, -1, pagesText.toString()))
         }
 
         // For elements in the sub tab

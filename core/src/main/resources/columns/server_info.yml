@@ -8,6 +8,10 @@ page:
   # page and display the remaining elements on all the
   # new pages
   enabled: true
+  # Maximum amount of pages to create. If
+  # items try to create more than this amount of
+  # pages it will stop at this page
+  max: 5
   # Maximum amount of elements per page. If the
   # elements go over this they will flow to the next
   # page
@@ -15,7 +19,8 @@ page:
   # Interval in ticks between scrolling pages. Only applies
   # if there is more than one page
   interval: 100
-  # The text element for page text
+  # This is the text element that is displayed at the bottom that indicated the
+  # current and maximum pages.
   text:
     # These are the different animation frames for
     # this text. Each text element is iterated through
@@ -24,11 +29,16 @@ page:
       - "&7{current_page}&8/&7{max_page}"
     # This is the interval (in ticks) between updating
     # animation frames. This is limited by the tab update
-    # interval
+    # interval. Recommended being -1 if only
+    # has one frame as doesn't actually animate
     interval: -1
 
 # The title of this tab column
 title:
+  # The custom skin for this tab element. There are multiple ways they're
+  # defined. You can set the 'name' element here which will take
+  # a skin from the skins.yml file. Otherwise you can directly specify the
+  # 'value' and 'signature' like in skins.yml but right here under 'skin:'
   skin:
     name: light_purple
   # These are the different animation frames for
@@ -36,59 +46,43 @@ title:
   # to create a dynamic animation.
   animations:
     - "&d&lServer Info"
-  # This is the interval (in ticks) between updating
-  # animation frames. This is limited by the tab update
-  # interval
+    # This is the interval (in ticks) between updating
+    # animation frames. This is limited by the tab update
+    # interval. Recommended being -1 if only
+    # has one frame as doesn't actually animate
   interval: 5
+  # This specifies if the text will be centered. This is good
+  # for aesthetics like the title where you want it to be center
   center: true
 
 # Text elements to display for this column
 text:
   # These are the different text elements in
-  # the column. Maximum of configured tab elements
+  # the column. The key doesn't matter and items are put
+  # in the order they are entered
   1:
     # These are the different animation frames for
     # this text. Each text element is iterated through
-    # to create a dynamic animation.
+    # to create a dynamic animation. Colors are supported here
+    # along with 1.16+ HEX codes. Hex codes can be used with
+    # '&#111111'. Here is a good tool for generating gradient
+    # text. https://rgb.birdflop.com/
     animations:
       - "&7Online Players: %server_online%"
     # This is the interval (in ticks) between updating
     # animation frames. This is limited by the tab update
-    # interval
+    # interval. Recommended being -1 if only
+    # has one frame as doesn't actually animate
     interval: 20
-  # These are the different text elements in
-  # the column. Maximum of configured tab elements
   2:
-    # These are the different animation frames for
-    # this text. Each text element is iterated through
-    # to create a dynamic animation.
     animations:
       - "&7Unique Joins: %server_unique_joins%"
-    # This is the interval (in ticks) between updating
-    # animation frames. This is limited by the tab update
-    # interval
     interval: 20
-  # These are the different text elements in
-  # the column. Maximum of configured tab elements
   3:
-    # These are the different animation frames for
-    # this text. Each text element is iterated through
-    # to create a dynamic animation.
     animations:
       - "&7Server Version: %server_version%"
-    # This is the interval (in ticks) between updating
-    # animation frames. This is limited by the tab update
-    # interval
     interval: 20
-  # These are the different text elements in
-  # the column. Maximum of configured tab elements
   4:
-    # These are the different animation frames for
-    # this text. Each text element is iterated through
-    # to create a dynamic animation.
     animations:
       - "&7TPS: %server_tps_1%"
-    # This is the interval (in ticks) between updating
-    # animation frames. This is limited by the tab update
-    # interval
     interval: 20

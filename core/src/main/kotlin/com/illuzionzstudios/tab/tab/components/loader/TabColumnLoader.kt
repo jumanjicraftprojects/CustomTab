@@ -18,6 +18,7 @@ class TabColumnLoader(directory: String, fileName: String) : YamlFileLoader<TabC
         val column = SimpleColumn(file?.getString("name") ?: "default")
 
         column.pageEnabled = file?.getBoolean("page.enabled") ?: true
+        column.maxPages = file?.getInt("page.max", 5) ?: 5
         column.pageItem = TabItemLoader(file?.getConfigurationSection("page.text")).`object` ?: BlankTabItem()
 
         column.pageElements = file?.getInt("page.elements") ?: 20
