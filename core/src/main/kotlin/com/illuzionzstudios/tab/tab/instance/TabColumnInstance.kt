@@ -2,6 +2,7 @@ package com.illuzionzstudios.tab.tab.instance
 
 import com.illuzionzstudios.mist.config.locale.MistString
 import com.illuzionzstudios.mist.config.locale.mist
+import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.mist.util.TextUtil
 import com.illuzionzstudios.tab.CustomTab
@@ -99,7 +100,7 @@ class TabColumnInstance(
             maxPage = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt().coerceAtMost(tab.maxPages)
 
             // If we can go to next page
-            if (interval.isReady) {
+            if (interval.isReady && MinecraftScheduler.get()?.hasElapsed(20.0) == true) {
                 // Don't update if on a null page
                 if (currentPage > maxPage) {
                     // Reset to page 1
@@ -215,9 +216,6 @@ class TabColumnInstance(
         }
 
         if (reloadSkins) {
-            // TODO: Only refresh changed elements
-            // Refresh column
-//            instance.avatarCache.rowKeySet().removeIf {it == slot}
             instance.avatarCache.row(slot).clear()
         }
     }
