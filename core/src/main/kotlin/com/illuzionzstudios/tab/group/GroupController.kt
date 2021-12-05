@@ -26,6 +26,7 @@ object GroupController: PluginController {
 
         // Load groups
         GroupLoader().`object`.forEach {
+            Logger.info("Loading group `" + it.id + "`")
             groups[it.id] = it
         }
     }

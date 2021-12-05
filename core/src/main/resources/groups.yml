@@ -1,3 +1,6 @@
+# Browse the wiki at https://docs.illuzionzstudios.com/spigot-plugins/custom-tab
+# to learn how to configure this plugin
+
 # This is the default group
 default:
   # Permission for player to have this group. Set to blank here so all players have it

@@ -9,18 +9,5 @@ class TabCommand: SpigotCommandGroup() {
 
     override fun registerSubcommands() {
         registerSubCommand(ReloadCommand())
-        registerSubCommand(TestCommand())
-    }
-
-    inner class TestCommand: SpigotSubCommand("test") {
-
-        override fun onCommand(): ReturnType {
-            val toExecute = "var greeting='hello world';" +
-                    "print(greeting);" +
-                    "greeting"
-
-            return ReturnType.SUCCESS
-        }
-
     }
 }

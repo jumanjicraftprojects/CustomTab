@@ -1,3 +1,6 @@
+# Browse the wiki at https://docs.illuzionzstudios.com/spigot-plugins/custom-tab
+# to learn how to configure this plugin
+
 # Id of this column for referencing it
 name: "features"
 
@@ -98,14 +101,14 @@ text:
   '4':
     requirement:
       type: region
-      value: region1
+      value: spawn
     animations:
       - '&c&lConditional Text'
     interval: -1
   '5':
     requirement:
       type: region
-      value: region1
+      value: spawn
     animations:
       - '&c▌ I only appear in spawn!'
     interval: -1

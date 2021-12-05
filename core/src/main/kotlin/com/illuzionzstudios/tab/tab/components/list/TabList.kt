@@ -41,7 +41,7 @@ abstract class TabList<T>(id: String) : TabColumn(id) {
     companion object {
 
         /**
-         * Get a tab list from type. Currently only online luist
+         * Get a tab list from type. Currently only online list
          */
         fun getListFromType(type: ListType, id: String): TabList<*>? {
             return OnlineList(id)

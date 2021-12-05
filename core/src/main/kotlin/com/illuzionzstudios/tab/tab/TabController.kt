@@ -72,21 +72,25 @@ object TabController : PluginController {
         YamlConfig.loadInternalYaml(plugin, "", "skins.yml")
         // Load skins from skins.yml
         SkinLoader().`object`.forEach {
+            Logger.info("Loading skin `" + it.name + "`")
             SkinController.addSkin(it)
         }
 
         // Load columns
         DirectoryLoader(TabColumnLoader::class.java, "columns", listOf("features.yml", "player_info.yml", "server_info.yml")).loaders.forEach {
+            Logger.info("Loading tab column `" + it.`object`.id + "`")
             columns[it.`object`.id] = it.`object`
         }
 
         // Load lists
         DirectoryLoader(TabListLoader::class.java, "lists", listOf("online_list.yml")).loaders.forEach {
+            Logger.info("Loading tab list `" + it.`object`.id + "`")
             lists[it.`object`.id] = it.`object`
         }
 
         // Load tabs
         DirectoryLoader(TabLoader::class.java, "tabs", listOf("default.yml")).loaders.forEach {
+            Logger.info("Loading tab `" + it.`object`.id + "`")
             tabs[it.`object`.id] = it.`object`
         }
 

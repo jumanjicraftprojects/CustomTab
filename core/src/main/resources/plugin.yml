@@ -8,6 +8,8 @@ depend:
   - ProtocolLib
 softdepend:
   - PlaceholderAPI
+  - WorldEdit
+  - WorldGuard
 
 permissions:
   tab.command.reload:
