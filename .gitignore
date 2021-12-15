@@ -61,4 +61,4 @@ manifest.mf
 Thumbs.db
 *.sh
 
-*.versionsBackup
+pom.xml.versionsBackup
