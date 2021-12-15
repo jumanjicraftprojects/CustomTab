@@ -13,6 +13,7 @@ import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.TabController
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.spigotmc.Metrics
 import java.util.*
 
 class CustomTab: SpigotPlugin() {

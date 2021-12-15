@@ -60,3 +60,5 @@ output/
 manifest.mf
 Thumbs.db
 *.sh
+
+*.versionsBackup

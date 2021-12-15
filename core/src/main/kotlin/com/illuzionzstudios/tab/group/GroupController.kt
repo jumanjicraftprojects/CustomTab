@@ -49,8 +49,7 @@ object GroupController: PluginController {
         for (group in groups.values) {
             // Has permission for group
             if (PlayerUtil.hasPerm(player, group.permission, true) || group.permission.trim().equals("", true)) {
-                val compare = (highest?.weight ?: 0).compareTo(group.weight)
-                if (compare < 0) {
+                if ((highest?.weight ?: 0) < group.weight) {
                     highest = group
                 }
             }

@@ -41,6 +41,8 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.ChatPaginator
 import java.nio.ByteBuffer
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 /**
  * Controller for handling player tab instances and manipulating the tab
@@ -61,9 +63,9 @@ object TabController : PluginController {
     val lists: MutableMap<String, TabList<*>> = HashMap()
 
     /**
-     * All currently displaying tab instances
+     * All currently displaying tab instances. Concurrent as constantly being updated
      */
-    val displayedTabs: MutableMap<UUID, TabInstance> = HashMap()
+    val displayedTabs: ConcurrentMap<UUID, TabInstance> = ConcurrentHashMap()
 
     override fun initialize(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.registerSynchronizationService(this)
