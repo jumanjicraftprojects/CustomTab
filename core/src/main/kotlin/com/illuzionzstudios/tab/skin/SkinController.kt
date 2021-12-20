@@ -3,14 +3,12 @@ package com.illuzionzstudios.tab.skin
 import com.comphenix.protocol.wrappers.*
 import com.illuzionzstudios.mist.controller.PluginController
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
-import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
 import com.illuzionzstudios.tab.packet.PacketPlayServerPlayerInfo
 import com.illuzionzstudios.tab.tab.Ping
 import com.illuzionzstudios.tab.tab.TabController
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Handles our skins for the player and tabs
@@ -59,67 +57,60 @@ object SkinController : PluginController {
      * Set the skin avatar at a slot to a profiles skin
      */
     fun setAvatar(x: Int, y: Int, skin: CachedSkin, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val property = skin.getProperty()
-            this.setAvatar(x, y, property.value, property.signature, *players)
-        }
+        val property = skin.getProperty()
+        this.setAvatar(x, y, property.value, property.signature, *players)
     }
 
     /**
      * Set the skin avatar at a slot to a profiles skin
      */
     fun setAvatar(x: Int, y: Int, profile: WrappedGameProfile, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val property = profile.properties["textures"].iterator().next()
-            this.setAvatar(x, y, property.value, property.signature, *players)
-        }
+        val property = profile.properties["textures"].iterator().next()
+        this.setAvatar(x, y, property.value, property.signature, *players)
     }
 
     /**
      * Set the skin avatar at a slot to a skin texture
      */
     fun setAvatar(x: Int, y: Int, value: String?, signature: String?, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            // Clear old avatar
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            val gameProfile: WrappedGameProfile = TabController.getDisplayProfile(x, y)
-            playerInfo.action = EnumWrappers.PlayerInfoAction.REMOVE_PLAYER
-            data.add(
-                PlayerInfoData(
-                    gameProfile,
-                    Ping.FIVE.ping,
-                    EnumWrappers.NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromText("")
-                )
+        // Clear old avatar
+        val data: MutableList<PlayerInfoData> = ArrayList()
+        val playerInfo = PacketPlayServerPlayerInfo()
+        val gameProfile: WrappedGameProfile = TabController.getDisplayProfile(x, y)
+        playerInfo.action = EnumWrappers.PlayerInfoAction.REMOVE_PLAYER
+        data.add(
+            PlayerInfoData(
+                gameProfile,
+                Ping.FIVE.ping,
+                EnumWrappers.NativeGameMode.SURVIVAL,
+                WrappedChatComponent.fromText("")
             )
-            playerInfo.data = data
-            playerInfo.sendPacket(*players)
+        )
+        playerInfo.data = data
+        playerInfo.sendPacket(*players)
 
-            data.clear()
+        data.clear()
 
-            // Insert new avatar
-            playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
-            gameProfile.properties.removeAll("textures")
-            gameProfile.properties.put(
+        // Insert new avatar
+        playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
+        gameProfile.properties.put(
+            "textures",
+            WrappedSignedProperty(
                 "textures",
-                WrappedSignedProperty(
-                    "textures",
-                    value,
-                    signature
-                )
+                value,
+                signature
             )
-            data.add(
-                PlayerInfoData(
-                    gameProfile,
-                    Ping.FIVE.ping,
-                    EnumWrappers.NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromText("")
-                )
+        )
+        data.add(
+            PlayerInfoData(
+                gameProfile,
+                Ping.FIVE.ping,
+                EnumWrappers.NativeGameMode.SURVIVAL,
+                WrappedChatComponent.fromText("")
             )
-            playerInfo.data = data
-            playerInfo.sendPacket(*players)
-        }
+        )
+        playerInfo.data = data
+        playerInfo.sendPacket(*players)
     }
 
     /**
@@ -127,84 +118,5 @@ object SkinController : PluginController {
      */
     fun setAvatar(x: Int, y: Int, player: Player, vararg players: Player?) {
         setAvatar(x, y, WrappedGameProfile.fromPlayer(player), *players)
-    }
-
-    /**
-     * Assign the skin instance of a player
-     */
-    fun addSkin(player: Player, vararg players: Player?) {
-        this.addSkin(player.uniqueId, WrappedGameProfile.fromPlayer(player), *players)
-    }
-
-    /**
-     * Assigns a skin of a profile to a UUID
-     */
-    fun addSkin(uuid: UUID?, profile: WrappedGameProfile, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val iterator: Iterator<WrappedSignedProperty> = profile.properties["textures"].iterator()
-            // Make sure is valid
-            if (iterator.hasNext()) {
-                val property = iterator.next()
-                this.addSkin(uuid, property.value, property.signature, *players)
-            }
-        }
-    }
-
-    /**
-     * Assigns a skin of a texture to a UUID
-     */
-    fun addSkin(uuid: UUID?, value: String?, signature: String?, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            var gameProfile: WrappedGameProfile = TabController.getSkinProfile(uuid)
-            val available = Bukkit.getPlayer(uuid!!)
-            if (available != null) {
-                gameProfile = WrappedGameProfile(uuid, WrappedGameProfile.fromPlayer(available).name)
-            }
-            playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
-            gameProfile.properties.removeAll("textures")
-            gameProfile.properties.put(
-                "textures",
-                WrappedSignedProperty(
-                    "textures",
-                    value,
-                    signature
-                )
-            )
-            data.add(
-                PlayerInfoData(
-                    gameProfile,
-                    Ping.NONE.ping,
-                    EnumWrappers.NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromText("")
-                )
-            )
-            playerInfo.data = data
-            removeSkin(uuid, *players)
-            playerInfo.sendPacket(*players)
-        }
-    }
-
-    /**
-     * Remove the skin from a UUID
-     */
-    fun removeSkin(uuid: UUID?, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            val gameProfile: WrappedGameProfile = TabController.getSkinProfile(uuid)
-            playerInfo.action = EnumWrappers.PlayerInfoAction.REMOVE_PLAYER
-            data.add(
-                PlayerInfoData(
-                    gameProfile,
-                    Ping.NONE.ping,
-                    EnumWrappers.NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromText("")
-                )
-            )
-            playerInfo.data = data
-            playerInfo.sendPacket(*players)
-        }
     }
 }

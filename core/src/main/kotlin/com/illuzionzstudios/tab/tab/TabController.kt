@@ -11,7 +11,6 @@ import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
 import com.illuzionzstudios.mist.scheduler.rate.Async
 import com.illuzionzstudios.mist.scheduler.rate.Rate
 import com.illuzionzstudios.mist.util.TextUtil
-import com.illuzionzstudios.tab.model.FrameText
 import com.illuzionzstudios.tab.packet.PacketPlayServerPlayerInfo
 import com.illuzionzstudios.tab.packet.PacketPlayerListHeaderFooter
 import com.illuzionzstudios.tab.settings.Settings
@@ -19,26 +18,18 @@ import com.illuzionzstudios.tab.skin.CachedSkin
 import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.skin.SkinLoader
 import com.illuzionzstudios.tab.tab.components.Tab
-import com.illuzionzstudios.tab.tab.components.column.SimpleColumn
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
-import com.illuzionzstudios.tab.tab.components.item.TabItem
 import com.illuzionzstudios.tab.tab.components.list.TabList
-import com.illuzionzstudios.tab.tab.components.list.type.OnlineList
 import com.illuzionzstudios.tab.tab.components.loader.TabColumnLoader
 import com.illuzionzstudios.tab.tab.components.loader.TabListLoader
 import com.illuzionzstudios.tab.tab.components.loader.TabLoader
 import com.illuzionzstudios.tab.tab.instance.TabInstance
-import net.md_5.bungee.api.chat.BaseComponent
-import net.md_5.bungee.api.chat.TextComponent
-import net.md_5.bungee.chat.ComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.ChatPaginator
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -79,7 +70,11 @@ object TabController : PluginController {
         }
 
         // Load columns
-        DirectoryLoader(TabColumnLoader::class.java, "columns", listOf("features.yml", "player_info.yml", "server_info.yml")).loaders.forEach {
+        DirectoryLoader(
+            TabColumnLoader::class.java,
+            "columns",
+            listOf("features.yml", "player_info.yml", "server_info.yml")
+        ).loaders.forEach {
             Logger.info("Loading tab column `" + it.`object`.id + "`")
             columns[it.`object`.id] = it.`object`
         }
@@ -121,12 +116,10 @@ object TabController : PluginController {
      * @param players Players to send to
      */
     fun setHeaderFooter(header: String?, footer: String?, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val playerListHeaderFooter = PacketPlayerListHeaderFooter()
-            playerListHeaderFooter.header = WrappedChatComponent.fromText(TextUtil.formatText(header))
-            playerListHeaderFooter.footer = WrappedChatComponent.fromText(TextUtil.formatText(footer))
-            playerListHeaderFooter.sendPacket(*players)
-        }
+        val playerListHeaderFooter = PacketPlayerListHeaderFooter()
+        playerListHeaderFooter.header = WrappedChatComponent.fromText(TextUtil.formatText(header))
+        playerListHeaderFooter.footer = WrappedChatComponent.fromText(TextUtil.formatText(footer))
+        playerListHeaderFooter.sendPacket(*players)
     }
 
     /**
@@ -138,21 +131,19 @@ object TabController : PluginController {
      * @param players Players to set for
      */
     fun setText(x: Int, y: Int, text: String?, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME
-            data.add(
-                PlayerInfoData(
-                    getDisplayProfile(x, y),
-                    Ping.FIVE.ping,
-                    NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromChatMessage(text)[0]
-                )
+        val data: MutableList<PlayerInfoData> = ArrayList()
+        val playerInfo = PacketPlayServerPlayerInfo()
+        playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME
+        data.add(
+            PlayerInfoData(
+                getDisplayProfile(x, y),
+                Ping.FIVE.ping,
+                NativeGameMode.SURVIVAL,
+                WrappedChatComponent.fromChatMessage(text)[0]
             )
-            playerInfo.data = data
-            playerInfo.sendPacket(*players)
-        }
+        )
+        playerInfo.data = data
+        playerInfo.sendPacket(*players)
     }
 
     /**
@@ -164,21 +155,19 @@ object TabController : PluginController {
      * @param players Players to set for
      */
     fun setPing(x: Int, y: Int, latency: Ping, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_LATENCY
-            data.add(
-                PlayerInfoData(
-                    getDisplayProfile(x, y),
-                    latency.ping,
-                    NativeGameMode.SURVIVAL,
-                    WrappedChatComponent.fromText("")
-                )
+        val data: MutableList<PlayerInfoData> = ArrayList()
+        val playerInfo = PacketPlayServerPlayerInfo()
+        playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_LATENCY
+        data.add(
+            PlayerInfoData(
+                getDisplayProfile(x, y),
+                latency.ping,
+                NativeGameMode.SURVIVAL,
+                WrappedChatComponent.fromText("")
             )
-            playerInfo.data = data
-            playerInfo.sendPacket(*players)
-        }
+        )
+        playerInfo.data = data
+        playerInfo.sendPacket(*players)
     }
 
     /**
@@ -190,63 +179,39 @@ object TabController : PluginController {
      * @param players
      */
     fun setGameMode(x: Int, y: Int, gameMode: NativeGameMode?, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE
-            data.add(
-                PlayerInfoData(
-                    getDisplayProfile(x, y),
-                    Ping.FIVE.ping,
-                    gameMode,
-                    WrappedChatComponent.fromText("")
-                )
-            )
-            playerInfo.data = data
-            playerInfo.sendPacket(*players)
-        }
-    }
-
-    fun setGameMode(player: Player?, gameMode: NativeGameMode?, vararg players: Player?) {
-        MinecraftScheduler.get()?.desynchronize {
-            val data: MutableList<PlayerInfoData> = ArrayList()
-            val playerInfo = PacketPlayServerPlayerInfo()
-            playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE
-            data.add(
-                PlayerInfoData(
-                    WrappedGameProfile.fromPlayer(player),
-                    Ping.FIVE.ping,
-                    gameMode,
-                    WrappedChatComponent.fromText("")
-                )
-            )
-            playerInfo.data = data
-            playerInfo.sendPacket(*players)
-        }
-    }
-
-    fun hideAvatar(x: Int, y: Int, vararg players: Player?) {
-        SkinController.setDefaultAvatar(x, y, *players)
-    }
-
-    /**
-     * Set the name on a profile for a UUID
-     */
-    fun setName(uuid: UUID?, name: String?, vararg players: Player?) {
-        val data: MutableList<PlayerInfoData> =
-            ArrayList()
+        val data: MutableList<PlayerInfoData> = ArrayList()
         val playerInfo = PacketPlayServerPlayerInfo()
-        playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME
+        playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE
         data.add(
             PlayerInfoData(
-                getSkinProfile(uuid),
+                getDisplayProfile(x, y),
                 Ping.FIVE.ping,
-                NativeGameMode.SURVIVAL,
-                WrappedChatComponent.fromText(name)
+                gameMode,
+                WrappedChatComponent.fromText("")
             )
         )
         playerInfo.data = data
         playerInfo.sendPacket(*players)
+    }
+
+    fun setGameMode(player: Player?, gameMode: NativeGameMode?, vararg players: Player?) {
+        val data: MutableList<PlayerInfoData> = ArrayList()
+        val playerInfo = PacketPlayServerPlayerInfo()
+        playerInfo.action = EnumWrappers.PlayerInfoAction.UPDATE_GAME_MODE
+        data.add(
+            PlayerInfoData(
+                WrappedGameProfile.fromPlayer(player),
+                Ping.FIVE.ping,
+                gameMode,
+                WrappedChatComponent.fromText("")
+            )
+        )
+        playerInfo.data = data
+        playerInfo.sendPacket(*players)
+    }
+
+    fun hideAvatar(x: Int, y: Int, vararg players: Player?) {
+        SkinController.setDefaultAvatar(x, y, *players)
     }
 
     /**
@@ -288,7 +253,6 @@ object TabController : PluginController {
 
             // Now display tab to player
             displayedTabs[player.uniqueId] = tab
-            tab.render()
         }
     }
 
@@ -333,15 +297,6 @@ object TabController : PluginController {
         val id = x * 100 + y
         return WrappedGameProfile(
             UUID.nameUUIDFromBytes(ByteBuffer.allocate(16).putInt(id).array()), String.format("%c%d", DISPLAY_SLOT, id)
-        )
-    }
-
-    /**
-     * Get the game profile with texture data for a UUID
-     */
-    fun getSkinProfile(uuid: UUID?): WrappedGameProfile {
-        return WrappedGameProfile(
-            uuid, String.format("\u00A7%c", SKIN_SLOT)
         )
     }
 

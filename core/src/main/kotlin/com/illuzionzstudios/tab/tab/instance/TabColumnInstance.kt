@@ -1,7 +1,9 @@
 package com.illuzionzstudios.tab.tab.instance
 
+import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.locale.MistString
 import com.illuzionzstudios.mist.config.locale.mist
+import com.illuzionzstudios.mist.debug.PerformanceTimer
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.mist.util.TextUtil
@@ -58,9 +60,9 @@ class TabColumnInstance(
         if (elements.isEmpty()) {
             elements = check
         } else {
+            elements = check
             // If current elements differ to new elements to render, re render elements
             if (check.size != elements.size) {
-                elements = check
                 reloadSkins = true
             }
         }

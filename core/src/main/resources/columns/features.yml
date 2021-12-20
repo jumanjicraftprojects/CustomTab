@@ -94,7 +94,7 @@ text:
   '3':
     requirement:
       type: region
-      value: region1
+      value: spawn
     animations:
       - ' '
     interval: -1

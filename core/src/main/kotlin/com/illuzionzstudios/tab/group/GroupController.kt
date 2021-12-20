@@ -43,7 +43,7 @@ object GroupController: PluginController {
      */
     fun getGroup(player: Player): Group? {
         // Find in cache first
-        if (groupCache.contains(player.uniqueId)) return groupCache[player.uniqueId]
+//        if (groupCache.contains(player.uniqueId)) return groupCache[player.uniqueId]
 
         var highest: Group? = null
         for (group in groups.values) {
@@ -55,7 +55,7 @@ object GroupController: PluginController {
             }
         }
 
-        groupCache[player.uniqueId] = highest ?: groups.values.first()
+//        groupCache[player.uniqueId] = highest ?: groups.values.first()
         return highest
     }
 }
