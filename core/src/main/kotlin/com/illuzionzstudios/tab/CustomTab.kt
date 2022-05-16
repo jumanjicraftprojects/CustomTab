@@ -2,21 +2,20 @@ package com.illuzionzstudios.tab
 
 import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.PluginSettings
-import com.illuzionzstudios.mist.config.YamlConfig
 import com.illuzionzstudios.mist.config.locale.PluginLocale
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
 import com.illuzionzstudios.tab.command.TabCommand
 import com.illuzionzstudios.tab.group.GroupController
+import com.illuzionzstudios.tab.hologram.HologramController
 import com.illuzionzstudios.tab.settings.Locale
 import com.illuzionzstudios.tab.settings.Settings
 import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.TabController
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.spigotmc.Metrics
 import java.util.*
 
-class CustomTab: SpigotPlugin() {
+class CustomTab: SpigotPlugin(7282) {
 
     override val pluginColor: ChatColor = ChatColor.AQUA
     override val pluginId: Int = 78200
@@ -59,10 +58,11 @@ class CustomTab: SpigotPlugin() {
     }
 
     override fun onRegisterReloadables() {
-        reloadables.registerController(GroupController)
         registerMainCommand(TabCommand(), "tab", "customtab")
+        reloadables.registerController(GroupController)
         reloadables.registerController(SkinController)
         reloadables.registerController(TabController)
+        reloadables.registerController(HologramController)
     }
 
     companion object {

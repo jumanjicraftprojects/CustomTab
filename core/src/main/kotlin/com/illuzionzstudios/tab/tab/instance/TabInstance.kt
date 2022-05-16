@@ -123,25 +123,6 @@ class TabInstance(
             foot.changeText()
         }
 
-        // Remove actual player on tab after delay so skins don't bug out :(
-        // This is because usually we should have 4 columns with 20 elements, if
-        // we want less we have to cheat
-//        val pageElements: Int = tab.columns[1]?.pageElements ?: 0
-//        val tryAddSkins: Boolean = tab.columns.size == 4 && pageElements >= 20
-//        if (this.refresh != null && this.refresh!!.isReady && !tryAddSkins) {
-//            // Add skins for players
-//            for (player in Bukkit.getOnlinePlayers()) {
-//                // Make sure player exists
-//                if (player == null) continue
-//                SkinController.addSkin(player, this.player)
-//                if (this.player != player) {
-//                    SkinController.addSkin(this.player, player)
-//                }
-//            }
-//
-//            this.refresh = null
-//        }
-
         // Render columns
         columns.forEach { (slot, column) ->
             column.render(slot, tab.displayTitles, tab.elementWidth)

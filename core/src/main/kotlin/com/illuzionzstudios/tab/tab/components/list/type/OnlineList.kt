@@ -49,19 +49,7 @@ class OnlineList(id: String) : TabList<Player>(id) {
                 // Process player name and skin
                 val listElement: TabItem = GroupController.getGroup(tabPlayer.tabPlayer)?.tabDisplay ?: elementText
 
-                // Place
-                val n = if (displayTitles) 3 else 1
-
-                val tabInstance: TabInstance = TabController.displayedTabs[player?.uniqueId]!!
-
-                // Check if not set at all
-                // Set the avatar for that slot
-                if (!tabInstance.avatarCache.contains(slot, i + n) || tabInstance.avatarCache[slot, i + n] != TabController.getSkinFromPlayer(tabPlayer.tabPlayer.uniqueId)) {
-                    SkinController.setAvatar(slot, i + n, tabPlayer.tabPlayer, player)
-                    tabInstance.avatarCache.put(slot, i + n, TabController.getSkinFromPlayer(tabPlayer.tabPlayer.uniqueId))
-                }
-
-                // Set text
+                // Add element, handles text and skin
                 list.add(PlayerTabItem(tabPlayer.tabPlayer, listElement))
             }
 

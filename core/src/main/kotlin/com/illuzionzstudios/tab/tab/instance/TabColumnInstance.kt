@@ -43,6 +43,9 @@ class TabColumnInstance(
      */
     var pageCursor = 0
 
+    /**
+     * Interval (in ticks) between switching pages
+     */
     var interval: PresetCooldown = PresetCooldown(tab.pageInterval)
 
     /**
@@ -96,7 +99,7 @@ class TabColumnInstance(
         var maxPage = 1
 
         if (size >= tab.pageElements - 1 && tab.pageEnabled) {
-            // Calculate page length //
+            // Calculate page length
             val pageDelta: Double = (pageCursor + if (displayTitles) 3 else 1).toDouble() / tab.pageElements + 1
             currentPage = (if (pageDelta < 2) floor(pageDelta) else ceil(pageDelta)).toInt()
             maxPage = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt().coerceAtMost(tab.maxPages)

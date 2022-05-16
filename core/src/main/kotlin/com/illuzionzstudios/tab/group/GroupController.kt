@@ -16,11 +16,6 @@ object GroupController: PluginController {
      */
     val groups: MutableMap<String, Group> = HashMap()
 
-    /**
-     * A cache of assigned groups so we don't constantly have to do check for groups
-     */
-    val groupCache: MutableMap<UUID, Group> = HashMap()
-
     override fun initialize(plugin: SpigotPlugin) {
         YamlConfig.loadInternalYaml(plugin, "", "groups.yml")
 
@@ -33,7 +28,6 @@ object GroupController: PluginController {
 
     override fun stop(plugin: SpigotPlugin) {
         groups.clear()
-        groupCache.clear()
     }
 
     /**
@@ -42,9 +36,6 @@ object GroupController: PluginController {
      * @param player The player to check
      */
     fun getGroup(player: Player): Group? {
-        // Find in cache first
-//        if (groupCache.contains(player.uniqueId)) return groupCache[player.uniqueId]
-
         var highest: Group? = null
         for (group in groups.values) {
             // Has permission for group
@@ -55,7 +46,6 @@ object GroupController: PluginController {
             }
         }
 
-//        groupCache[player.uniqueId] = highest ?: groups.values.first()
         return highest
     }
 }
