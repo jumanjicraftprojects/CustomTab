@@ -39,7 +39,7 @@ class FrameText(interval: Int, frames: List<String>?): DynamicText {
 
     override fun getOriginalText(): String? {
         // Get first element
-        return frames!![0]
+        return if (frames!!.isEmpty()) null else frames!![0]
     }
 
     override fun getVisibleText(): String? {

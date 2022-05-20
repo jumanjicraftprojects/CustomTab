@@ -41,7 +41,7 @@ class TabColumnInstance(
     /**
      * Cursor between pages
      */
-    var pageCursor = 0
+    private var pageCursor = 0
 
     /**
      * Interval (in ticks) between switching pages
@@ -57,17 +57,10 @@ class TabColumnInstance(
     fun render(slot: Int, displayTitles: Boolean, elementWidth: Int) {
         // Check if to refresh
         val check: MutableList<TabItem> = tab.render(slot, player, displayTitles).filter { it.getFilter().test(player) }.toMutableList()
-        var reloadSkins = false
 
         // If no elements, try get from to render
         if (elements.isEmpty()) {
             elements = check
-        } else {
-            elements = check
-            // If current elements differ to new elements to render, re render elements
-            if (check.size != elements.size) {
-                reloadSkins = true
-            }
         }
 
         // Our sub array, or our page
@@ -211,17 +204,10 @@ class TabColumnInstance(
 
         // Check if cursor is greater than applicable
         // number of pages
-
-        // Check if cursor is greater than applicable
-        // number of pages
         if (pageCursor >= size - (if (displayTitles) 3 else 1) * elements.size / tab.pageElements) {
             // Reset to page 1
             elements = ArrayList()
             pageCursor = 0
-        }
-
-        if (reloadSkins) {
-            instance.avatarCache.row(slot).clear()
         }
     }
 

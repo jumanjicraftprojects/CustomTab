@@ -6,7 +6,6 @@ import com.illuzionzstudios.mist.config.locale.PluginLocale
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
 import com.illuzionzstudios.tab.command.TabCommand
 import com.illuzionzstudios.tab.group.GroupController
-import com.illuzionzstudios.tab.hologram.HologramController
 import com.illuzionzstudios.tab.settings.Locale
 import com.illuzionzstudios.tab.settings.Settings
 import com.illuzionzstudios.tab.skin.SkinController
@@ -62,7 +61,6 @@ class CustomTab: SpigotPlugin(7282) {
         reloadables.registerController(GroupController)
         reloadables.registerController(SkinController)
         reloadables.registerController(TabController)
-        reloadables.registerController(HologramController)
     }
 
     companion object {
