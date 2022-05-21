@@ -29,8 +29,7 @@ abstract class AbstractPacket(
     open fun sendPacket(vararg receivers: Player?) {
         MinecraftScheduler.get()!!.desynchronize {
             try {
-                for (receiver in receivers) ProtocolLibrary.getProtocolManager()
-                    .sendServerPacket(receiver, handle, false)
+                for (receiver in receivers) ProtocolLibrary.getProtocolManager().sendServerPacket(receiver, handle, false)
             } catch (e: InvocationTargetException) {
                 Logger.displayError(e, "Cannot send packet")
             }

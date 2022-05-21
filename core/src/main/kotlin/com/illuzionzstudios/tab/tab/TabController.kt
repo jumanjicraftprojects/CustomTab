@@ -14,7 +14,6 @@ import com.illuzionzstudios.mist.util.TextUtil
 import com.illuzionzstudios.tab.packet.PacketPlayServerPlayerInfo
 import com.illuzionzstudios.tab.packet.PacketPlayerListHeaderFooter
 import com.illuzionzstudios.tab.settings.Settings
-import com.illuzionzstudios.tab.skin.CachedSkin
 import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.skin.SkinLoader
 import com.illuzionzstudios.tab.tab.components.Tab
@@ -106,6 +105,79 @@ object TabController : PluginController {
         tabs.clear()
         columns.clear()
         lists.clear()
+    }
+
+    /**
+     * Displays the tab to the player
+     */
+    fun displayTab(player: Player, tab: Tab? = getTab(player)) {
+        MinecraftScheduler.get()!!.desynchronize {
+            val tab = TabInstance(player, tab!!)
+
+            // Send default list
+            val playerInfo = PacketPlayServerPlayerInfo()
+            playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
+            playerInfo.data = tab.initialList
+            playerInfo.sendPacket(player)
+
+            // Now display tab to player
+            displayedTabs[player.uniqueId] = tab
+        }
+    }
+
+    /**
+     * Renders all tab instances
+     */
+    @Async(rate = Rate.TICK)
+    fun renderTabs() {
+        displayedTabs.forEach { (uuid, tab) ->
+            val player: Player? = Bukkit.getPlayer(uuid)
+            if (player != null)
+                tab.render()
+        }
+    }
+
+    /**
+     * Gets the highest tab the player has
+     *
+     * @param player The player to check
+     */
+    fun getTab(player: Player): Tab? {
+        var highest: Tab? = null
+        for (tab in tabs.values) {
+            // Has permission for tab
+            if (tab.requirement.test(player)) {
+                val compare = (highest?.weight ?: 0).compareTo(tab.weight)
+                if (compare < 0) {
+                    highest = tab
+                }
+            }
+        }
+        return highest ?: tabs[Settings.DEFAULT_TAB.string]
+    }
+
+    /**
+     * Get player's currently displayed tab
+     */
+    fun getDisplayedTab(player: Player?): TabInstance? {
+        return displayedTabs[player?.uniqueId]
+    }
+
+    // ---------------------------------
+    // Tab Packet Methods
+    // ---------------------------------
+
+    /**
+     * Get game profile at x and y in tab
+     *
+     * @param x X of player
+     * @param y Y of player
+     */
+    fun getDisplayProfile(x: Int, y: Int): WrappedGameProfile {
+        val id = x * 100 + y
+        return WrappedGameProfile(
+            UUID.nameUUIDFromBytes(ByteBuffer.allocate(16).putInt(id).array()), String.format("%c%d", DISPLAY_SLOT, id)
+        )
     }
 
     /**
@@ -236,89 +308,5 @@ object TabController : PluginController {
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
         displayedTabs.remove(event.player.uniqueId)
-    }
-
-    /**
-     * Displays the tab to the player
-     */
-    fun displayTab(player: Player, tab: Tab? = getTab(player)) {
-        MinecraftScheduler.get()!!.desynchronize {
-            val tab = TabInstance(player, tab!!)
-
-            // Send default list
-            val playerInfo = PacketPlayServerPlayerInfo()
-            playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
-            playerInfo.data = tab.initialList
-            playerInfo.sendPacket(player)
-
-            // Now display tab to player
-            displayedTabs[player.uniqueId] = tab
-        }
-    }
-
-    /**
-     * Renders all tab instances
-     */
-    @Async(rate = Rate.TICK)
-    fun renderTabs() {
-        displayedTabs.forEach { (uuid, tab) ->
-            val player: Player? = Bukkit.getPlayer(uuid)
-            if (player != null)
-                tab.render()
-        }
-    }
-
-    /**
-     * Gets the highest tab the player has
-     *
-     * @param player The player to check
-     */
-    fun getTab(player: Player): Tab? {
-        var highest: Tab? = null
-        for (tab in tabs.values) {
-            // Has permission for tab
-            if (tab.requirement.test(player)) {
-                val compare = (highest?.weight ?: 0).compareTo(tab.weight)
-                if (compare < 0) {
-                    highest = tab
-                }
-            }
-        }
-        return highest ?: tabs[Settings.DEFAULT_TAB.string]
-    }
-
-    /**
-     * Get game profile at x and y in tab
-     *
-     * @param x X of player
-     * @param y Y of player
-     */
-    fun getDisplayProfile(x: Int, y: Int): WrappedGameProfile {
-        val id = x * 100 + y
-        return WrappedGameProfile(
-            UUID.nameUUIDFromBytes(ByteBuffer.allocate(16).putInt(id).array()), String.format("%c%d", DISPLAY_SLOT, id)
-        )
-    }
-
-    fun getSkinFromPlayer(uuid: UUID): CachedSkin {
-        var skin: CachedSkin? = SkinController.getSkin(uuid.toString())
-
-        if (skin == null) {
-            val profile = WrappedGameProfile.fromPlayer(Bukkit.getPlayer(uuid))
-            var value = ""
-            var signature = ""
-            val iterator: Iterator<WrappedSignedProperty> = profile.properties["textures"].iterator()
-            // Make sure is valid
-            if (iterator.hasNext()) {
-                val property = iterator.next()
-                value = property.value
-                signature = property.signature
-            }
-
-            skin = CachedSkin(uuid.toString(), value, signature)
-            SkinController.addSkin(skin)
-        }
-
-        return skin
     }
 }

@@ -11,7 +11,7 @@ import java.util.function.Predicate
  * because the information on the tab is usually unique to the player
  * in terms of placeholders etc
  */
-class Tab(
+open class Tab(
     /**
      * ID of this tab
      */
@@ -28,9 +28,10 @@ class Tab(
     var requirement: Predicate<Player> = Predicate<Player> { true }
 
     /**
-     * The weight of the tab
+     * The weight of the tab. Default to high
+     * if creating custom object and not loading from file.
      */
-    var weight: Int = 1
+    var weight: Int = 9999
 
     // ----------------------------------------
     // Column options
@@ -39,7 +40,7 @@ class Tab(
     /**
      * If to display titles for each column
      */
-    var displayTitles: Boolean = true
+    var displayTitles: Boolean = false
 
     /**
      * The minimum width for each text element on the tab
@@ -57,5 +58,12 @@ class Tab(
 
     var header: List<DynamicText> = ArrayList()
     var footer: List<DynamicText> = ArrayList()
+
+    /**
+     * Set the column for this tab in a slot
+     */
+    protected fun setColumn(slot: Int, column: TabColumn) {
+        columns[slot] = column
+    }
 
 }

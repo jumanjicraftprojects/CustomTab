@@ -4,6 +4,7 @@ import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.PluginSettings
 import com.illuzionzstudios.mist.config.locale.PluginLocale
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
+import com.illuzionzstudios.tab.api.CustomTabAPI
 import com.illuzionzstudios.tab.command.TabCommand
 import com.illuzionzstudios.tab.group.GroupController
 import com.illuzionzstudios.tab.settings.Locale
@@ -38,6 +39,9 @@ class CustomTab: SpigotPlugin(7282) {
 
         if (papiEnabled)
             Logger.info("Hooked into PlaceholderAPI")
+
+        // Set API
+        api = CustomTabImpl()
     }
 
     override fun onPluginLoad() {
@@ -81,5 +85,8 @@ class CustomTab: SpigotPlugin(7282) {
                 }
                 return field
             }
+
+        @JvmStatic
+        var api: CustomTabAPI? = null
     }
 }

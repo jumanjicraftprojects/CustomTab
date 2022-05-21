@@ -49,6 +49,31 @@ object SkinController : PluginController {
         return skins[name]
     }
 
+    /**
+     * Retrieve a skin for a player
+     */
+    fun getSkinFromPlayer(uuid: UUID): CachedSkin {
+        var skin: CachedSkin? = getSkin(uuid.toString())
+
+        if (skin == null) {
+            val profile = WrappedGameProfile.fromPlayer(Bukkit.getPlayer(uuid))
+            var value = ""
+            var signature = ""
+            val iterator: Iterator<WrappedSignedProperty> = profile.properties["textures"].iterator()
+            // Make sure is valid
+            if (iterator.hasNext()) {
+                val property = iterator.next()
+                value = property.value
+                signature = property.signature
+            }
+
+            skin = CachedSkin(uuid.toString(), value, signature)
+            addSkin(skin)
+        }
+
+        return skin
+    }
+
     fun setDefaultAvatar(x: Int, y: Int, vararg players: Player?) {
         setAvatar(x, y, UNKNOWN_SKIN.value, UNKNOWN_SKIN.signature, *players)
     }
