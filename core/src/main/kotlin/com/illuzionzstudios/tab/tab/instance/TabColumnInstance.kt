@@ -58,10 +58,8 @@ class TabColumnInstance(
         // Check if to refresh
         val check: MutableList<TabItem> = tab.render(slot, player, displayTitles).filter { it.getFilter().test(player) }.toMutableList()
 
-        // If no elements, try get from to render
-        if (elements.isEmpty()) {
-            elements = check
-        }
+        // Update elements to render
+        elements = check
 
         // Our sub array, or our page
         val sub: MutableList<TabItem?> = ArrayList(
@@ -102,13 +100,11 @@ class TabColumnInstance(
                 // Don't update if on a null page
                 if (currentPage > maxPage) {
                     // Reset to page 1
-                    elements = ArrayList()
                     pageCursor = 0
                     return
                 }
 
                 // Go to next page
-                elements = check
                 pageInfo = true
                 interval.reset()
                 interval.go()
@@ -205,8 +201,6 @@ class TabColumnInstance(
         // Check if cursor is greater than applicable
         // number of pages
         if (pageCursor >= size - (if (displayTitles) 3 else 1) * elements.size / tab.pageElements) {
-            // Reset to page 1
-            elements = ArrayList()
             pageCursor = 0
         }
     }
