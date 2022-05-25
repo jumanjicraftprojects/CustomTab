@@ -19,6 +19,8 @@ import com.illuzionzstudios.tab.skin.SkinLoader
 import com.illuzionzstudios.tab.tab.components.Tab
 import com.illuzionzstudios.tab.tab.components.column.TabColumn
 import com.illuzionzstudios.tab.tab.components.list.TabList
+import com.illuzionzstudios.tab.tab.components.list.TabPlayer
+import com.illuzionzstudios.tab.tab.components.list.type.OnlineList
 import com.illuzionzstudios.tab.tab.components.loader.TabColumnLoader
 import com.illuzionzstudios.tab.tab.components.loader.TabListLoader
 import com.illuzionzstudios.tab.tab.components.loader.TabLoader
@@ -33,6 +35,8 @@ import java.nio.ByteBuffer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Controller for handling player tab instances and manipulating the tab
@@ -55,7 +59,13 @@ object TabController : PluginController {
     /**
      * All currently displaying tab instances. Concurrent as constantly being updated
      */
-    val displayedTabs: ConcurrentMap<UUID, TabInstance> = ConcurrentHashMap()
+    private val displayedTabs: ConcurrentMap<UUID, TabInstance> = ConcurrentHashMap()
+
+    /**
+     * A list of online lists with their slots.
+     * Slot mapped to list
+     */
+    private val onlineLists: MutableMap<Int, TabList<*>> = HashMap();
 
     override fun initialize(plugin: SpigotPlugin) {
         MinecraftScheduler.get()!!.registerSynchronizationService(this)
@@ -88,6 +98,9 @@ object TabController : PluginController {
         DirectoryLoader(TabLoader::class.java, "tabs", listOf("default.yml")).loaders.forEach {
             Logger.info("Loading tab `" + it.`object`.id + "`")
             tabs[it.`object`.id] = it.`object`
+            it.`object`.columns.forEach { (slot, column) ->
+                if (column is OnlineList) onlineLists[slot] = column
+            }
         }
 
         // Reshow tabs if needed
@@ -105,6 +118,38 @@ object TabController : PluginController {
         tabs.clear()
         columns.clear()
         lists.clear()
+    }
+
+    /**
+     * Gets a list of players to display based on the list id
+     * and slot it is in. Will take full list of tab players and sort
+     * them before dividing onto list to make sure everything is
+     * sorted
+     */
+    fun getPlayers(list: OnlineList, slot: Int, maxPerPage: Int): MutableList<TabPlayer> {
+        // Convert online to TabPlayer
+        val tabPlayers: MutableList<TabPlayer> = ArrayList()
+        for (player in Bukkit.getOnlinePlayers()) {
+            tabPlayers.add(TabPlayer(player, list.sorter, list.sortVariable))
+        }
+
+        // Sort
+        Collections.sort(tabPlayers)
+
+        // If only one list being used, but all in that list and have pagination
+        if (onlineLists.size == 1) return tabPlayers
+
+        // Iteration, or number of list
+        var iteration = 0
+        for ((s, column) in onlineLists) {
+            if (list == column) iteration++
+            if (s == slot) break
+        }
+
+        // Offset in list to use
+        val offset = (iteration - 1) * maxPerPage
+
+        return tabPlayers.subList(offset, (offset + maxPerPage).coerceAtMost(tabPlayers.size))
     }
 
     /**

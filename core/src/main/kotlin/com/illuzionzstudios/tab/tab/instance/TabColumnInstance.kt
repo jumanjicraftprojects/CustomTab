@@ -1,15 +1,11 @@
 package com.illuzionzstudios.tab.tab.instance
 
-import com.illuzionzstudios.mist.Logger
 import com.illuzionzstudios.mist.config.locale.MistString
 import com.illuzionzstudios.mist.config.locale.mist
-import com.illuzionzstudios.mist.debug.PerformanceTimer
 import com.illuzionzstudios.mist.scheduler.MinecraftScheduler
 import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
 import com.illuzionzstudios.mist.util.TextUtil
 import com.illuzionzstudios.tab.CustomTab
-import com.illuzionzstudios.tab.model.DynamicText
-import com.illuzionzstudios.tab.model.FrameText
 import com.illuzionzstudios.tab.settings.Locale
 import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.Ping
@@ -50,48 +46,53 @@ class TabColumnInstance(
 
     /**
      * Render this tab column for a player
-     *
-     * @param slot The slot of the column to render
-     * @param player The player to render column for
      */
     fun render(slot: Int, displayTitles: Boolean, elementWidth: Int) {
-        // Check if to refresh
+        // Our constant stream of elements to render
         val check: MutableList<TabItem> = tab.render(slot, player, displayTitles).filter { it.getFilter().test(player) }.toMutableList()
 
         // Update elements to render
         elements = check
 
-        // Our sub array, or our page
+        // Offset for some rendering depending if titles are rendered
+        val titleOffset = if (displayTitles) 3 else 1
+
+        // This is the sublist for the page we are trying to render
         val sub: MutableList<TabItem?> = ArrayList(
             elements.subList(
+                // Start from beginning of page cursor
                 0.coerceAtLeast(pageCursor.coerceAtMost(elements.size)),
-                elements.size.coerceAtMost(pageCursor + (tab.pageElements - 3))
+                // End at page cursor plus elements to render per page
+                elements.size.coerceAtMost(pageCursor + (tab.pageElements - (if (displayTitles) 2 else 0) - (if (tab.pageEnabled) 1 else 0)))
             )
         )
 
         // If titles enabled
         if (displayTitles) {
-            // Center title
+            // Insert title at top
             sub.add(0, tab.title)
 
             // Set our minimum tab length
             val width = StringBuilder()
-            for (i in 0 until elementWidth) {
+            for (i in 0..elementWidth) {
                 width.append(" ")
             }
+            // Blank item
             sub.add(1, TextTabItem(width.toString()))
         }
 
+        // Size of each page                  -   Max amount of pages needed  -
         val size = elements.size + 2 + floor((elements.size / tab.pageElements).toDouble())
 
         // If to show pagination info
         var pageInfo = false
+        // Page info
         var currentPage = 1
         var maxPage = 1
 
-        if (size >= tab.pageElements - 1 && tab.pageEnabled) {
+        if (size >= tab.pageElements && tab.pageEnabled) {
             // Calculate page length
-            val pageDelta: Double = (pageCursor + if (displayTitles) 3 else 1).toDouble() / tab.pageElements + 1
+            val pageDelta: Double = (pageCursor + titleOffset).toDouble() / tab.pageElements + 1
             currentPage = (if (pageDelta < 2) floor(pageDelta) else ceil(pageDelta)).toInt()
             maxPage = ceil((size + 2 * elements.size / tab.pageElements) / tab.pageElements).toInt().coerceAtMost(tab.maxPages)
 
@@ -116,11 +117,12 @@ class TabColumnInstance(
             sub.add(tab.pageItem ?: TextTabItem(SkinController.UNKNOWN_SKIN, -1, pagesText.toString()))
         }
 
-        // For elements in the sub tab
+        // For elements in the sub tab (elements to render)
         for (i in 1..tab.pageElements) {
+            // Current element to render
             val element: TabItem? = if (i - 1 < sub.size) sub[i - 1] else null
 
-            // Send update packet //
+            // Get raw text to display
             var text = TextUtil.formatText(element?.getText()?.getVisibleText() ?: "")
 
             // Global placeholders
@@ -163,6 +165,7 @@ class TabColumnInstance(
                 if (element?.isCenter() == true) {
                     text = TextUtil.getCenteredString(text, elementWidth)
                 }
+
                 // Set text in that slot as our final text
                 TabController.setText(slot, i, text, player)
                 TabController.setPing(slot, i, element?.getPing() ?: Ping.FIVE, player)
@@ -173,7 +176,7 @@ class TabColumnInstance(
                     instance.avatarCache.put(slot, i, element?.getSkin() ?: SkinController.UNKNOWN_SKIN)
                 }
             } else {
-                // Otherwise text not defined so set blank
+                // Otherwise, text not defined so set blank
                 TabController.setText(slot, i, "", player)
 
                 // Make sure avatar is blank
@@ -183,7 +186,7 @@ class TabColumnInstance(
                 }
             }
 
-            // Go to next page if applicable
+            // Increment page cursor for rendering
             if (pageInfo) pageCursor++
         }
 
@@ -195,12 +198,11 @@ class TabColumnInstance(
 
         // If page display at bottom
         if (pageInfo) {
-            pageCursor -= if (displayTitles) 3 else 1
+            pageCursor -= titleOffset
         }
 
-        // Check if cursor is greater than applicable
-        // number of pages
-        if (pageCursor >= size - (if (displayTitles) 3 else 1) * elements.size / tab.pageElements) {
+        // Check if cursor is greater than total pages
+        if (pageCursor >= size - titleOffset * elements.size / tab.pageElements) {
             pageCursor = 0
         }
     }

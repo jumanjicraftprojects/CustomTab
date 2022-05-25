@@ -61,4 +61,5 @@ manifest.mf
 Thumbs.db
 *.sh
 
+.git-versioned-pom.xml
 pom.xml.versionsBackup

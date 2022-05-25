@@ -11,9 +11,15 @@ import com.illuzionzstudios.tab.settings.Locale
 import com.illuzionzstudios.tab.settings.Settings
 import com.illuzionzstudios.tab.skin.SkinController
 import com.illuzionzstudios.tab.tab.TabController
+import com.illuzionzstudios.tab.tab.components.Tab
+import com.illuzionzstudios.tab.tab.components.column.TabColumn
+import com.illuzionzstudios.tab.tab.components.item.TabItem
+import com.illuzionzstudios.tab.tab.components.item.TextTabItem
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.entity.Player
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CustomTab: SpigotPlugin(7282) {
 
@@ -42,6 +48,19 @@ class CustomTab: SpigotPlugin(7282) {
 
         // Set API
         api = CustomTabImpl()
+
+//        val tab = Tab("test")
+//
+//        tab.setColumn(1, object : TabColumn("one") {
+//            override fun render(slot: Int, player: Player?, displayTitles: Boolean): MutableList<TabItem> {
+//                val toReturn: MutableList<TabItem> = ArrayList()
+//                val string = "Test Location: " + player?.location?.blockX
+//                toReturn.add(TextTabItem(20, "&c$string", "&d$string"))
+//                return toReturn
+//            }
+//        })
+//
+//        (api as CustomTabImpl).registerTab(tab)
     }
 
     override fun onPluginLoad() {

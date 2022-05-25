@@ -62,7 +62,7 @@ open class Tab(
     /**
      * Set the column for this tab in a slot
      */
-    protected fun setColumn(slot: Int, column: TabColumn) {
+    fun setColumn(slot: Int, column: TabColumn) {
         columns[slot] = column
     }
 
