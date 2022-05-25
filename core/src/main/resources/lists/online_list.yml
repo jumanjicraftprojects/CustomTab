@@ -10,6 +10,8 @@ page:
   # the below 'elements' option, it will create a new
   # page and display the remaining elements on all the
   # new pages
+  # If using an online_list across multiple columns, this option
+  # should be set to false so it doesn't try to change pages
   enabled: true
   # Maximum amount of pages to create. If
   # items try to create more than this amount of
