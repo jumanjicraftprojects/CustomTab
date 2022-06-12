@@ -133,6 +133,9 @@ class TabColumnInstance(
                 text = if (element is PlayerTabItem) {
                     PlaceholderAPI.setPlaceholders(element.player, text)
                 } else PlaceholderAPI.setPlaceholders(player, text)
+
+                // Re-parse format placeholders
+                text = TextUtil.formatText(text)
             }
 
             // Trim text
