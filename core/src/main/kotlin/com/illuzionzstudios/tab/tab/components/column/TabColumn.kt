@@ -1,7 +1,5 @@
 package com.illuzionzstudios.tab.tab.components.column
 
-import com.illuzionzstudios.mist.scheduler.timer.PresetCooldown
-import com.illuzionzstudios.tab.model.DynamicText
 import com.illuzionzstudios.tab.tab.components.item.TabItem
 import org.bukkit.entity.Player
 
