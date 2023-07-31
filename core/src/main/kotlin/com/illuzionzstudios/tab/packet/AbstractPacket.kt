@@ -15,10 +15,10 @@ abstract class AbstractPacket(
     var type: PacketType
 ) {
 
-    protected var handle: PacketContainer? = PacketContainer(type)
+    protected var handle: PacketContainer? = ProtocolLibrary.getProtocolManager().createPacket(type)
 
     init {
-        handle!!.modifier.writeDefaults()
+        //handle!!.modifier.writeDefaults()
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class AbstractPacket(
     open fun receivePacket(sender: Player?) {
         MinecraftScheduler.get()!!.desynchronize {
             try {
-                ProtocolLibrary.getProtocolManager().recieveClientPacket(sender, handle, false)
+                ProtocolLibrary.getProtocolManager().receiveClientPacket(sender, handle, false)
             } catch (e: Exception) {
                 Logger.displayError(e, "Cannot receive packet")
             }

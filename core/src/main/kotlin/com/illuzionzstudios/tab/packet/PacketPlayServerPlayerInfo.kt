@@ -3,6 +3,7 @@ package com.illuzionzstudios.tab.packet
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction
 import com.comphenix.protocol.wrappers.PlayerInfoData
+import java.util.*
 
 class PacketPlayServerPlayerInfo : AbstractPacket(PacketType.Play.Server.PLAYER_INFO) {
 
@@ -11,10 +12,10 @@ class PacketPlayServerPlayerInfo : AbstractPacket(PacketType.Play.Server.PLAYER_
      */
     var action: PlayerInfoAction?
         get() {
-            return handle?.playerInfoAction?.read(0)
+            return handle?.playerInfoActions?.read(0)?.first()
         }
         set(value) {
-            handle?.playerInfoAction?.write(0, value)
+            handle?.playerInfoActions?.write(0, EnumSet.of(value))
         }
 
     /**
@@ -22,9 +23,9 @@ class PacketPlayServerPlayerInfo : AbstractPacket(PacketType.Play.Server.PLAYER_
      */
     var data: List<PlayerInfoData?>?
         get() {
-            return handle?.playerInfoDataLists?.read(0)
+            return handle?.playerInfoDataLists?.read(1)
         }
         set(value) {
-            handle?.playerInfoDataLists?.write(0, value)
+            handle?.playerInfoDataLists?.write(1, value)
         }
 }

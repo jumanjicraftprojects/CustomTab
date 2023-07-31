@@ -4,6 +4,7 @@ import com.comphenix.protocol.wrappers.*
 import com.illuzionzstudios.mist.controller.PluginController
 import com.illuzionzstudios.mist.plugin.SpigotPlugin
 import com.illuzionzstudios.tab.packet.PacketPlayServerPlayerInfo
+import com.illuzionzstudios.tab.packet.PacketPlayServerPlayerInfoRemove
 import com.illuzionzstudios.tab.tab.Ping
 import com.illuzionzstudios.tab.tab.TabController
 import org.bukkit.Bukkit
@@ -99,24 +100,14 @@ object SkinController : PluginController {
      */
     fun setAvatar(x: Int, y: Int, value: String?, signature: String?, vararg players: Player?) {
         // Clear old avatar
-        val data: MutableList<PlayerInfoData> = ArrayList()
-        val playerInfo = PacketPlayServerPlayerInfo()
+        val playerInfoRemove = PacketPlayServerPlayerInfoRemove()
         val gameProfile: WrappedGameProfile = TabController.getDisplayProfile(x, y)
-        playerInfo.action = EnumWrappers.PlayerInfoAction.REMOVE_PLAYER
-        data.add(
-            PlayerInfoData(
-                gameProfile,
-                Ping.FIVE.ping,
-                EnumWrappers.NativeGameMode.SURVIVAL,
-                WrappedChatComponent.fromText("")
-            )
-        )
-        playerInfo.data = data
-        playerInfo.sendPacket(*players)
+        playerInfoRemove.data = Collections.singletonList(gameProfile.uuid)
+        playerInfoRemove.sendPacket(*players)
 
-        data.clear()
 
         // Insert new avatar
+        var playerInfo = PacketPlayServerPlayerInfo()
         playerInfo.action = EnumWrappers.PlayerInfoAction.ADD_PLAYER
         gameProfile.properties.put(
             "textures",
@@ -126,15 +117,13 @@ object SkinController : PluginController {
                 signature
             )
         )
-        data.add(
-            PlayerInfoData(
-                gameProfile,
-                Ping.FIVE.ping,
-                EnumWrappers.NativeGameMode.SURVIVAL,
-                WrappedChatComponent.fromText("")
-            )
-        )
-        playerInfo.data = data
+
+        playerInfo.data = Collections.singletonList(PlayerInfoData(
+            gameProfile,
+            Ping.FIVE.ping,
+            EnumWrappers.NativeGameMode.SURVIVAL,
+            WrappedChatComponent.fromText("")
+        ))
         playerInfo.sendPacket(*players)
     }
 
