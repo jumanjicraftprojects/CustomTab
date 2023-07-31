@@ -130,6 +130,12 @@
             <version>${kotlin.version}</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.illuzionzstudios</groupId>
+            <artifactId>Mist</artifactId>
+            <version>1.0.2</version>
+        </dependency>
     </dependencies>
 
 </project>
